@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany } from 'typeorm';
 import { Company } from './company.entity';
-import { Tag } from './tag.entity';
+import { Request } from './request.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class User {
@@ -16,9 +17,12 @@ export class User {
     @Column()
     lastname: string;
 
-    @ManyToOne(type => Company, company => company.id)
+    @ManyToOne(type => Company, company => company.users)
     company: Company;
 
-    @OneToMany(type => Tag, tag => tag.id)
-    tags: Tag[];
+    @OneToMany(type => Request, request => request.user)
+    request: Request;
+
+    @OneToMany(type => Comment, comment => comment.user)
+    comment: Comment;
 }
