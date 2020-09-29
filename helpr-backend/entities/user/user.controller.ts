@@ -11,6 +11,11 @@ export class UserController {
         return this.userService.getAll();
     }
 
+    @Get('query')
+    async query(): Promise<User[]> {
+        return this.userService.query();
+    }
+
     @Post('create')
     async createUser(@Body() user: User): Promise<User> {
         return await this.userService.create(user);

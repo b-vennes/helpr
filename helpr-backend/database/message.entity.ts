@@ -1,4 +1,3 @@
-import { cpuUsage } from 'process';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
