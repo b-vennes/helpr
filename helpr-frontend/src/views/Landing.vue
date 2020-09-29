@@ -21,7 +21,7 @@
 
    background-image: url("../assets/landing-background.svg");
    background-repeat: no-repeat;
-   background-size: 100%;
+   background-size: cover;
    color: black;
    height: 100vh;
 
