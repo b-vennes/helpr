@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from '../entities/company/company.module';
 import { UserModule } from '../entities/user/user.module';
+import { RequestModule } from '../entities/request/request.module';
+import { CommentModule } from '../entities/comment/comment.module';
 import { Company } from 'database/company.entity';
 import { User } from 'database/user.entity';
 import { UserProfile } from 'database/userprofile.entity';
@@ -17,6 +19,8 @@ import { RequestTag } from 'database/requesttag.entity';
 @Module({
   imports: [CompanyModule,
             UserModule,
+            RequestModule,
+            CommentModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'C:/sqlite/helpr2.db',

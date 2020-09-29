@@ -8,7 +8,14 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>) {}
-        
+    
+    async query(): Promise<User[]> {
+        // we can probably pass in a string from the body later on. This might not even be a 
+        // good idea to query this way due to SQL Injection Attacks. 
+        let getLatestLimitThree = "SELECT * FROM user ORDER BY id desc LIMIT 3";
+        return await this.userRepository.query(getLatestLimitThree);
+    }
+    
     async getAll(): Promise<User[]> {
         return await this.userRepository.find();
     }

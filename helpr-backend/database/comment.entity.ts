@@ -14,7 +14,6 @@ export class Comment {
     dateCreated: Date;
 
     @ManyToOne(type => Request, request => request.comments)
-    @JoinTable()
     request: Request;
 
     @ManyToOne(type => User, user => user.comment)
