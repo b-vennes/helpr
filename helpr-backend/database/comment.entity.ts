@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable } from 'typeorm';
 import { Request } from 'database/request.entity';
+import { User } from './user.entity';
+
 @Entity()
 export class Comment {
     @PrimaryGeneratedColumn()
@@ -11,6 +13,13 @@ export class Comment {
     @Column()
     dateCreated: Date;
 
-    @ManyToOne(type => Request, request => request.id)
+    @Column()
+    associatedCommentId: string;
+
+    @ManyToOne(type => Request, request => request.comments)
+    @JoinTable()
     request: Request;
+
+    @ManyToOne(type => User, user => user.comment)
+    user: User;
 }

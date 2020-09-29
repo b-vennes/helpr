@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
-import { Tag } from './tag.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class Request {
@@ -22,9 +22,10 @@ export class Request {
     @Column()
     isPublicRequest: boolean;
 
-    @ManyToOne(type => User, user => user.id)
+    @ManyToOne(type => User, user => user.request)
+    @JoinTable()
     user: User;
 
-    @OneToMany(type => Tag, tag => tag.id)
-    tags: Tag[];
+    @OneToMany(type => Comment, comment => comment.request)
+    comments: Comment[];
 }
