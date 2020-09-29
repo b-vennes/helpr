@@ -1,12 +1,11 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
   <router-view/>
 </template>
 
 <style>
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&family=Roboto&display=swap');
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -26,5 +25,10 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+body, html {
+  margin: 0;
+  height: 100%;
 }
 </style>

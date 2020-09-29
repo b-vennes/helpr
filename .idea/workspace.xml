@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="098ec114-a400-4d42-8862-b43cbb8ce4bf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/slnx.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helpr-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/About.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/About.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/Landing.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/Landing.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +61,28 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1601398249215</updated>
-      <workItem from="1601398250323" duration="2469000" />
+      <workItem from="1601398250323" duration="11039000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-1253" y="253" width="585" height="534" key="find.popup" timestamp="1601414344213">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1253" y="253" width="585" height="534" key="find.popup/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601414344213" />
   </component>
 </project>
