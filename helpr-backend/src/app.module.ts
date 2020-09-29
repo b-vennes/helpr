@@ -4,6 +4,12 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from '../entities/company/company.module';
 import { Company } from 'database/company.entity';
+import { User } from 'database/user.entity';
+import { UserProfile } from 'database/userprofile.entity';
+import { Message } from 'database/message.entity';
+import { Tag } from 'database/tag.entity';
+import { Request } from 'database/request.entity';
+import { Comment } from 'database/comment.entity';
 
 @Module({
   imports: [CompanyModule,
@@ -12,7 +18,15 @@ import { Company } from 'database/company.entity';
       database: 'C:/sqlite/helpr2.db',
       synchronize: true,
       logging: false,
-      entities: [Company]
+      entities: [
+        Company, 
+        User, 
+        UserProfile, 
+        Message, 
+        Tag, 
+        Request, 
+        Comment
+      ]
     }), 
     ],
   controllers: [AppController],
