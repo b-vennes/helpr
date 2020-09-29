@@ -13,9 +13,6 @@ export class Comment {
     @Column()
     dateCreated: Date;
 
-    @Column()
-    associatedCommentId: string;
-
     @ManyToOne(type => Request, request => request.comments)
     @JoinTable()
     request: Request;
