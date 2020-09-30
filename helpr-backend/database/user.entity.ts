@@ -20,9 +20,6 @@ export class User {
     @ManyToOne(type => Company, company => company.users)
     company: Company;
 
-    @OneToMany(type => Request, request => request.user)
-    request: Request;
-
     @OneToMany(type => Comment, comment => comment.user)
     comment: Comment;
 }

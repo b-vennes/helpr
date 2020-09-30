@@ -19,6 +19,9 @@ export class Comment {
     @Column()
     requestId: number;
 
+    @Column()
+    isDeleted: boolean;
+
     @ManyToOne(type => User, user => user.comment)
     user: User;
 }

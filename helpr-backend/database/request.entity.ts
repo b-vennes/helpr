@@ -24,7 +24,6 @@ export class Request {
     @Column()
     isDeleted: boolean;
 
-    @ManyToOne(type => User, user => user.request)
-    @JoinTable()
-    user: User;
+    @Column()
+    userId: number;
 }
