@@ -11,7 +11,7 @@ export class Comment {
     description: string;
 
     @Column()
-    dateCreated: Date;
+    createdDate: Date;
 
     @ManyToOne(type => Request, request => request.comments)
     request: Request;

@@ -6,8 +6,8 @@ import { Request } from 'database/request.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Request])],
-    providers: [RequestService],
-    controllers: [RequestController]
+    controllers: [RequestController],
+    providers: [RequestService]
 })
 
 export class RequestModule {}

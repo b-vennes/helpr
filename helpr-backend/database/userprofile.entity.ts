@@ -10,6 +10,9 @@ export class UserProfile {
     points: number;
 
     @Column()
+    title: string;
+
+    @Column()
     aboutMe: string;
 
     @OneToOne(type => User)

@@ -11,7 +11,7 @@ export class Request {
     description: string;
 
     @Column()
-    dateCreated: Date;
+    createdDate: Date;
 
     @Column()
     points: number;
