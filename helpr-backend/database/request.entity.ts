@@ -25,7 +25,4 @@ export class Request {
     @ManyToOne(type => User, user => user.request)
     @JoinTable()
     user: User;
-
-    @OneToMany(type => Comment, comment => comment.request)
-    comments: Comment[];
 }

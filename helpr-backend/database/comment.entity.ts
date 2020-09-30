@@ -13,8 +13,11 @@ export class Comment {
     @Column()
     createdDate: Date;
 
-    @ManyToOne(type => Request, request => request.comments)
-    request: Request;
+    @Column()
+    like: number;
+
+    @Column()
+    requestId: number;
 
     @ManyToOne(type => User, user => user.comment)
     user: User;
