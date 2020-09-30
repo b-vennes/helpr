@@ -17,6 +17,6 @@ export class DeleteRequestHandler implements ICommandHandler<DeleteRequestComman
       ) { }
 
     async execute(command: DeleteRequestCommand) {
-        await this.requestRepository.delete(command.request.id);
+        await this.requestRepository.update(command.request.id, command.request);
     }
 }

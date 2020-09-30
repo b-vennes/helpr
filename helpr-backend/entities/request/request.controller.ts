@@ -34,7 +34,8 @@ export class RequestController {
         return this.commandBus.execute(new IncrementLikesCommand(request.requestId));
     }
     
-    @Delete('delete')
+    // when deleting, also delete the comments associated with the post
+    @Put('delete')
     async deleteRequest(@Body() request: Request): Promise<any> {
         return await this.commandBus.execute(new DeleteRequestCommand(request));
     }
