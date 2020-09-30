@@ -5,6 +5,7 @@ import { GetRequestsQuery } from './queries/handlers/get-requests.handler';
 import { CreateRequestCommand } from './commands/handlers/create-request.handler';
 import { DeleteRequestCommand } from './commands/handlers/delete-request.handler';
 import { UpdateRequestCommand } from './commands/handlers/update-request.handler';
+import { IncrementLikesCommand } from './commands/handlers/increment-likes.handler';
 
 @Controller('requests')
 export class RequestController {
@@ -26,6 +27,11 @@ export class RequestController {
     @Put('update')
     async updateRequest(@Body() request: Request): Promise<any> {
         return await this.commandBus.execute(new UpdateRequestCommand(request));
+    }
+
+    @Put('like')
+    async incrementLikes(@Body() request: IncrementLikesCommand): Promise<any> {
+        return this.commandBus.execute(new IncrementLikesCommand(request.requestId));
     }
     
     @Delete('delete')

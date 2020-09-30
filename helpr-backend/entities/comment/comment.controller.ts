@@ -19,7 +19,7 @@ export class CommentController {
     }
 
     @Put('like')
-    async incrementLike(@Body() request: IncrementLikesCommand): Promise<any> {
+    async incrementLikes(@Body() request: IncrementLikesCommand): Promise<any> {
         return this.commandBus.execute(new IncrementLikesCommand(request.commentId));
     }
 
