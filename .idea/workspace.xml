@@ -20,14 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="098ec114-a400-4d42-8862-b43cbb8ce4bf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/slnx.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/About.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/About.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/Home.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/Landing.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/Landing.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +53,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1601398249215</updated>
-      <workItem from="1601398250323" duration="11039000" />
+      <workItem from="1601398250323" duration="13343000" />
     </task>
     <servers />
   </component>
