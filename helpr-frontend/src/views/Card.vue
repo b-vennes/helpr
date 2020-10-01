@@ -9,7 +9,7 @@
         </router-link>
       </div>
       <div class="main">
-        Hello. 
+        Hello.
       </div>
     </div>
   </div>
@@ -45,12 +45,11 @@
         align-items: center;
         justify-content: center;
 
-        height: 40px;
-        width: 40px;
-        margin-bottom: 8px;
-        margin-right: 8px;
-        border-radius: 50%;
         background-color: #f1f1f1;
+        border-radius: 50%;
+        height: 40px;
+        margin: 0 8px 8px 0;
+        width: 40px;
 
         img {
           height: 15px;
@@ -64,13 +63,13 @@
     }
 
     .main {
-      display: flex;
       align-items: flex-start;
-      flex-direction: column;
       background-color: rgba(#F1F1F1, 0.4);
-      padding: 12px;
       border-radius: 12px;
+      display: flex;
+      flex-direction: column;
       margin-bottom: 4px;
+      padding: 12px;
     }
   }
 }

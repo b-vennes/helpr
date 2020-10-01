@@ -13,10 +13,21 @@
         <input class="title" placeholder="Title">
         <textarea class="description" rows="20" placeholder="Description"></textarea>
       </div>
-      <div class="submit">Submit</div>
+      <Button txt="Submit" class="secondary submit"></Button>
     </div>
   </div>
 </template>
+
+<script>
+import Button from '../components/Button'
+
+export default {
+  components: {
+    Button
+  }
+}
+</script>
+
 
 <style scoped lang="scss">
  .container {
@@ -25,10 +36,10 @@
    flex-direction: column;
    justify-content: center;
 
+   color: black;
    background-image: url("../assets/questions-background.svg");
    background-repeat: no-repeat;
    background-size: cover;
-   color: black;
    height: 100vh;
 
    .content {
@@ -48,20 +59,19 @@
          align-items: center;
          justify-content: center;
 
-         height: 40px;
-         width: 40px;
-         margin-bottom: 8px;
-         margin-right: 8px;
-         border-radius: 50%;
          background-color: #f1f1f1;
+         border-radius: 50%;
+         height: 40px;
+         margin: 0 8px 8px 0;
+         width: 40px;
 
          img {
            height: 15px;
          }
 
          &:hover {
-           background-color: #fafafa;
            cursor: pointer;
+           background-color: #fafafa;
          }
        }
      }
@@ -70,50 +80,40 @@
        display: flex;
        align-items: flex-start;
        flex-direction: column;
+
        background-color: rgba(#F1F1F1, 0.4);
-       padding: 12px;
        border-radius: 12px;
        margin-bottom: 4px;
+       padding: 12px;
+
        .title {
+         background-color: #f1f1f1;
          border: 0;
+         border-radius: 8px;
+         font-size: 18px;
+         height: 30px;
+         margin-bottom: 8px;
          outline: 0;
          padding: 4px 8px;
-         background-color: #f1f1f1;
-         border-radius: 8px;
-         height: 30px;
-         font-size: 18px;
          width: 30rem;
-         margin-bottom: 8px;
        }
 
        .description {
-         font-family: Avenir, Helvetica, Arial, sans-serif;
-         border: 0;
-         outline: 0;
-         padding: 4px 8px;
          background-color: #f1f1f1;
+         border: 0;
          border-radius: 8px;
-         width: 60rem;
+         font-family: Avenir, Helvetica, Arial, sans-serif;
          font-size: 16px;
+         outline: 0;
          margin-bottom: 8px;
+         padding: 4px 8px;
          resize: none;
+         width: 60rem;
        }
      }
 
      .submit {
-       padding: 12px 16px;
-       border-radius: 8px;
-       background-color: #F06292;
-       height: 18px;
-       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.15));
-
        align-self: flex-end;
-
-       &:hover {
-         cursor: pointer;
-         background-color: #f26e9a;
-         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-       }
      }
    }
  }
