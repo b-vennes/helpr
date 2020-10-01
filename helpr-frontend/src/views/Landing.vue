@@ -3,10 +3,12 @@
     <div class="content">
       <div class="title">Helpr</div>
       <div class="subtitle">What do you need help with?</div>
-      <button class="btn">
-        <img src="../assets/google-logo.png">
-        <div class="text">SIGN IN WITH GOOGLE</div>
-      </button>
+      <router-link to="/questions">
+        <button class="btn">
+          <img src="../assets/google-logo.png">
+          <div class="text">SIGN IN WITH GOOGLE</div>
+        </button>
+      </router-link>
     </div>
     <div class="footer">A Viewpoint Project</div>
   </div>
@@ -65,6 +67,7 @@
        &:hover {
          background-color: #E35D8A;
          cursor: pointer;
+         filter: drop-shadow(0px 4.5px 4.5px rgba(0, 0.0, 0.0, 0.30));
        }
 
        &:active {
@@ -80,6 +83,8 @@
    }
  }
 
+ // Remove the underline from the router button.
+ a { text-decoration: none;}
 
  @keyframes colorWheel {
    from, to { color: black; }
