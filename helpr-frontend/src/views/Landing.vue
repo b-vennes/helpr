@@ -29,11 +29,11 @@
 
    .content {
      .title {
+       animation: colorWheel 15s infinite;
+       color: rgb(236,100,75);
        font-family: 'Patrick Hand SC', cursive;
        font-size: 17rem;
        line-height: 14rem;
-       color: rgb(236,100,75);
-       animation: colorWheel 15s infinite;
      }
 
      .subtitle {

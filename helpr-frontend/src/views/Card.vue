@@ -9,7 +9,8 @@
         </router-link>
       </div>
       <div class="main">
-        Hello. 
+        <div class="left"></div>
+        <div class="right"></div>
       </div>
     </div>
   </div>
@@ -45,12 +46,11 @@
         align-items: center;
         justify-content: center;
 
-        height: 40px;
-        width: 40px;
-        margin-bottom: 8px;
-        margin-right: 8px;
-        border-radius: 50%;
         background-color: #f1f1f1;
+        border-radius: 50%;
+        height: 40px;
+        margin: 0 8px 8px 0;
+        width: 40px;
 
         img {
           height: 15px;
@@ -64,13 +64,27 @@
     }
 
     .main {
-      display: flex;
       align-items: flex-start;
+      background-color: #F1F1F1;
+      background-image: url("../assets/card-background.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-radius: 40px;
+      display: flex;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+      height: 30rem;
       flex-direction: column;
-      background-color: rgba(#F1F1F1, 0.4);
-      padding: 12px;
-      border-radius: 12px;
       margin-bottom: 4px;
+      padding: 12px;
+      width: 60rem;
+
+      .left {
+
+      }
+
+      .right {
+
+      }
     }
   }
 }

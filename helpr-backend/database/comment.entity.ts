@@ -1,6 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable } from 'typeorm';
-import { Request } from 'database/request.entity';
-import { User } from './user.entity';
 
 @Entity()
 export class Comment {
@@ -22,6 +20,6 @@ export class Comment {
     @Column()
     isDeleted: boolean;
 
-    @ManyToOne(type => User, user => user.comment)
-    user: User;
+    @Column()
+    userId: number;
 }
