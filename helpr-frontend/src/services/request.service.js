@@ -1,20 +1,21 @@
 export default class RequestService {
     
-    getAllRequests() {
+    async getAllRequests() {
         // we'll hard code the url for now
-        fetch(`http://localhost:3000/requests/get`)
-            .then(response => {
-                return response.body;
-            })
-            .catch(error => {
-                console.log("Error when getting a request");
-            });
-    }
+        const response = await fetch(`http://localhost:3000/requests/get`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+        return response.json();
+    }
+    /*
     incrementRequestLikes(request) {
-        fetch(`http://localhost:3000/requests/incrementLikes`, {
-            method: 'PUT',
-            body: JSON.stringify({
+        return axios.put(`http://localhost:3000/requests/incrementLikes`, {
+            body: {
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -23,18 +24,13 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            })
-        })
-        .then(response => {})
-        .catch(error => {
-            console.log("Error when updating a request");
+            }
         });
     }
 
     createRequest(request) {
-        fetch(`http://localhost:3000/requests/create`, {
-            method: 'POST',
-            body: JSON.stringify({
+        return axios.post(`http://localhost:3000/requests/create`, {
+            body: {
                 description: request.description,
                 createDate: new Date(),
                 points: request.points,
@@ -42,18 +38,13 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            })
-        })
-        .then(response => {})
-        .catch(error => {
-            console.log("Error when creating a request");
+            }
         });
     }
 
     updateRequest(request) {
-        fetch(`http://localhost:3000/requests/update`, {
-            method: 'PUT',
-            body: JSON.stringify({
+        return axios.put(`http://localhost:3000/requests/update`, {
+            body: {
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -62,18 +53,13 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            })
-        })
-        .then(response => {})
-        .catch(error => {
-            console.log("Error when updating a request");
+            }
         });
     }
 
     deleteRequest(request) {
-        fetch(`http://localhost:3000/requests/delete`, {
-            method: 'POST',
-            body: JSON.stringify({
+        return axios.post(`http://localhost:3000/requests/delete`, {
+            body: {
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -82,11 +68,8 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: true
-            })
-        })
-        .then(response => {})
-        .catch(error => {
-            console.log("Error when updating a request");
+            }
         });
     }
+    */
 }

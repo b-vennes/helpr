@@ -20,51 +20,55 @@
         </div>
       </div>
       <div class="main">
-        <QuestionPreview
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-            title="My Title"
-            description="Some description of my problem."
-            tag="Forms">
-        </QuestionPreview>
-        <QuestionPreview
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-            title="My Title"
-            description="Some description of my problem."
-            tag="Forms">
-        </QuestionPreview>
-        <QuestionPreview
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-            title="My Title"
-            description="Some description of my problem."
-            tag="Forms">
-        </QuestionPreview>
-        <QuestionPreview
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-            title="My Title"
-            description="Some description of my problem."
-            tag="Forms">
-        </QuestionPreview>
-        <QuestionPreview
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-            title="My Title"
-            description="Some description of my problem."
-            tag="Forms">
-        </QuestionPreview>
-      </div>
-    </div>
+            <div v-for="request in requests" :key="request.id">
+                <div class="question">
+                    <QuestionPreview
+                        img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+                        v-bind:title="request.title"
+                        v-bind:description="request.description"
+                        tag="Forms">
+                    </QuestionPreview>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 
 <script>
-  import Button from '../components/Button'
-  import QuestionPreview from '../components/Question-preview'
+import RequestService from "../services/request.service.js";
+import Button from '../components/Button'
+import QuestionPreview from '../components/Question-preview'
 
-  export default {
+const requestService = new RequestService();
+export default {     
+    data: function() {
+        return {
+            requests: [],
+            error: ""
+        }
+    },
     components: {
-      Button,
-      QuestionPreview
+        Button,
+        QuestionPreview
+    },
+    methods: {
+        async getRequests() {
+            await requestService.getAllRequests()
+            .then(data => {
+                if (data) {
+                    this.requests = data;
+                }
+            });
+        }
+    },
+    async mounted(){ // like ngOnInit() lifecyclehook
+        await this.getRequests();
+    },
+    beforeUnmount: function() { // like ngOnDestroy() lifecyclehook
+        
     }
-  }
+}
 </script>
 
 <style lang="scss">

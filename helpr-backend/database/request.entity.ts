@@ -7,6 +7,9 @@ export class Request {
     id: number;
 
     @Column()
+    title: string;
+
+    @Column()
     description: string;
 
     @Column()
