@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from 'database/user.entity';
 
 @Injectable()
@@ -29,11 +29,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const existingUser = await this.userRepository.findOne({ passportId: id});
 
     if (!existingUser) {
-      const newUser = await this.userRepository.create({
-        id: id,
+      const newUser = await this.userRepository.save({
+        username: '',
+        password: '',
+        companyId: 0,
+        passportId: id,
         firstname: firstName,
-        lastname: lastName
-      });
+        lastname: lastName,
+        email: ''
+      } as User);
 
       done(null, newUser);
     } else {
