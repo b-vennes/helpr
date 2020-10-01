@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Landing from '../views/Landing.vue'
 
+import auth from '../middleware/auth';
+
 const routes = [
   {
     path: '/',
@@ -18,17 +20,20 @@ const routes = [
   {
     path: '/questions',
     name: 'Questions',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next)
   },
   {
     path: '/ask',
     name: 'Ask',
-    component: () => import('../views/Ask.vue')
+    component: () => import('../views/Ask.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next),
   },
   {
     path: '/card',
     name: 'Card',
-    component: () => import('../views/Card.vue')
+    component: () => import('../views/Card.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next),
   }
 ]
 

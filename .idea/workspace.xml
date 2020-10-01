@@ -20,9 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="098ec114-a400-4d42-8862-b43cbb8ce4bf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/helpr-frontend/src/middleware/auth.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/slnx.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/views/Card.vue" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/views/Card.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpr-frontend/src/router/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +86,10 @@
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
     <state x="-1506" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601490549633" />
+    <state x="-1197" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1601589606150">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1197" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601589606150" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1601509058556">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
