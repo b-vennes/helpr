@@ -18,7 +18,7 @@ export class Message {
     createdDate: Date;
 
     @Column()
-    associatedMessageId: string;
+    associatedMessageId: number;
 
     @Column()
     isLatestMessage: boolean;

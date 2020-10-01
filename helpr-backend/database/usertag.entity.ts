@@ -10,4 +10,7 @@ export class UserTag {
 
     @Column()
     tagId: number;
+
+    @Column()
+    isDeleted: boolean;
 }

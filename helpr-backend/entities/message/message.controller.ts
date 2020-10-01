@@ -11,9 +11,9 @@ export class MessageController {
         private readonly queryBus: QueryBus
       ) {}
 
-    @Get('get')
-    async getAllMessages(): Promise<Message[]> {
-        return await this.queryBus.execute(new GetMessagesQuery());
+    @Get('getMessagesByAssociatedId')
+    async getMessagesByAssociatedId(@Body() query: GetMessagesQuery): Promise<Message[]> {
+        return await this.queryBus.execute(new GetMessagesQuery(query.associatedMessageId));
     }
 
     @Post('create')
