@@ -1,13 +1,10 @@
-import { Observable } from 'rxjs';
-import axios from 'axios';
-
 export default class RequestService {
     
     getAllRequests() {
         // we'll hard code the url for now
-        axios.get(`http://localhost:3000/requests/get`)
+        fetch(`http://localhost:3000/requests/get`)
             .then(response => {
-                return response.data;
+                return response.body;
             })
             .catch(error => {
                 console.log("Error when getting a request");
@@ -15,8 +12,9 @@ export default class RequestService {
     }
 
     incrementRequestLikes(request) {
-        axios.put(`http://localhost:3000/requests/incrementLikes`, {
-            body: {
+        fetch(`http://localhost:3000/requests/incrementLikes`, {
+            method: 'PUT',
+            body: JSON.stringify({
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -25,7 +23,7 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            }
+            })
         })
         .then(response => {})
         .catch(error => {
@@ -34,8 +32,9 @@ export default class RequestService {
     }
 
     createRequest(request) {
-        axios.post(`http://localhost:3000/requests/create`, {
-            body: {
+        fetch(`http://localhost:3000/requests/create`, {
+            method: 'POST',
+            body: JSON.stringify({
                 description: request.description,
                 createDate: new Date(),
                 points: request.points,
@@ -43,7 +42,7 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            }
+            })
         })
         .then(response => {})
         .catch(error => {
@@ -52,8 +51,9 @@ export default class RequestService {
     }
 
     updateRequest(request) {
-        axios.put(`http://localhost:3000/requests/update`, {
-            body: {
+        fetch(`http://localhost:3000/requests/update`, {
+            method: 'PUT',
+            body: JSON.stringify({
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -62,7 +62,7 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            }
+            })
         })
         .then(response => {})
         .catch(error => {
@@ -71,8 +71,9 @@ export default class RequestService {
     }
 
     deleteRequest(request) {
-        axios.post(`http://localhost:3000/requests/delete`, {
-            body: {
+        fetch(`http://localhost:3000/requests/delete`, {
+            method: 'POST',
+            body: JSON.stringify({
                 id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
@@ -81,7 +82,7 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: true
-            }
+            })
         })
         .then(response => {})
         .catch(error => {
