@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
-import { Comment } from './comment.entity';
 
 @Entity()
 export class Request {
@@ -22,10 +21,9 @@ export class Request {
     @Column()
     isPublicRequest: boolean;
 
-    @ManyToOne(type => User, user => user.request)
-    @JoinTable()
-    user: User;
+    @Column()
+    isDeleted: boolean;
 
-    @OneToMany(type => Comment, comment => comment.request)
-    comments: Comment[];
+    @Column()
+    userId: number;
 }

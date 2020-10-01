@@ -1,33 +1,30 @@
-import { Body, Controller, Delete, Get, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { Comment } from 'database/comment.entity';
-import { CommentService } from './comment.service';
+import { Request } from 'database/request.entity';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetCommentsByRequestIdQuery } from './queries/handlers/get-comments-by-request-id.handler';
+import { IncrementLikesCommand } from './commands/handler/increment-likes.handler';
+import { CreateCommentCommand } from './commands/handler/create-comment.handler';
 
 @Controller('comments')
 export class CommentController {
-    constructor(private commentService: CommentService) {}
+    constructor(
+        private readonly commandBus: CommandBus,
+        private readonly queryBus: QueryBus
+      ) {}
 
     @Get('get')
-    async getAll(): Promise<Comment[]>  {
-        return this.commentService.getAll();
+    async getCommentsByRequestId(@Body() request: GetCommentsByRequestIdQuery): Promise<Comment[]>  {
+        return this.queryBus.execute(new GetCommentsByRequestIdQuery(request.requestId));
     }
 
-    @Get('query')
-    async query(): Promise<Comment[]> {
-        return this.commentService.query();
+    @Put('like')
+    async incrementLikes(@Body() request: IncrementLikesCommand): Promise<any> {
+        return this.commandBus.execute(new IncrementLikesCommand(request.commentId));
     }
 
     @Post('create')
     async createComment(@Body() comment: Comment): Promise<Comment> {
-        return await this.commentService.create(comment);
-    }
-
-    @Put('update')
-    async updateComment(@Body() comment: Comment): Promise<any> {
-        return await this.commentService.update(comment);
-    }
-
-    @Delete('delete')
-    async deleteComment(@Body() comment: Comment): Promise<any> {
-        return await this.commentService.delete(comment);
+        return this.commandBus.execute(new CreateCommentCommand(comment));
     }
 }

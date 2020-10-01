@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { RequestController } from './request.controller';
+import { MessageController } from './message.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Request } from 'database/request.entity';
+import { Message } from 'database/message.entity';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([Request])],
-    controllers: [RequestController],
+    imports: [CqrsModule, TypeOrmModule.forFeature([Message])],
+    controllers: [MessageController],
     providers: [
         ...CommandHandlers,
         ...QueryHandlers],
 })
 
-export class RequestModule {}
+export class MessageModule {}

@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { RequestController } from './request.controller';
+import { UserProfileController } from './userprofile.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Request } from 'database/request.entity';
+import { UserProfile } from 'database/userprofile.entity';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([Request])],
-    controllers: [RequestController],
+    imports: [CqrsModule, TypeOrmModule.forFeature([UserProfile])],
+    controllers: [UserProfileController],
     providers: [
         ...CommandHandlers,
         ...QueryHandlers],
 })
 
-export class RequestModule {}
+export class UserProfileModule {}

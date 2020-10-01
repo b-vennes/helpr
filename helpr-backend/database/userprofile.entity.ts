@@ -15,7 +15,6 @@ export class UserProfile {
     @Column()
     aboutMe: string;
 
-    @OneToOne(type => User)
-    @JoinColumn()
-    user: User;
+    @Column()
+    userId: number;
 }
