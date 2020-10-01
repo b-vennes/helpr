@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="stuff">
+    <div class="all">
       <div class="top">
         <div class="left">
           <div class="header">Open Questions</div>
@@ -11,75 +11,61 @@
         <div class="right">
           <input type="text" placeholder="Search">
           <router-link to="/ask">
-            <div class="ask">Ask a Helpr</div>
+            <Button txt="Ask a Helpr" class="primary ask"></Button>
           </router-link>
           <router-link to="/card">
-            <div class="find">Find a Helpr</div>
+            <Button txt="Find a Helpr" class="secondary find"></Button>
           </router-link>
           <img src="../assets/settings.svg" class="settings">
         </div>
       </div>
       <div class="main">
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
-        <div class="question">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-          <div class="content">
-            <div class="title">My Title</div>
-            <div class="description">Some very short description of what I need from someone.</div>
-          </div>
-          <div class="right">Forms</div>
-        </div>
+        <QuestionPreview
+            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+            title="My Title"
+            description="Some description of my problem."
+            tag="Forms">
+        </QuestionPreview>
+        <QuestionPreview
+            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+            title="My Title"
+            description="Some description of my problem."
+            tag="Forms">
+        </QuestionPreview>
+        <QuestionPreview
+            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+            title="My Title"
+            description="Some description of my problem."
+            tag="Forms">
+        </QuestionPreview>
+        <QuestionPreview
+            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+            title="My Title"
+            description="Some description of my problem."
+            tag="Forms">
+        </QuestionPreview>
+        <QuestionPreview
+            img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+            title="My Title"
+            description="Some description of my problem."
+            tag="Forms">
+        </QuestionPreview>
       </div>
     </div>
     </div>
 </template>
+
+<script>
+  import Button from '../components/Button'
+  import QuestionPreview from '../components/Question-preview'
+
+  export default {
+    components: {
+      Button,
+      QuestionPreview
+    }
+  }
+</script>
 
 <style lang="scss">
 .container {
@@ -93,7 +79,7 @@
   color: black;
   height: 100vh;
 
-  .stuff {
+  .all {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -153,34 +139,8 @@
           border-radius: 8px;
         }
 
-        .ask {
+        .ask, .find {
           margin-right: 12px;
-          padding: 12px 16px;
-          border-radius: 8px;
-          background-color: #1DE9B6;
-          height: 18px;
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.15));
-
-          &:hover {
-            cursor: pointer;
-            background-color: #2aeaba;
-            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-          }
-        }
-
-        .find {
-          margin-right: 12px;
-          padding: 12px 16px;
-          border-radius: 8px;
-          background-color: #F06292;
-          height: 18px;
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.15));
-
-          &:hover {
-            cursor: pointer;
-            background-color: #f26e9a;
-            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-          }
         }
 
         .settings {
@@ -207,50 +167,6 @@
       max-height: 25rem;
       overflow: scroll;
       overflow-x: hidden;
-
-      .question {
-        display: flex;
-        background-color: #F1F1F1;
-        padding: 16px;
-        border-radius: 24px;
-        align-items: center;
-        margin-bottom: 4px;
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.03));
-
-        img {
-          height: 80px;
-          border-radius: 80px;
-          margin-right: 18px;
-        }
-
-        .content {
-          display: flex;
-          justify-content: flex-start;
-          flex-direction: column;
-          align-items: flex-start;
-
-          .title {
-            font-size: 2rem;
-          }
-
-          .description {
-            font-size: 16px;
-          }
-        }
-
-        .right {
-          background-color: #FF7043;
-          padding: 12px 18px;
-          border-radius: 24px;
-          margin: 0 24px 0 auto;
-        }
-
-        &:hover {
-          cursor: pointer;
-          background-color: #f7f7f7;
-          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-        }
-      }
     }
 
     // Remove the underline from the router button.

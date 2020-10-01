@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompanyModule } from '../entities/company/company.module';
 import { UserModule } from '../entities/user/user.module';
@@ -15,15 +14,18 @@ import { Request } from 'database/request.entity';
 import { Comment } from 'database/comment.entity';
 import { UserTag } from 'database/usertag.entity';
 import { RequestTag } from 'database/requesttag.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CompanyModule,
-            UserModule,
-            RequestModule,
-            CommentModule,
+  imports: [
+    CompanyModule,
+    UserModule,
+    RequestModule,
+    CommentModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'C:/sqlite/helpr2.db',
+      database: 'helpr.db',
       synchronize: true,
       logging: false,
       entities: [
@@ -40,6 +42,6 @@ import { RequestTag } from 'database/requesttag.entity';
     }), 
     ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
