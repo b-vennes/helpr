@@ -9,6 +9,15 @@ export class User {
     id: number;
 
     @Column()
+    username: string;
+
+    @Column()
+    password: string;
+
+    @Column()
+    email: string;
+
+    @Column()
     passportId: number;
 
     @Column()
@@ -17,9 +26,6 @@ export class User {
     @Column()
     lastname: string;
 
-    @ManyToOne(type => Company, company => company.users)
-    company: Company;
-
-    @OneToMany(type => Comment, comment => comment.user)
-    comment: Comment;
+    @Column()
+    companyId: number;
 }
