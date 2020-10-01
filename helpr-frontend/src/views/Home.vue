@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <ErrorDisplay v-if="isShowError" :errorMessage="errorMessage"></ErrorDisplay>
     <div class="all">
       <div class="top">
         <div class="left">
@@ -24,8 +25,8 @@
                 <div class="question">
                     <QuestionPreview
                         img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-                        v-bind:title="request.title"
-                        v-bind:description="request.description"
+                        :title="request.title"
+                        :description="request.description"
                         tag="Forms">
                     </QuestionPreview>
                 </div>
@@ -37,36 +38,58 @@
 
 <script>
 import RequestService from "../services/request.service.js";
-import Button from '../components/Button'
-import QuestionPreview from '../components/Question-preview'
+import Button from '../components/Button';
+import QuestionPreview from '../components/Question-preview';
+import ErrorDisplay from '../components/common/Error.vue';
+import { emitter } from '../components/common/event-bus';
 
 const requestService = new RequestService();
+
 export default {     
     data: function() {
         return {
             requests: [],
-            error: ""
+            errorMessage: "",
+            isShowError: false
         }
     },
     components: {
         Button,
-        QuestionPreview
+        QuestionPreview,
+        ErrorDisplay
     },
     methods: {
+        showErrorMessage: function(message) {
+            this.errorMessage = message;
+            this.isShowError = true;
+        },
         async getRequests() {
             await requestService.getAllRequests()
             .then(data => {
                 if (data) {
                     this.requests = data;
+                    this.showErrorMessage("Error when receiving requests");
+                } else {
+                    this.showErrorMessage("Error when receiving requests");
                 }
             });
+        },
+        async createRequest() {
+            
+        },
+        showErrorMessageEventListener() {
+            this.isShowError = false;
         }
     },
-    async mounted(){ // like ngOnInit() lifecyclehook
+    async mounted(){
         await this.getRequests();
+
+        emitter.on('error-display-event', () => {
+            this.showErrorMessageEventListener();
+        });
     },
-    beforeUnmount: function() { // like ngOnDestroy() lifecyclehook
-        
+    beforeUnmount: function() {
+        emitter.off('error-display-event', () => {});
     }
 }
 </script>

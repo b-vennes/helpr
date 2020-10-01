@@ -1,7 +1,6 @@
 export default class RequestService {
     
     async getAllRequests() {
-        // we'll hard code the url for now
         const response = await fetch(`http://localhost:3000/requests/get`, {
             method: 'GET',
             mode: 'cors',
@@ -12,11 +11,10 @@ export default class RequestService {
 
         return response.json();
     }
-    /*
-    incrementRequestLikes(request) {
-        return axios.put(`http://localhost:3000/requests/incrementLikes`, {
-            body: {
-                id: request.id,
+    
+    async incrementRequestLikes(request) {
+        const body = {
+            id: request.id,
                 description: request.description,
                 createdDate: request.createdDate,
                 points: request.points,
@@ -24,24 +22,45 @@ export default class RequestService {
                 isPublicRequest: request.isPublicRequest,
                 userId: request.userId,
                 isDeleted: false
-            }
+        };
+
+        const response = await fetch(`http://localhost:3000/requests/incrementLikes`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
+
+        return response.json();
     }
 
-    createRequest(request) {
-        return axios.post(`http://localhost:3000/requests/create`, {
-            body: {
-                description: request.description,
-                createDate: new Date(),
-                points: request.points,
-                likes: 0,
-                isPublicRequest: request.isPublicRequest,
-                userId: request.userId,
-                isDeleted: false
-            }
+    async createRequest(request) {
+        const body = {
+            id: request.id,
+            description: request.description,
+            createDate: new Date(),
+            points: request.points,
+            likes: 0,
+            isPublicRequest: request.isPublicRequest,
+            userId: request.userId,
+            isDeleted: false
+        };
+
+        const response = await fetch(`http://localhost:3000/requests/create`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
+
+        return response.json();
     }
 
+    /*
     updateRequest(request) {
         return axios.put(`http://localhost:3000/requests/update`, {
             body: {
