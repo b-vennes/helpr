@@ -15,13 +15,13 @@ export default class RequestService {
     async incrementRequestLikes(request) {
         const body = {
             id: request.id,
-                description: request.description,
-                createdDate: request.createdDate,
-                points: request.points,
-                likes: request.likes, //increment is done in the backend
-                isPublicRequest: request.isPublicRequest,
-                userId: request.userId,
-                isDeleted: false
+            description: request.description,
+            createdDate: request.createdDate,
+            points: request.points,
+            likes: request.likes, //increment is done in the backend
+            isPublicRequest: request.isPublicRequest,
+            userId: request.userId,
+            isDeleted: false
         };
 
         const response = await fetch(`http://localhost:3000/requests/incrementLikes`, {
@@ -38,14 +38,14 @@ export default class RequestService {
 
     async createRequest(request) {
         const body = {
-            id: request.id,
             description: request.description,
-            createDate: new Date(),
+            createdDate: request.createdDate,
             points: request.points,
-            likes: 0,
+            likes: request.likes,
             isPublicRequest: request.isPublicRequest,
             userId: request.userId,
-            isDeleted: false
+            isDeleted: request.isDeleted,
+            title: request.title
         };
 
         const response = await fetch(`http://localhost:3000/requests/create`, {
@@ -57,7 +57,7 @@ export default class RequestService {
             body: JSON.stringify(body)
         });
 
-        return response.json();
+        return response;
     }
 
     /*

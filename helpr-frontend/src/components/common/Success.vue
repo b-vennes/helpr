@@ -1,10 +1,10 @@
 <template>
-    <div class="error-card">
+    <div class="success-card">
         <div class="message">
-            <h3 class="text-sm-left"> {{errorMessage}} </h3>
+            <h3 class="text-sm-left"> {{successMessage}} </h3>
         </div>
         <div class="clear">
-            <a @click="clearErrorMessage">Clear</a>
+            <a @click="clearSuccessMessage">Clear</a>
         </div>
     </div>
 </template>
@@ -13,27 +13,27 @@
 import { emitter } from './event-bus';
 
 export default { 
-    name: 'ErrorDisplay',
+    name: 'SuccessDisplay',
     methods: {
-        clearErrorMessage() {
-            emitter.emit('error-display-event');
+        clearSuccessMessage() {
+            emitter.emit('success-display-event');
         }
     },
     props: {
-        errorMessage: String
+        successMessage: String
     }
 }
 </script>
 
 <style scoped lang="scss">
-.error-card {
+.success-card {
     width: 70%;
     background-color: #F1F1F1;
     border-radius: 8px;
     align-items: center;
     //margin-top: 8px;
     border-style: solid;
-    border-color: red;
+    border-color: green;
     display: flex;
 
     .message {

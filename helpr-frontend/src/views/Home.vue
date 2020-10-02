@@ -68,14 +68,12 @@ export default {
             .then(data => {
                 if (data) {
                     this.requests = data;
-                    this.showErrorMessage("Error when receiving requests");
+                    
+                    this.showErrorMessage("Error in posting a new request");
                 } else {
                     this.showErrorMessage("Error when receiving requests");
                 }
             });
-        },
-        async createRequest() {
-            
         },
         showErrorMessageEventListener() {
             this.isShowError = false;
