@@ -26,7 +26,9 @@
                         img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
                         v-bind:title="request.title"
                         v-bind:description="request.description"
-                        tag="Forms">
+                        v-bind:id="request.id"
+                        tag="Forms"
+                        v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
                     </QuestionPreview>
                 </div>
             </div>
