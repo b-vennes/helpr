@@ -10,14 +10,6 @@ const routes = [
     component: Landing
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
     path: '/questions',
     name: 'Questions',
     component: () => import('../views/Home.vue'),
@@ -34,6 +26,13 @@ const routes = [
     name: 'Card',
     component: () => import('../views/Card.vue'),
     beforeEnter: (to, from, next) => auth(to, from, next),
+  },
+  {
+    path: '/question',
+    name: 'Question',
+    props: true,
+    component: () => import('../views/Question.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next)
   }
 ]
 
