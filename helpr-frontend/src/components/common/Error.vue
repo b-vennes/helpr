@@ -14,11 +14,6 @@ import { emitter } from './event-bus';
 
 export default { 
     name: 'ErrorDisplay',
-    data() {
-        return {
-
-        }
-    },
     methods: {
         clearErrorMessage() {
             emitter.emit('error-display-event');
@@ -26,11 +21,6 @@ export default {
     },
     props: {
         errorMessage: String
-    },
-    mounted: function() {
-        
-    },
-    beforeUnmount: function() {
     }
 }
 </script>
@@ -47,7 +37,7 @@ export default {
     display: flex;
 
     .message {
-        margin-left: 8px;
+        margin-left: 12px;
     }
 
     .clear {
