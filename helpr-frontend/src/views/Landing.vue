@@ -3,16 +3,40 @@
     <div class="content">
       <div class="title">Helpr</div>
       <div class="subtitle">What do you need help with?</div>
-      <router-link to="/questions">
-        <button class="btn">
+        <button @click="login" class="btn">
           <img src="../assets/google-logo.png">
           <div class="text">SIGN IN WITH GOOGLE</div>
         </button>
-      </router-link>
     </div>
     <div class="footer">A Viewpoint Project</div>
   </div>
 </template>
+
+<script>
+import AuthService from '../services/auth.service.js';
+
+const authService = new AuthService();
+
+export default {
+    data: function() {
+        return {
+            
+        }
+    },
+    methods: {
+        async login() {
+            await authService.login()
+            .then(data => {
+                console.log(data);
+                if (data) {
+                    localStorage.setItem('userInformation', data);
+                    window.location.href = "http://localhost:8080/#/questions";
+                }
+            })
+        }
+    }
+}
+</script>
 
 <style scoped lang="scss">
  .container {
