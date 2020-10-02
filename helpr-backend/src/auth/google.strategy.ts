@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { User } from 'database/user.entity';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy) {
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   constructor(
     @InjectRepository(User)
@@ -15,13 +15,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     super({
       clientID: '521010473477-a9mrljfidb26hvuiv8bacg76lelk64gd.apps.googleusercontent.com',
       clientSecret: 'DKg6fQl3_aCgfDlM6Ev5oGjw',
-      callbackURL: 'http://localhost:3000/auth/login',
+      callbackURL: 'http://localhost:3000/google/redirect',
       scope: ['email', 'profile'],
     });
   }
 
   async validate (accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-    const { id, name } = profile;
+    const { id, name, emails, photos } = profile;
 
     const firstName = name.givenName;
     const lastName = name.familyName;
@@ -30,13 +30,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 
     if (!existingUser) {
       const newUser = await this.userRepository.save({
-        username: '',
-        password: '',
-        companyId: 0,
+        username: emails[0].value,
+        companyId: 1,
         passportId: id,
         firstname: firstName,
         lastname: lastName,
-        email: ''
+        email: emails[0].value,
+        photo: photos[0].value
       } as User);
 
       done(null, newUser);

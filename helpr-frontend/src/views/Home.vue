@@ -68,8 +68,6 @@ export default {
             .then(data => {
                 if (data) {
                     this.requests = data;
-                    
-                    this.showErrorMessage("Error in posting a new request");
                 } else {
                     this.showErrorMessage("Error when receiving requests");
                 }

@@ -12,9 +12,6 @@ export class User {
     username: string;
 
     @Column()
-    password: string;
-
-    @Column()
     email: string;
 
     @Column()
@@ -25,6 +22,9 @@ export class User {
 
     @Column()
     lastname: string;
+
+    @Column()
+    photo: string;
 
     @Column()
     companyId: number;
