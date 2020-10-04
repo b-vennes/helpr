@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { fromEventPattern } from 'rxjs';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

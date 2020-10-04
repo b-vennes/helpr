@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CompanyModule } from '../entities/company/company.module';
-import { UserModule } from '../entities/user/user.module';
-import { RequestModule } from '../entities/request/request.module';
-import { CommentModule } from '../entities/comment/comment.module';
-import { Company } from 'database/company.entity';
-import { User } from 'database/user.entity';
-import { UserProfile } from 'database/userprofile.entity';
-import { Message } from 'database/message.entity';
-import { Tag } from 'database/tag.entity';
-import { Request } from 'database/request.entity';
-import { Comment } from 'database/comment.entity';
-import { UserTag } from 'database/usertag.entity';
-import { RequestTag } from 'database/requesttag.entity';
+import { CompanyModule } from 'src/entities/company/company.module';
+import { UserModule } from 'src/entities/user/user.module';
+import { RequestModule } from 'src/entities/request/request.module';
+import { CommentModule } from 'src/entities/comment/comment.module';
+import { Company } from 'src/database/company.entity';
+import { User } from 'src/database/user.entity';
+import { UserProfile } from 'src/database/userprofile.entity';
+import { Message } from 'src/database/message.entity';
+import { Tag } from 'src/database/tag.entity';
+import { Request } from 'src/database/request.entity';
+import { Comment } from 'src/database/comment.entity';
+import { UserTag } from 'src/database/usertag.entity';
+import { RequestTag } from 'src/database/requesttag.entity';
 import { AuthModule } from './auth/auth.module';
 
 @Module({

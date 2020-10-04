@@ -40,6 +40,13 @@ const routes = [
     name: 'Card',
     component: () => import('../views/Card.vue'),
     beforeEnter: (to, from, next) => auth(to, from, next),
+  },
+  {
+    path: '/question',
+    name: 'Question',
+    props: true,
+    component: () => import('../views/Question.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next)
   }
 ]
 

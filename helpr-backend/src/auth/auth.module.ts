@@ -7,7 +7,7 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { AuthController } from './auth.controller';
-import { User } from 'database/user.entity';
+import { User } from 'src/database/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

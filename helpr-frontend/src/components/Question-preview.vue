@@ -2,7 +2,7 @@
   <div class="question">
     <img v-bind:src="img">
     <div class="content">
-      <div class="title">{{ title }}</div>
+      <div class="title">{{ title }}<span class="id">#{{ id }}</span></div>
       <div class="description"> {{ description }}</div>
     </div>
     <div class="right">{{ tag }}</div>
@@ -14,6 +14,7 @@ export default {
   name: 'QuestionPreview',
   props: {
     description: String,
+    id: Number,
     img: String,
     tag: String,
     title: String
@@ -44,7 +45,16 @@ export default {
     align-items: flex-start;
 
     .title {
+      display: flex;
+      align-items: center;
+
       font-size: 2rem;
+
+      .id {
+        font-size: 15px;
+        margin-left: 8px;
+        opacity: 0.6;
+      }
     }
 
     .description {
