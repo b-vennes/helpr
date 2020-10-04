@@ -20,7 +20,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forFeature([User])
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
-  exports: [],
   controllers: [AuthController]
 })
 export class AuthModule {}

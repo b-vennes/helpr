@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Landing from '../views/Landing.vue'
+import Loading from '../views/Loading.vue'
 
 import auth from '../middleware/auth';
 
@@ -8,6 +9,11 @@ const routes = [
     path: '/',
     name: 'Landing',
     component: Landing
+  },
+  {
+    path: '/loading/:id',
+    name: 'Loading',
+    component: Loading
   },
   {
     path: '/about',

@@ -1,33 +1,23 @@
-import { Body, Controller, Delete, Get, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { User } from 'database/user.entity';
-import { UserService } from './user.service';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetAllUsersQuery } from './queries/handlers/get-users.handler';
+import { GetUsersByUserIdQuery } from './queries/handlers/get-users-by-id.handler';
 
 @Controller('users')
 export class UserController {
-    constructor(private userService: UserService) {}
+    constructor(
+        private readonly commandBus: CommandBus,
+        private readonly queryBus: QueryBus
+      ) {}
 
-    @Get('get')
-    async getAll(): Promise<User[]>  {
-        return this.userService.getAll();
+    @Get('getAllUsers')
+    async getAllUsers(): Promise<User[]>  {
+        return this.queryBus.execute(new GetAllUsersQuery());
     }
 
-    @Get('query')
-    async query(): Promise<User[]> {
-        return this.userService.query();
-    }
-
-    @Post('create')
-    async createUser(@Body() user: User): Promise<User> {
-        return await this.userService.create(user);
-    }
-
-    @Put('update')
-    async updateUser(@Body() user: User): Promise<any> {
-        return await this.userService.update(user);
-    }
-
-    @Delete('delete')
-    async deleteUser(@Body() user: User): Promise<any> {
-        return await this.userService.delete(user);
+    @Get('getById/:id')
+    async query(@Param('id') id: number): Promise<User> {
+        return await this.queryBus.execute(new GetUsersByUserIdQuery(id));
     }
 }
