@@ -24,6 +24,18 @@ const routes = [
   //  component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   //},
   {
+    path: '/navigation',
+    name: 'Navigation',
+    component: () => import('../views/Navbar.vue'),
+    children: [
+        {
+            path: 'questions',
+            name: 'Questions',
+            component: () => import('../views/Home.vue')
+        }
+    ]
+  },
+  {
     path: '/questions',
     name: 'Questions',
     component: () => import('../views/Home.vue'),

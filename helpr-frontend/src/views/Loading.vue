@@ -33,6 +33,10 @@ export default {
                     localStorage.setItem('userId', data.id)
                     localStorage.setItem('photo', data.photo)
                     localStorage.setItem('username', data.username)
+                    localStorage.setItem('requiresAuth', 'userIsAuthorized')
+                    setTimeout(function () {
+                        window.location.replace("http://localhost:8080/#/navigation");
+                    }, 2000);
                 }
             })
         }
