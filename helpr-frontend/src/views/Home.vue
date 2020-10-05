@@ -1,4 +1,5 @@
 <template>
+  <Navbar class="navbar"></Navbar>
   <div class="container">
     <ErrorDisplay v-if="isShowError" :errorMessage="errorMessage"></ErrorDisplay>
     <div class="all">
@@ -21,21 +22,21 @@
         </div>
       </div>
       <div class="main">
-            <div v-for="request in requests" :key="request.id">
-                <div class="question">
-                    <QuestionPreview
-                        img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-                        v-bind:title="request.title"
-                        v-bind:description="request.description"
-                        v-bind:id="request.id"
-                        tag="Forms"
-                        v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
-                    </QuestionPreview>
-                </div>
-            </div>
+        <div v-for="request in requests" :key="request.id">
+          <div class="question">
+            <QuestionPreview
+                img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
+                v-bind:title="request.title"
+                v-bind:description="request.description"
+                v-bind:id="request.id"
+                tag="Forms"
+                v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
+            </QuestionPreview>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -44,55 +45,61 @@ import Button from '../components/Button';
 import QuestionPreview from '../components/Question-preview';
 import ErrorDisplay from '../components/common/Error.vue';
 import { emitter } from '../components/common/event-bus';
+import Navbar from "@/components/Navbar";
 
 const requestService = new RequestService();
 
-export default {     
-    data: function() {
-        return {
-            requests: [],
-            errorMessage: "",
-            isShowError: false
-        }
-    },
-    components: {
-        Button,
-        QuestionPreview,
-        ErrorDisplay
-    },
-    methods: {
-        showErrorMessage: function(message) {
-            this.errorMessage = message;
-            this.isShowError = true;
-        },
-        async getRequests() {
-            await requestService.getAllRequests()
-            .then(data => {
-                if (data) {
-                    this.requests = data;
-                } else {
-                    this.showErrorMessage("Error when receiving requests");
-                }
-            });
-        },
-        showErrorMessageEventListener() {
-            this.isShowError = false;
-        }
-    },
-    async mounted(){
-        await this.getRequests();
-
-        emitter.on('error-display-event', () => {
-            this.showErrorMessageEventListener();
-        });
-    },
-    beforeUnmount: function() {
-        emitter.off('error-display-event', () => {});
+export default {
+  data: function() {
+    return {
+      requests: [],
+      errorMessage: "",
+      isShowError: false
     }
+  },
+  components: {
+    Navbar,
+    Button,
+    QuestionPreview,
+    ErrorDisplay
+  },
+  methods: {
+    showErrorMessage: function(message) {
+      this.errorMessage = message;
+      this.isShowError = true;
+    },
+    async getRequests() {
+      await requestService.getAllRequests()
+          .then(data => {
+            if (data) {
+              this.requests = data;
+            } else {
+              this.showErrorMessage("Error when receiving requests");
+            }
+          });
+    },
+    showErrorMessageEventListener() {
+      this.isShowError = false;
+    }
+  },
+  async mounted(){
+    await this.getRequests();
+
+    emitter.on('error-display-event', () => {
+      this.showErrorMessageEventListener();
+    });
+  },
+  beforeUnmount: function() {
+    emitter.off('error-display-event', () => {});
+  }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.navbar {
+  position: absolute;
+  width: 100vw;
+}
 .container {
   display: flex;
   align-items: center;
