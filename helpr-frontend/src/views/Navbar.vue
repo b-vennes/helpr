@@ -38,7 +38,6 @@ export default {
     },
     methods: {
         switchView: function(switchValue) {
-            console.log("switch view" + switchValue);
             if (switchValue === 1) {
                 this.view = 1;
             } else if (switchValue === 2) { 
