@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Put } from "@nestjs/common";
 import { UserProfile } from 'src/database/userprofile.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetUserProfilesQuery } from "./queries/handlers/get-user-profiles.handler";
@@ -18,9 +18,9 @@ export class UserProfileController {
             return await this.queryBus.execute(new GetUserProfilesQuery());
       }
 
-      @Get('getUserProfileById')
-      async getUserProfileById(@Body() query: GetUserProfileByIdQuery): Promise<UserProfile[]> {
-            return await this.queryBus.execute(new GetUserProfileByIdQuery(query.userProfileId));
+      @Get('getUserProfileById/:id')
+      async getUserProfileById(@Param('id') id: number): Promise<UserProfile[]> {
+            return await this.queryBus.execute(new GetUserProfileByIdQuery(id));
       }
 
       @Put('addPoints')
