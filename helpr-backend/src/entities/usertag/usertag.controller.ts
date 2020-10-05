@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { UserTag } from 'src/database/usertag.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetTagsByUserIdQuery } from "./queries/handlers/get-tags-by-user-id.handler";
@@ -12,9 +12,9 @@ export class UserTagController {
         private readonly queryBus: QueryBus
       ) {}
 
-    @Get('getUserTagsByUserId')
-    async getByUserId(@Body() query: GetTagsByUserIdQuery): Promise<UserTag[]> {
-        return await this.queryBus.execute(new GetTagsByUserIdQuery(query.userId));
+    @Get('getById/:id')
+    async getByUserId(@Param('id') id: number): Promise<UserTag[]> {
+        return await this.queryBus.execute(new GetTagsByUserIdQuery(id));
     }
 
     @Post('createUserTag')
