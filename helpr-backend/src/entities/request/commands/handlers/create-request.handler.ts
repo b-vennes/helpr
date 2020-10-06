@@ -16,7 +16,7 @@ export class CreateRequestHandler implements ICommandHandler<CreateRequestComman
         private readonly requestRepository: Repository<Request>
       ) { }
 
-    async execute(command: CreateRequestCommand) {
-        await this.requestRepository.save(command.request)
+    async execute(command: CreateRequestCommand): Promise<Request> {
+        return await this.requestRepository.save(command.request)
     }
 }

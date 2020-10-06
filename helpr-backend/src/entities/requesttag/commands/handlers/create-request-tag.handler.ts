@@ -16,7 +16,7 @@ export class CreateRequestTagHandler implements ICommandHandler<CreateRequestTag
         private readonly requesttagRepository: Repository<RequestTag>
       ) { }
 
-    async execute(command: CreateRequestTagCommand) {
-        await this.requesttagRepository.save(command.requestTag);
+    async execute(command: CreateRequestTagCommand): Promise<RequestTag> {
+        return await this.requesttagRepository.save(command.requestTag);
     }
 }

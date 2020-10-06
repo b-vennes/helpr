@@ -57,6 +57,6 @@ export default class RequestService {
             body: JSON.stringify(body)
         });
 
-        return response;
+        return response.json();
     }
 }

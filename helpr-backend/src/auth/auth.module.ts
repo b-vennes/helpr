@@ -9,6 +9,7 @@ import { GoogleStrategy } from './google.strategy';
 import { AuthController } from './auth.controller';
 import { User } from 'src/database/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserProfile } from 'src/database/userprofile.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
     }),
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User, UserProfile])
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController]

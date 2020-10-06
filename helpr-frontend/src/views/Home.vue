@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="homeContainer">
     <Navbar class="navbar"></Navbar>
     <ErrorDisplay v-if="isShowError" :errorMessage="errorMessage"></ErrorDisplay>
     <div class="all">
@@ -12,9 +12,13 @@
         </div>
         <div class="right">
           <input type="text" placeholder="Search">
+          
+          <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
+          <!--
           <router-link to="/ask">
             <Button txt="Ask a Helpr" class="primary ask"></Button>
           </router-link>
+          -->
           <router-link to="/card">
             <Button txt="Find a Helpr" class="secondary find"></Button>
           </router-link>
@@ -44,6 +48,11 @@
             </div>
         </div>
         </div>
+        <transition name="slide-fade" mode="out-in">
+            <div class="modal" v-if="showModal">
+                <AskModal></AskModal>
+            </div>
+        </transition>
       </div>
 </template>
 
@@ -56,6 +65,7 @@ import ErrorDisplay from '../components/common/Error.vue';
 import User from '../components/User';
 import { emitter } from '../components/common/event-bus';
 import Navbar from "@/components/Navbar";
+import AskModal from '../components/AskModal';
 
 const requestService = new RequestService();
 const userService = new UserService();
@@ -65,7 +75,8 @@ export default {
         return {
             requests: [],
             errorMessage: "",
-            isShowError: false
+            isShowError: false,
+            showModal: false
         }
     },
     components: {
@@ -73,13 +84,10 @@ export default {
         Button,
         QuestionPreview,
         ErrorDisplay,
-        User
+        User,
+        AskModal
     },
     methods: {
-        showErrorMessage: function(message) {
-            this.errorMessage = message;
-            this.isShowError = true;
-        },
         async getRequests() {
             await requestService.getAllRequests()
             .then(data => {
@@ -90,9 +98,6 @@ export default {
                 }
             });
         },
-        showErrorMessageEventListener() {
-            this.isShowError = false;
-        },
         async getUser(userId) {
             await userService.getUser(userId)
             .then(data => {
@@ -100,17 +105,35 @@ export default {
                     return data;
                 }
             })
+        },
+        showErrorMessageEventListener() {
+            this.isShowError = false;
+        },
+        toggleModal() {
+            this.showModal = true;
+        },
+        exitModal() {
+            this.showModal = false;
+        },
+        showErrorMessage: function(message) {
+            this.errorMessage = message;
+            this.isShowError = true;
         }
     },
     async mounted(){
         await this.getRequests();
 
         emitter.on('error-display-event', () => {
-        this.showErrorMessageEventListener();
+            this.showErrorMessageEventListener();
+        });
+
+        emitter.on('exit-ask-modal-event', () => {
+            this.exitModal();
         });
     },
     beforeUnmount: function() {
         emitter.off('error-display-event', () => {});
+        emitter.off('exit-ask-modal-event', () => {});
     }
 }
 </script>
@@ -120,7 +143,7 @@ export default {
   position: absolute;
   width: 100vw;
 }
-.container {
+.homeContainer {
   display: flex;
   flex-direction: column;
 
@@ -262,5 +285,22 @@ export default {
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
     }
   }
+}
+
+.modal {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

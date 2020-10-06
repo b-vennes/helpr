@@ -4,12 +4,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/database/user.entity';
+import { UserProfile } from 'src/database/userprofile.entity';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User>
+        private userRepository: Repository<User>,
+        @InjectRepository(UserProfile)
+        private userProfileRepository: Repository<UserProfile>
     ) {
         super({
         clientID: '521010473477-a9mrljfidb26hvuiv8bacg76lelk64gd.apps.googleusercontent.com',
@@ -24,7 +27,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     {
         const { id, name, emails, photos } = profile;
 
-        const existingUser = await this.userRepository.findOne({ passportId: id});
+        const existingUser = await this.userRepository.findOne({ passportId: id });
+        
+        console.log("in validate");
 
         if (!existingUser) {
             const newUser = await this.userRepository.save({
@@ -36,6 +41,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 email: emails[0].value,
                 photo: photos[0].value
             } as User);
+
+            const newUserProfile = {
+                points: 0,
+                title: "Add your title",
+                aboutMe: "Add your about me",
+                userId: newUser.id
+            }
+
+            this.userProfileRepository.save(newUserProfile);
 
             done(null, newUser);
         } else {

@@ -26,7 +26,7 @@ export class RequestController {
     }
 
     @Post('create')
-    async createRequest(@Body() request: Request) {
+    async createRequest(@Body() request: Request): Promise<Request>{
         return await this.commandBus.execute(new CreateRequestCommand(request));
     }
     
