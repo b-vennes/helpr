@@ -5,6 +5,8 @@ import { CompanyModule } from 'src/entities/company/company.module';
 import { UserModule } from 'src/entities/user/user.module';
 import { RequestModule } from 'src/entities/request/request.module';
 import { CommentModule } from 'src/entities/comment/comment.module';
+import { RequestTagModule } from 'src/entities/requesttag/requesttag.module';
+import { UserProfileModule } from 'src/entities/userprofile/userprofile.module';
 import { Company } from 'src/database/company.entity';
 import { User } from 'src/database/user.entity';
 import { UserProfile } from 'src/database/userprofile.entity';
@@ -23,6 +25,8 @@ import { AuthModule } from './auth/auth.module';
     RequestModule,
     CommentModule,
     AuthModule,
+    RequestTagModule,
+    UserProfileModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'helpr.db',

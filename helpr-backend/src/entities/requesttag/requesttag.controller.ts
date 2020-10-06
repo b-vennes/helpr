@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { RequestTag } from 'src/database/requesttag.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetTagsByRequestIdQuery } from "./queries/handlers/get-tags-by-request-id.handler";
@@ -12,9 +12,9 @@ export class RequestTagController {
         private readonly queryBus: QueryBus
       ) {}
 
-    @Get('getRequestTagsByUserId')
-    async getByUserId(@Body() query: GetTagsByRequestIdQuery): Promise<RequestTag[]> {
-        return await this.queryBus.execute(new GetTagsByRequestIdQuery(query.requestId));
+    @Get('getRequestTagsByRequestId/:id')
+    async getByRequestId(@Param('id') id: number): Promise<any[]> {
+        return await this.queryBus.execute(new GetTagsByRequestIdQuery(id));
     }
 
     @Post('createRequestTag')

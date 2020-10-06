@@ -10,7 +10,7 @@ export default class UserProfileService {
     }
 
     async getUserProfileById(profileId) {
-        const response = await fetch(`http://localhost:3000/userprofiles/getUserProfileById/` + profileId , {
+        const response = await fetch(`http://localhost:3000/userprofiles/getUserProfileById/` + profileId, {
             method: 'GET',
             mode: 'cors'
         });

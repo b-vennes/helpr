@@ -1,11 +1,11 @@
 <template>
-  <Navbar class="navbar"></Navbar>
   <div class="container">
+    <Navbar class="navbar"></Navbar>
     <ErrorDisplay v-if="isShowError" :errorMessage="errorMessage"></ErrorDisplay>
     <div class="all">
       <div class="top">
         <div class="left">
-          <div class="header">Open Questions</div>
+          <div class="header">Open Requests</div>
           <div class="filters">
             <span class="filter active">Recommended</span> | <span class="filter">All</span>
           </div>
@@ -22,76 +22,96 @@
         </div>
       </div>
       <div class="main">
-        <div v-for="request in requests" :key="request.id">
-          <div class="question">
-            <QuestionPreview
-                img="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU"
-                v-bind:title="request.title"
-                v-bind:description="request.description"
-                v-bind:id="request.id"
-                tag="Forms"
-                v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
-            </QuestionPreview>
-          </div>
+            <div v-for="request in requests" :key="request.id">
+                <div class="post">
+                    <div class="user">
+                        <User
+                            v-bind:userId="request.userId"
+                            v-bind:createdDate="request.createdDate">
+                        </User>
+                    </div>
+                    <div class="question">
+                        <QuestionPreview
+                            v-bind:title="request.title"
+                            v-bind:description="request.description"
+                            v-bind:id="request.id"
+                            v-bind:userId="request.userId"
+                            tag="Forms"
+                            v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
+                        </QuestionPreview>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
 import RequestService from "../services/request.service.js";
+import UserService from '../services/user.service.js';
 import Button from '../components/Button';
 import QuestionPreview from '../components/Question-preview';
 import ErrorDisplay from '../components/common/Error.vue';
+import User from '../components/User';
 import { emitter } from '../components/common/event-bus';
 import Navbar from "@/components/Navbar";
 
 const requestService = new RequestService();
+const userService = new UserService();
 
-export default {
-  data: function() {
-    return {
-      requests: [],
-      errorMessage: "",
-      isShowError: false
-    }
-  },
-  components: {
-    Navbar,
-    Button,
-    QuestionPreview,
-    ErrorDisplay
-  },
-  methods: {
-    showErrorMessage: function(message) {
-      this.errorMessage = message;
-      this.isShowError = true;
+export default {     
+    data: function() {
+        return {
+            requests: [],
+            errorMessage: "",
+            isShowError: false
+        }
     },
-    async getRequests() {
-      await requestService.getAllRequests()
-          .then(data => {
-            if (data) {
-              this.requests = data;
-            } else {
-              this.showErrorMessage("Error when receiving requests");
-            }
-          });
+    components: {
+        Navbar,
+        Button,
+        QuestionPreview,
+        ErrorDisplay,
+        User
     },
-    showErrorMessageEventListener() {
-      this.isShowError = false;
-    }
-  },
-  async mounted(){
-    await this.getRequests();
+    methods: {
+        showErrorMessage: function(message) {
+            this.errorMessage = message;
+            this.isShowError = true;
+        },
+        async getRequests() {
+            await requestService.getAllRequests()
+            .then(data => {
+                if (data) {
+                    this.requests = data;
+                } else {
+                    this.showErrorMessage("Error when receiving requests");
+                }
+            });
+        },
+        showErrorMessageEventListener() {
+            this.isShowError = false;
+        },
+        async getUser(userId) {
+            await userService.getUser(userId)
+            .then(data => {
+                if (data) {
+                    return data;
+                }
+            })
+        }
+    },
+    async mounted(){
+        await this.getRequests();
 
-    emitter.on('error-display-event', () => {
-      this.showErrorMessageEventListener();
-    });
-  },
-  beforeUnmount: function() {
-    emitter.off('error-display-event', () => {});
-  }
+        emitter.on('error-display-event', () => {
+        this.showErrorMessageEventListener();
+        });
+    },
+    beforeUnmount: function() {
+        emitter.off('error-display-event', () => {});
+    }
 }
 </script>
 
@@ -102,10 +122,9 @@ export default {
 }
 .container {
   display: flex;
-  align-items: center;
   flex-direction: column;
 
-  background-image: url("../assets/questions-background.svg");
+  //background-image: url("../assets/questions-background.svg");
   background-repeat: no-repeat;
   background-size: cover;
   color: black;
@@ -193,12 +212,31 @@ export default {
 
     .main {
       width: 70%;
-      background-color: rgba(#F1F1F1, 0.4);
-      border-radius: 36px;
+      //background-color: rgba(#F1F1F1, 0.4);
+      //border-radius: 36px;
       padding: 24px;
       max-height: 25rem;
-      overflow: scroll;
-      overflow-x: hidden;
+      //overflow: scroll;
+      //overflow-x: hidden;
+    }
+
+    .post {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: flex-start;
+
+        .user {
+            width: 20%;
+            float: left;
+        }
+
+        .question {
+            width: 95%;
+            margin-bottom: 100px;
+            height: 300px;
+            float: right;
+        }
     }
 
     // Remove the underline from the router button.

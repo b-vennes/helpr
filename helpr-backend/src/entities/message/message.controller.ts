@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { Message } from 'src/database/message.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetMessagesQuery } from './queries/handlers/get-messages.handler';
@@ -11,9 +11,9 @@ export class MessageController {
         private readonly queryBus: QueryBus
       ) {}
 
-    @Get('getMessagesByAssociatedId')
-    async getMessagesByAssociatedId(@Body() query: GetMessagesQuery): Promise<Message[]> {
-        return await this.queryBus.execute(new GetMessagesQuery(query.associatedMessageId));
+    @Get('getMessagesByAssociatedId/:id')
+    async getMessagesByAssociatedId(@Param('id') id: number): Promise<Message[]> {
+        return await this.queryBus.execute(new GetMessagesQuery(id));
     }
 
     @Post('create')

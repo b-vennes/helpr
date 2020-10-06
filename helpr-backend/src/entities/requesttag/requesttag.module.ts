@@ -5,9 +5,10 @@ import { RequestTag } from 'src/database/requesttag.entity';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
+import { Tag } from 'src/database/tag.entity';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([RequestTag])],
+    imports: [CqrsModule, TypeOrmModule.forFeature([RequestTag, Tag])],
     controllers: [RequestTagController],
     providers: [
         ...CommandHandlers,

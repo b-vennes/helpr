@@ -1,4 +1,4 @@
-export default class Message {
+export default class MessageService {
 
     async getMessagesByAssociatedId(associatedId) {
         const response = await fetch(`http://localhost:3000/messages/getMessagesByAssociatedId/` + associatedId, {

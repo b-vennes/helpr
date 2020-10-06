@@ -5,9 +5,11 @@
       <div class="messages" v-bind:class="{ active: this.$route.name === 'Messages' }"><a>Messages</a></div>
       <div class="contact" v-bind:class="{ active: this.$route.name === 'Contact' }"><a>Contact</a></div>
     </div>
-    <div class="right" @click="toggleModal()">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
-    </div>
+    <router-link to="/card">
+        <div class="right" @click="toggleModal()">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
+        </div>
+    </router-link>
   </div>
 
   <div class="modal" v-if="showModal">
@@ -27,7 +29,8 @@ export default {
   data: function() {
     return {
       showModal: false,
-      load: true
+      load: true,
+      goToUserProfile: false
     }
   },
   props: {
@@ -102,7 +105,7 @@ export default {
 
 .modal {
   display: flex;
-  align-items: center;
+  //align-items: center;
   flex-direction: column;
   justify-content: center;
 
