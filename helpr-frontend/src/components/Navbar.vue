@@ -1,19 +1,20 @@
 <template>
-  <div class="nav" v-if="load">
-    <div class="left">
-      <div class="requests" v-bind:class="{ active: this.$route.name === 'Questions' }"><a>Requests</a></div>
-      <div class="messages" v-bind:class="{ active: this.$route.name === 'Messages' }"><a>Messages</a></div>
-      <div class="contact" v-bind:class="{ active: this.$route.name === 'Contact' }"><a>Contact</a></div>
-    </div>
-    
-        <div class="right">
-            
-            <router-link to="/card">
-                <div class="profile" v-bind:class="{ active: this.$route.name === 'Card'}"><a>Profile</a></div>
+    <div class="nav" v-if="load">
+        <div class="left">
+            <router-link to="/questions">
+                <div class="requests" v-bind:class="{ active: this.$route.name === 'Questions' }"><a>Requests</a></div>
             </router-link>
-            <img @click="toggleModal()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
+            <div class="messages" v-bind:class="{ active: this.$route.name === 'Messages' }"><a>Messages</a></div>
+            <div class="contact" v-bind:class="{ active: this.$route.name === 'Contact' }"><a>Contact</a></div>
         </div>
-  </div>
+        
+    <div class="right">
+        <router-link to="/profile">
+            <div class="profile" v-bind:class="{ active: this.$route.name === 'Profile'}"><a>Profile</a></div>
+        </router-link>
+        <img @click="toggleModal()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
+    </div>
+</div>
 
   <div class="modal" v-if="showModal">
     <div>James One</div>

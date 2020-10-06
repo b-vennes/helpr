@@ -143,6 +143,7 @@ export default {
   position: absolute;
   width: 100vw;
 }
+
 .homeContainer {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <Navbar class="navbar"></Navbar>
+    <div class="profileContainer">
     <div class="content">
       <div class="top">
         <router-link to="/questions">
@@ -31,11 +33,13 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
+import Navbar from "@/components/Navbar";
 
 const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
@@ -52,6 +56,9 @@ export default {
             title: "",
             userId: 0
         }
+    },
+    components: {
+        Navbar
     },
     methods: {
         async setData() {
@@ -92,7 +99,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.container {
+.navbar {
+  position: absolute;
+  width: 100vw;
+}
+
+.profileContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
