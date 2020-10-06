@@ -1,6 +1,6 @@
 export default class UserTagService {
 
-    async getUserTags(userId) {
+    async getUserTagsById(userId) {
         const response = await fetch(`http://localhost:3000/usertags/getById/` + userId, {
             method: 'GET',
             mode: 'cors'

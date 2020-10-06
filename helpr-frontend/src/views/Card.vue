@@ -10,28 +10,86 @@
       </div>
       <div class="main">
         <div class="header">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS0KFFrNPMikH-rz4qzpFyms5mWnQUW_3KMDA&usqp=CAU">
+            <img :src="photo">
           <div class="points">
-            304
+            {{ points }}
           </div>
         </div>
         <div class="name">
-          James One
+          {{ name }}
         </div>
         <div class="tags">
-          <div>Forms</div>
-          <div>JavaScript</div>
-          <div>SQL</div>
+            <div v-for="userTag in userTags" v-bind:key="userTag.id">
+                {{userTag.tagName}}
+            </div>
         </div>
         <div class="description">
           <div>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              {{ description }}
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import UserProfileService from '../services/userprofile.service.js';
+import UserTagService from '../services/usertag.service.js';
+
+const userProfileService = new UserProfileService();
+const userTagService = new UserTagService();
+
+export default {
+    data: function() {
+        return {
+            userTags: [],
+            name: "",
+            photo: "",
+            points: 0,
+            email: "",
+            description: "",
+            title: "",
+            userId: 0
+        }
+    },
+    methods: {
+        async setData() {
+            let firstName = localStorage.getItem('firstname');
+            let lastName = localStorage.getItem('lastname');
+            
+            this.name = firstName + " " + lastName;
+            this.photo = localStorage.getItem('photo');
+            this.email = localStorage.getItem('email');
+            this.userId = localStorage.getItem('userId');
+        },
+        async getUserProfileData() {
+            await userProfileService.getUserProfileById(this.userId)
+            .then(data => {
+                if (data) {
+                    this.points = data.points;
+                    this.title = data.title;
+                    this.description = data.aboutMe;
+                }
+            })
+        },
+        async getUserTags() {
+            await userTagService.getUserTagsById(this.userId)
+            .then(data => {
+                console.log(data);
+                if (data) {
+                    this.userTags = data;
+                }
+            })
+        }
+    },
+    async mounted() {
+        await this.setData();
+        await this.getUserProfileData();
+        await this.getUserTags();
+    }
+}
+</script>
 
 <style scoped lang="scss">
 .container {
@@ -98,6 +156,7 @@
         margin: 24px 0 0 0;
 
         img {
+          height: 225px;
           border-radius: 50%;
         }
 

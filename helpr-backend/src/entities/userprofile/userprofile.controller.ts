@@ -14,12 +14,12 @@ export class UserProfileController {
       ) {}
 
       @Get('getAll')
-      async getAll(): Promise<UserProfile> {
+      async getAll(): Promise<UserProfile[]> {
             return await this.queryBus.execute(new GetUserProfilesQuery());
       }
 
       @Get('getUserProfileById/:id')
-      async getUserProfileById(@Param('id') id: number): Promise<UserProfile[]> {
+      async getUserProfileById(@Param('id') id: number): Promise<UserProfile> {
             return await this.queryBus.execute(new GetUserProfileByIdQuery(id));
       }
 

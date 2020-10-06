@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 
 export class GetUserProfileByIdQuery {
     constructor(
-        public readonly userProfileId: number
+        public readonly userId: number
     ) {}
 }
 
@@ -17,6 +17,6 @@ export class GetUserProfileByIdHandler implements IQueryHandler<GetUserProfileBy
     ) {}
 
     public async execute(query: GetUserProfileByIdQuery): Promise<UserProfile> {
-        return await this.userProfileRepository.findOne(query.userProfileId);
+        return await this.userProfileRepository.findOne({userId: query.userId });
     }
 }

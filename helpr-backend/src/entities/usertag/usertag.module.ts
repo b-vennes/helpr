@@ -5,9 +5,10 @@ import { UserTag } from 'src/database/usertag.entity';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
+import { Tag } from 'src/database/tag.entity';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([UserTag])],
+    imports: [CqrsModule, TypeOrmModule.forFeature([UserTag, Tag])],
     controllers: [UserTagController],
     providers: [
         ...CommandHandlers,
