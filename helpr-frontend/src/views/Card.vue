@@ -2,7 +2,7 @@
   <div class="container">
     <div class="content">
       <div class="top">
-        <router-link to="/questions">
+        <router-link to="/requests">
           <div class="back">
             <img src="../assets/left-chevron.svg">
           </div>
@@ -44,24 +44,22 @@ export default {
     data: function() {
         return {
             userTags: [],
-            name: "",
-            photo: "",
+            name: '',
             points: 0,
-            email: "",
-            description: "",
-            title: "",
-            userId: 0
+            title: '',
+            description: ''
         }
+    },
+    props: {
+        userId: Number,
+        firstname: String,
+        lastname: String,
+        photo: String,
+        email: String
     },
     methods: {
         async setData() {
-            let firstName = localStorage.getItem('firstname');
-            let lastName = localStorage.getItem('lastname');
-            
-            this.name = firstName + " " + lastName;
-            this.photo = localStorage.getItem('photo');
-            this.email = localStorage.getItem('email');
-            this.userId = localStorage.getItem('userId');
+            this.name = this.firstname + " " + this.lastname;
         },
         async getUserProfileData() {
             await userProfileService.getUserProfileById(this.userId)
@@ -76,7 +74,6 @@ export default {
         async getUserTags() {
             await userTagService.getUserTagsById(this.userId)
             .then(data => {
-                console.log(data);
                 if (data) {
                     this.userTags = data;
                 }

@@ -28,8 +28,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         const { id, name, emails, photos } = profile;
 
         const existingUser = await this.userRepository.findOne({ passportId: id });
-        
-        console.log("in validate");
 
         if (!existingUser) {
             const newUser = await this.userRepository.save({

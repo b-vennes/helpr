@@ -1,31 +1,27 @@
 <template>
-  <div class="homeContainer">
+  <div class="requestsContainer">
     <Navbar class="navbar"></Navbar>
     <ErrorDisplay v-if="isShowError" :errorMessage="errorMessage"></ErrorDisplay>
     <div class="all">
-      <div class="top">
-        <div class="left">
-          <div class="header">Open Requests</div>
-          <div class="filters">
-            <span class="filter active">Recommended</span> | <span class="filter">All</span>
-          </div>
+        <div class="top">
+            <div class="left">
+                <div class="header">Open Requests</div>
+                <div class="filters">
+                    <span class="filter active">Recommended</span> | <span class="filter">All</span>
+                </div>
+            </div>
+            <div class="right">
+            <input type="text" placeholder="Search">
+            
+            <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
+            
+            <router-link to="/card">
+                <Button txt="Find a Helpr" class="secondary find"></Button>
+            </router-link>
+            <img src="../assets/settings.svg" class="settings">
+            </div>
         </div>
-        <div class="right">
-          <input type="text" placeholder="Search">
-          
-          <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
-          <!--
-          <router-link to="/ask">
-            <Button txt="Ask a Helpr" class="primary ask"></Button>
-          </router-link>
-          -->
-          <router-link to="/card">
-            <Button txt="Find a Helpr" class="secondary find"></Button>
-          </router-link>
-          <img src="../assets/settings.svg" class="settings">
-        </div>
-      </div>
-      <div class="main">
+        <div class="main">
             <div v-for="request in requests" :key="request.id">
                 <div class="post">
                     <div class="user">
@@ -144,7 +140,7 @@ export default {
   width: 100vw;
 }
 
-.homeContainer {
+.requestsContainer {
   display: flex;
   flex-direction: column;
 

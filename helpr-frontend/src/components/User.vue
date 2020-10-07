@@ -1,12 +1,20 @@
 <template>
-  <div class="userinformation">
-    <img v-bind:src="user.photo">
-    <div class="information">
-        <div class="username">{{user.firstname}} {{user.lastname}}</div>
-        <div class="email">{{user.email}}</div>
-        <div class="createdDate">{{createdDate}}</div>
+  <router-link :to="{ name: 'Card', params: { 
+      userId: sendUserId, 
+      firstname: user.firstname,
+      lastname: user.lastname,
+      photo: user.photo,
+      email: user.email }
+    }">
+    <div class="userinformation">
+        <img v-bind:src="user.photo">
+        <div class="information">
+            <div class="username">{{user.firstname}} {{user.lastname}}</div>
+            <div class="email">{{user.email}}</div>
+            <div class="createdDate">{{createdDate}}</div>
+        </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 
@@ -18,10 +26,11 @@ export default {
     name: 'User',
     props: {
         userId: Number,
-        createdDate: String
+        createdDate: String,
     },
     data: function(){
         return {
+            sendUserId: 0,
             user: {}
         }
     },
@@ -36,6 +45,7 @@ export default {
         }
     },
     async mounted() {
+        this.sendUserId = parseInt(this.userId);
         await this.getUser();
     }
 }
@@ -43,6 +53,7 @@ export default {
 
 <style lang="scss" scoped>
     .userinformation {
+        cursor: pointer;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;

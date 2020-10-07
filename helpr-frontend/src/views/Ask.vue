@@ -5,7 +5,7 @@
      
         <div class="content">
         <div class="top">
-            <router-link to="/questions">
+            <router-link to="/requests">
             <div class="back">
                 <img src="../assets/left-chevron.svg">
             </div>

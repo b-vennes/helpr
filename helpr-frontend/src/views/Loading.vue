@@ -35,7 +35,7 @@ export default {
                     localStorage.setItem('username', data.username)
                     localStorage.setItem('requiresAuth', 'userIsAuthorized')
                     setTimeout(function () {
-                        window.location.replace("http://localhost:8080/#/questions");
+                        window.location.replace("http://localhost:8080/#/requests");
                     }, 2000);
                 }
             })

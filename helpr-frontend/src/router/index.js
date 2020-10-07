@@ -24,9 +24,9 @@ const routes = [
   //  component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   //},
   {
-    path: '/questions',
-    name: 'Questions',
-    component: () => import('../views/Home.vue'),
+    path: '/requests',
+    name: 'Requests',
+    component: () => import('../views/Requests.vue'),
     beforeEnter: (to, from, next) => auth(to, from, next)
   },
   {
@@ -39,6 +39,7 @@ const routes = [
     path: '/card',
     name: 'Card',
     component: () => import('../views/Card.vue'),
+    props: true,
     beforeEnter: (to, from, next) => auth(to, from, next),
   },
   {

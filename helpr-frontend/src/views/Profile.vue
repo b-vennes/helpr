@@ -4,7 +4,7 @@
     <div class="profileContainer">
     <div class="content">
       <div class="top">
-        <router-link to="/questions">
+        <router-link to="/requests">
           <div class="back">
             <img src="../assets/left-chevron.svg">
           </div>
@@ -83,7 +83,6 @@ export default {
         async getUserTags() {
             await userTagService.getUserTagsById(this.userId)
             .then(data => {
-                console.log(data);
                 if (data) {
                     this.userTags = data;
                 }
