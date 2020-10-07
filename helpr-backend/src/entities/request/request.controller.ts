@@ -5,8 +5,9 @@ import { GetRequestsQuery } from './queries/handlers/get-requests.handler';
 import { CreateRequestCommand } from './commands/handlers/create-request.handler';
 import { DeleteRequestCommand } from './commands/handlers/delete-request.handler';
 import { UpdateRequestCommand } from './commands/handlers/update-request.handler';
-import { IncrementLikesCommand } from './commands/handlers/increment-likes.handler';
+import { IncrementLikesRequestCommand } from './commands/handlers/increment-likes-request.handler';
 import { GetRequestsByUserIdQuery } from './queries/handlers/get-requests-by-user-id.handler';
+import { UpdateResult } from 'typeorm';
 
 @Controller('requests')
 export class RequestController {
@@ -31,13 +32,13 @@ export class RequestController {
     }
     
     @Put('update')
-    async updateRequest(@Body() request: Request): Promise<any> {
+    async updateRequest(@Body() request: Request): Promise<UpdateResult> {
         return await this.commandBus.execute(new UpdateRequestCommand(request));
     }
 
     @Put('like')
-    async incrementLikes(@Body() request: IncrementLikesCommand): Promise<any> {
-        return this.commandBus.execute(new IncrementLikesCommand(request.requestId));
+    async incrementLikes(@Body() request: IncrementLikesRequestCommand) {
+        return await this.commandBus.execute(new IncrementLikesRequestCommand(request.requestId));
     }
     
     // when deleting, also delete the comments associated with the post

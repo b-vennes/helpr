@@ -32,12 +32,12 @@
                     </div>
                     <div class="question">
                         <QuestionPreview
+                            v-bind:likes="request.likes"
                             v-bind:title="request.title"
                             v-bind:description="request.description"
                             v-bind:id="request.id"
                             v-bind:userId="request.userId"
-                            tag="Forms"
-                            v-on:click="this.$router.push({ name: 'Question', params: { id: request.id } })">
+                            tag="Forms">
                         </QuestionPreview>
                     </div>
                 </div>
@@ -114,6 +114,33 @@ export default {
         showErrorMessage: function(message) {
             this.errorMessage = message;
             this.isShowError = true;
+        },
+        async incrementsLikes(requestId) {
+            let tempRequest = {}
+
+            for (var request in this.requests) {
+                if (request.requestId === requestId) {
+                    tempRequest = request;
+                }
+            }
+
+            const body = {
+                id: requestId,
+                description: tempRequest.description,
+                createdDate: tempRequest.createdDate,
+                points: tempRequest.points,
+                likes: tempRequest.likes,
+                isPublicRequest: tempRequest.isPublicRequest,
+                userId: tempRequest.userId,
+                isDeleted: tempRequest.isDeleted
+            }
+
+            await requestService.incrementRequestLikes(body)
+            .then(data => {
+                if (data) {
+                    console.log("success");
+                }
+            });
         }
     },
     async mounted(){
@@ -126,10 +153,15 @@ export default {
         emitter.on('exit-ask-modal-event', () => {
             this.exitModal();
         });
+
+        emitter.on('thumbs-up-event', requestId => {
+            this.incrementsLikes(requestId);
+        });
     },
     beforeUnmount: function() {
         emitter.off('error-display-event', () => {});
         emitter.off('exit-ask-modal-event', () => {});
+        emitter.off('thumbs-up-event', () => {});
     }
 }
 </script>

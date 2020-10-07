@@ -1,18 +1,29 @@
 <template>
     <div class="questionContainer">
-    <div class="question">
-        <div class="content">
-            <div class="title">{{ title }}<span class="id"></span></div>
+        <div class="question">
+            <div class="content">
+                <div class="title">{{ title }}<span class="id"></span></div>
+            </div>
         </div>
-    </div>
         <div class="description">
             <div class="requestDescription">{{ description }}</div>
         </div>
+        <div class="icons">
+            <img @click="thumbsUp()" class="image" src="https://img.icons8.com/ios/50/000000/thumb-up.png"/>
+            <img @click="commentRequest()" class="image" src="https://img.icons8.com/small/16/000000/comments.png"/>
+            <img @click="messageUser()" class="image" src="https://img.icons8.com/ios/50/000000/speech-bubble-with-dots.png"/>
+        </div>
         <div class="footer">
-            <div class="tags">
-            <div class="requestTags" v-for="requestTag in requestTags" v-bind:key="requestTag.id">
-                {{ requestTag.tagName }}
+            <div class="thumbsUp">
+                {{ thumbsUpAmount }}
             </div>
+            <div class="tags">
+                <div class="requestTags" v-for="requestTag in requestTags" v-bind:key="requestTag.id">
+                    {{ requestTag.tagName }}
+                </div>
+            </div>
+            <div class="showComments">
+                <img @click="dropdown()" class="dropdown" src="https://img.icons8.com/ios/50/000000/drag-list-down.png"/>
             </div>
         </div>
     </div>
@@ -21,6 +32,7 @@
 <script>
 import UserService from '../services/user.service.js';
 import RequestTagsService from '../services/requesttags.service';
+import { emitter } from './common/event-bus';
 
 const userService = new UserService();
 const requestTagsService = new RequestTagsService();
@@ -32,12 +44,14 @@ export default {
         id: Number,
         tag: String,
         title: String,
-        userId: Number
+        userId: Number,
+        likes: Number
     },
     data: function() {
         return {
             user: {},
-            requestTags: []
+            requestTags: [],
+            thumbsUpAmount: 0
         }
     },
     methods: {
@@ -64,9 +78,21 @@ export default {
                     }
                 }
             })
+        },
+        thumbsUp() {
+            emitter.emit('thumbs-up-event', this.id);
+            this.thumbsUpAmount += 1;
+        },
+        commentRequest() {
+
+        },
+        messageUser() {
+            
         }
+
     },
     async mounted() {
+        this.thumbsUpAmount = this.likes;
         await this.getUser();
         await this.getRequestTags();
     }
@@ -125,7 +151,7 @@ export default {
         padding: 10px;
         display: block;
         text-align: left;
-        height: 130px;
+        height: 70px;
 
         .requestDescription {
             display: block;
@@ -134,12 +160,31 @@ export default {
         }
     }
 
+    .icons {
+        height: 40px;
+        padding: 10px;
+
+        .image {
+            height: 40px;
+            margin-right: 10px;
+            float: right;
+            cursor: pointer;
+        }
+    }
+
     .footer {
         padding: 16px;
         border-bottom-left-radius: 24px;
         border-bottom-right-radius: 24px;
-        padding: 16px;
         background-color: #90EE90;
+
+        .thumbsUp {
+            float: left;
+            background-color: #F1F1F1;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
 
         .requestTags {
             display: inline-block;
@@ -148,7 +193,17 @@ export default {
             padding: 10px;
             font-size: 1.2rem;
             margin-right: 10px;
-            
+        }
+
+        .showComments {
+            float: right;
+            position: relative;
+            top: -36px;
+
+            .dropdown {
+                cursor: pointer;
+                height: 30px;
+            }
         }
     }
 }

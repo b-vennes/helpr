@@ -14,18 +14,11 @@ export default class RequestService {
     
     async incrementRequestLikes(request) {
         const body = {
-            id: request.id,
-            description: request.description,
-            createdDate: request.createdDate,
-            points: request.points,
-            likes: request.likes, //increment is done in the backend
-            isPublicRequest: request.isPublicRequest,
-            userId: request.userId,
-            isDeleted: false
+            requestId: request.id,
         };
 
-        const response = await fetch(`http://localhost:3000/requests/incrementLikes`, {
-            method: 'POST',
+        const response = await fetch(`http://localhost:3000/requests/like`, {
+            method: 'PUT',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'

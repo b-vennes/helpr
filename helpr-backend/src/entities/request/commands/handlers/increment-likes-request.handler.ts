@@ -1,22 +1,22 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'src/database/request.entity';
 
-export class IncrementLikesCommand {
+export class IncrementLikesRequestCommand {
     constructor(
         public readonly requestId: number 
     ) {}
 }
 
-@CommandHandler(IncrementLikesCommand)
-export class IncrementLikesHandler implements ICommandHandler<IncrementLikesCommand> {
+@CommandHandler(IncrementLikesRequestCommand)
+export class IncrementLikesRequestHandler implements ICommandHandler<IncrementLikesRequestCommand> {
     constructor(
         @InjectRepository(Request)
         private readonly requestRepository: Repository<Request>
-    ) {}
+      ) { }
 
-    async execute(command: IncrementLikesCommand) {
+    async execute(command: IncrementLikesRequestCommand) {
         let request = await this.requestRepository.findOne(command.requestId);
         request.likes = request.likes + 1;
 
