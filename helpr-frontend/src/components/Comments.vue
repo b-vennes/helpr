@@ -1,15 +1,28 @@
 <template>
     <div class="commentsContainer">
         <div class="comments" v-for="comment of comments" v-bind:key="comment.id">
-            {{comment.description}}
+            <div class="commentsInformation">
+                <div class="user" v-if="comment.user">
+                    <img v-bind:src="comment.user.photo">
+                    <div class="information">
+                        <div class="username">{{comment.user.firstname}} {{comment.user.lastname}}</div>
+                        <div class="createdDate">{{comment.createdDate}}</div>
+                    </div>
+                </div>
+                <div class="description">
+                    {{comment.description}}
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import CommentService from '../services/comment.service.js';
+import UserService from '../services/user.service.js';
 
 const commentService = new CommentService();
+const userService = new UserService();
 
 export default {     
     data: function() {
@@ -22,14 +35,25 @@ export default {
     },
     methods: {
         async getCommentsByRequestId() {
-            await  commentService.getCommentsByRequestId(this.requestId)
+            await commentService.getCommentsByRequestId(this.requestId)
             .then(data => {
                 this.comments = data;
             });
+        },
+        async getUsersForComments() {
+            for (var comment of this.comments) {
+                await userService.getUser(comment.userId)
+                .then(data => {
+                    if (data) {
+                        comment.user = data;
+                    }
+                });
+            }
         }
     },
     async mounted() {
         await this.getCommentsByRequestId();
+        await this.getUsersForComments();
     }
 }
 </script>
@@ -39,7 +63,7 @@ export default {
     display: block;
 
     .comments {
-        padding: 16px;
+        padding: 8px;
         border-radius: 24px;
         display: block;
         text-align: left;
@@ -47,6 +71,47 @@ export default {
         margin-bottom: 15px;
         border-color: #90EE90;
         border-style: solid;
+
+        .commentsInformation {
+            display: flex;
+            flex-direction: row;
+
+            .user {
+                display: flex;
+                flex-direction: row;
+                background-color: #F1F1F1;
+                border-radius: 18px;
+                padding: 8px;
+                
+                img {
+                    height: 60px;
+                    border-radius: 16px;
+                }
+
+                .information {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    margin-left: 15px;
+                    margin-top: 9px;
+
+                    .username {
+                        font-size: 20px;
+                    }
+
+                    .createdDate {
+                        font-size: 15px;
+                        color: #228B22;
+                    }
+                }
+            }
+
+            .description {
+                margin-left: 10px;
+                padding: 10px;
+            }
+        }
     }
 }
 

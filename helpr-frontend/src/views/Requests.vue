@@ -43,7 +43,8 @@
                 </div>
                     <div class="comments" v-if="showComments">
                         <Comments
-                            v-bind:requestId="request.id">
+                            v-bind:requestId="request.id"
+                            :key="commentComponentKey">
                         </Comments>
                     </div>
             </div>
@@ -90,7 +91,8 @@ export default {
             showAddCommentModal: false,
             commentRequestId: 0,
             commentUserId: 0,
-            showComments: false
+            showComments: false,
+            commentComponentKey: 0
         }
     },
     components: {
@@ -140,6 +142,8 @@ export default {
         },
         exitCommentModal() {
             this.showAddCommentModal = false;
+
+            this.forceRerender();
         },
         showCommentsEvent() {
             if (this.showComments) {
@@ -147,6 +151,9 @@ export default {
             } else {
                 this.showComments = true;
             }
+        },
+        forceRerender() {
+            this.commentComponentKey += 1;
         },
         async incrementsLikes(requestId) {
             let tempRequest = {}
