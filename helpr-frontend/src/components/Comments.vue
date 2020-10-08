@@ -33,3 +33,22 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.commentsContainer {
+    display: block;
+
+    .comments {
+        padding: 16px;
+        border-radius: 24px;
+        display: block;
+        text-align: left;
+        font-size: 18px;
+        margin-bottom: 15px;
+        border-color: #90EE90;
+        border-style: solid;
+    }
+}
+
+
+</style>

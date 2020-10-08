@@ -41,11 +41,11 @@
                         </QuestionPreview>
                     </div>
                 </div>
-                <div class="comments" v-if="showComments">
-                    <Comments
-                        v-bind:requestId="request.id">
-                    </Comments>
-                </div>
+                    <div class="comments" v-if="showComments">
+                        <Comments
+                            v-bind:requestId="request.id">
+                        </Comments>
+                    </div>
             </div>
         </div>
         </div>
@@ -313,31 +313,32 @@ export default {
     }
 
     .main {
-      width: 70%;
-      //background-color: rgba(#F1F1F1, 0.4);
-      //border-radius: 36px;
-      padding: 24px;
-      max-height: 25rem;
-      //overflow: scroll;
-      //overflow-x: hidden;
-    }
+        width: 70%;
+        padding: 24px;
+        max-height: 25rem;
+    
+        .post {
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row;
+            align-items: flex-start;
 
-    .post {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: row;
-        align-items: flex-start;
+            .user {
+                width: 20%;
+                float: left;
+            }
 
-        .user {
-            width: 20%;
-            float: left;
+            .question {
+                width: 95%;
+                margin-bottom: 100px;
+                height: 300px;
+                float: right;
+            }
         }
 
-        .question {
-            width: 95%;
-            margin-bottom: 100px;
-            height: 300px;
-            float: right;
+        .comments {
+            margin-left: 18.5%;
+            margin-bottom: 5%;
         }
     }
 
