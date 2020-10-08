@@ -16,7 +16,7 @@ export class CreateCommentHandler implements ICommandHandler<CreateCommentComman
         private readonly commentRepository: Repository<Comment>
       ) { }
 
-    async execute(command: CreateCommentCommand) {
-        await this.commentRepository.save(command.comment)
+    async execute(command: CreateCommentCommand): Promise<Comment> {
+        return await this.commentRepository.save(command.comment);
     }
 }

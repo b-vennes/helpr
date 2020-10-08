@@ -84,7 +84,12 @@ export default {
             this.thumbsUpAmount += 1;
         },
         commentRequest() {
+            const event = {
+                userId: this.userId,
+                requestId: this.id
+            }
 
+            emitter.emit('add-comment-event', event);
         },
         messageUser() {
             

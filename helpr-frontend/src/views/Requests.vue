@@ -49,6 +49,13 @@
                 <AskModal></AskModal>
             </div>
         </transition>
+        
+            <div class="modal" v-if="showAddCommentModal">
+                <AddCommentModal 
+                    v-bind:userId="commentUserId"
+                    v-bind:requestId="commentRequestId"
+                ></AddCommentModal>
+            </div>
       </div>
 </template>
 
@@ -62,6 +69,7 @@ import User from '../components/User';
 import { emitter } from '../components/common/event-bus';
 import Navbar from "@/components/Navbar";
 import AskModal from '../components/AskModal';
+import AddCommentModal from '../components/AddCommentModal';
 
 const requestService = new RequestService();
 const userService = new UserService();
@@ -72,7 +80,10 @@ export default {
             requests: [],
             errorMessage: "",
             isShowError: false,
-            showModal: false
+            showModal: false,
+            showAddCommentModal: false,
+            commentRequestId: 0,
+            commentUserId: 0
         }
     },
     components: {
@@ -81,7 +92,8 @@ export default {
         QuestionPreview,
         ErrorDisplay,
         User,
-        AskModal
+        AskModal,
+        AddCommentModal
     },
     methods: {
         async getRequests() {
@@ -114,6 +126,12 @@ export default {
         showErrorMessage: function(message) {
             this.errorMessage = message;
             this.isShowError = true;
+        },
+        addCommentModal() {
+            this.showAddCommentModal = true;
+        },
+        exitCommentModal() {
+            this.showAddCommentModal = false;
         },
         async incrementsLikes(requestId) {
             let tempRequest = {}
@@ -157,11 +175,23 @@ export default {
         emitter.on('thumbs-up-event', requestId => {
             this.incrementsLikes(requestId);
         });
+        
+        emitter.on('add-comment-event', event => {
+            this.commentRequestId = event.requestId;
+            this.commentUserId = event.userId;
+            this.addCommentModal();
+        });
+
+        emitter.on('exit-create-comment-modal-event', () => {
+            this.exitCommentModal();
+        });
     },
     beforeUnmount: function() {
         emitter.off('error-display-event', () => {});
         emitter.off('exit-ask-modal-event', () => {});
         emitter.off('thumbs-up-event', () => {});
+        emitter.off('add-comment-event', () => {});
+        emitter.off('exit-create-comment-modal-event', () => {});
     }
 }
 </script>
