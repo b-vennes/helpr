@@ -91,6 +91,9 @@ export default {
 
             emitter.emit('add-comment-event', event);
         },
+        dropdown() {
+            emitter.emit('show-comments-event');
+        },
         messageUser() {
             
         }

@@ -41,6 +41,11 @@
                         </QuestionPreview>
                     </div>
                 </div>
+                <div class="comments" v-if="showComments">
+                    <Comments
+                        v-bind:requestId="request.id">
+                    </Comments>
+                </div>
             </div>
         </div>
         </div>
@@ -70,6 +75,7 @@ import { emitter } from '../components/common/event-bus';
 import Navbar from "@/components/Navbar";
 import AskModal from '../components/AskModal';
 import AddCommentModal from '../components/AddCommentModal';
+import Comments from '../components/Comments';
 
 const requestService = new RequestService();
 const userService = new UserService();
@@ -83,7 +89,8 @@ export default {
             showModal: false,
             showAddCommentModal: false,
             commentRequestId: 0,
-            commentUserId: 0
+            commentUserId: 0,
+            showComments: false
         }
     },
     components: {
@@ -93,7 +100,8 @@ export default {
         ErrorDisplay,
         User,
         AskModal,
-        AddCommentModal
+        AddCommentModal,
+        Comments
     },
     methods: {
         async getRequests() {
@@ -132,6 +140,13 @@ export default {
         },
         exitCommentModal() {
             this.showAddCommentModal = false;
+        },
+        showCommentsEvent() {
+            if (this.showComments) {
+                this.showComments = false;
+            } else {
+                this.showComments = true;
+            }
         },
         async incrementsLikes(requestId) {
             let tempRequest = {}
@@ -185,6 +200,10 @@ export default {
         emitter.on('exit-create-comment-modal-event', () => {
             this.exitCommentModal();
         });
+
+        emitter.on('show-comments-event', () => {
+            this.showCommentsEvent();
+        });
     },
     beforeUnmount: function() {
         emitter.off('error-display-event', () => {});
@@ -192,6 +211,7 @@ export default {
         emitter.off('thumbs-up-event', () => {});
         emitter.off('add-comment-event', () => {});
         emitter.off('exit-create-comment-modal-event', () => {});
+        emitter.off('show-comments-event', () => {});
     }
 }
 </script>

@@ -16,15 +16,6 @@ export class GetCommentsByRequestIdHandler implements IQueryHandler<GetCommentsB
         private readonly commentRepository: Repository<Comment>) {}
 
     public async execute(query: GetCommentsByRequestIdQuery): Promise<Comment[]> {
-        let comments = await this.commentRepository.find();
-        let queryComments = new Array<Comment>();
-
-        for (var comment of comments) {
-            if (comment.requestId === query.requestId) {
-                queryComments.push(comment);
-            }
-        }
-
-        return queryComments;
+        return await this.commentRepository.find({requestId: query.requestId});
     }
 }
