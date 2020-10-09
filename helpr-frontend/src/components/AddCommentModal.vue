@@ -26,8 +26,7 @@ const commentService = new CommentService();
 
 export default {
     props: {
-        requestId: Number,
-        userId: Number
+        requestId: Number
     },
     data: function() {
         return {
@@ -43,7 +42,7 @@ export default {
                 description: this.comment,
                 createdDate: new Date(),
                 like: 0,
-                userId: this.userId,
+                userId: localStorage.getItem("userId"),
                 requestId: this.requestId,
                 isDeleted: false
             }

@@ -58,7 +58,6 @@
         
             <div class="modal" v-if="showAddCommentModal">
                 <AddCommentModal 
-                    v-bind:userId="commentUserId"
                     v-bind:requestId="commentRequestId"
                 ></AddCommentModal>
             </div>
