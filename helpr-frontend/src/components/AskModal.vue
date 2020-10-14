@@ -46,7 +46,9 @@
 <script>
 import RequestService from "../services/request.service.js";
 import TagService from '../services/tag.service.js';
+import UserService from '../services/user.service.js';
 import RequestTagService from '../services/requesttags.service.js';
+import NotificationService from '../services/notifications.service.js';
 import Button from '../components/Button';
 import ErrorDisplay from '../components/common/Error.vue';
 import SuccessDisplay from '../components/common/Success.vue';
@@ -54,12 +56,15 @@ import { emitter } from '../components/common/event-bus';
 
 const requestService = new RequestService();
 const tagService = new TagService();
+const userService = new UserService();
 const requestTagService = new RequestTagService();
+const notificationService = new NotificationService();
 
 export default {
     data: function() {
         return {
             tags: [],
+            users: [],
             tagSelectList: [],
             selectedTags: [],
             selected: '',
@@ -128,8 +133,18 @@ export default {
                 if (data.id) {
                     this.showSuccessMessage("Successfully posted a new request");
                     this.createRequestTags(data);
+                    this.createNotifications(data.id);
                 } else {
                     this.showErrorMessage("Error in posting a new request");
+                }
+            })
+        },
+        async getAllUsers() {
+            await userService.getAllUsers()
+            .then(data => {
+                console.log(data);
+                if (data) {
+                    this.users = data;
                 }
             });
         },
@@ -148,6 +163,14 @@ export default {
                 });
             }
         },
+        createNotifications(requestId) {
+            notificationService.sendNotifications(requestId)
+            .then(data => {
+                if (data) {
+                    console.log(data);
+                }
+            });
+        },
         async getTags() {
             await tagService.getAllTags()
             .then(data => {
@@ -157,10 +180,11 @@ export default {
                 }
             })
         }
-        
     },
     async mounted() {
         await this.getTags();
+
+        console.log(this.users);
 
         emitter.on('error-display-event', () => {
             this.showErrorMessageEventListener();

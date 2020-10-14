@@ -4,6 +4,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetLatestNotificationsQuery } from "./queries/handlers/get-latest-notifications.handler";
 import { CreateNotificationCommand } from "./commands/handlers/create-notification.handler";
 import { SetIsOpenedCommand } from "./commands/handlers/set-is-opened.handler";
+import { SendNotificationCommand } from "./commands/handlers/send-notifications.handler";
 
 @Controller('notifications')
 export class NotificationController {
@@ -20,6 +21,11 @@ export class NotificationController {
     @Post('createNotification')
     async createNotification(@Body() command: CreateNotificationCommand) {
         return await this.commandBus.execute(new CreateNotificationCommand(command.notification));
+    }
+
+    @Post('sendNotifications')
+    async sendNotifications(@Body() command: SendNotificationCommand) {
+        return await this.commandBus.execute(new SendNotificationCommand(command.requestId));
     }
 
     @Put('setIsOpened')

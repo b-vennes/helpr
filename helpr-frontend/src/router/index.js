@@ -30,6 +30,12 @@ const routes = [
     beforeEnter: (to, from, next) => auth(to, from, next)
   },
   {
+    path: '/request/:id',
+    name: 'Request',
+    component: () => import('../views/Request.vue'),
+    beforeEnter: (to, from, next) => auth(to, from, next)
+  },
+  {
     path: '/ask',
     name: 'Ask',
     component: () => import('../views/Ask.vue'),
