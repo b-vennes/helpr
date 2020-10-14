@@ -56,11 +56,11 @@
             </div>
         </transition>
         
-            <div class="modal" v-if="showAddCommentModal">
-                <AddCommentModal 
-                    v-bind:requestId="commentRequestId"
-                ></AddCommentModal>
-            </div>
+        <div class="modal" v-if="showAddCommentModal">
+            <AddCommentModal 
+                v-bind:requestId="commentRequestId"
+            ></AddCommentModal>
+        </div>
       </div>
 </template>
 
@@ -175,11 +175,7 @@ export default {
             }
 
             await requestService.incrementRequestLikes(body)
-            .then(data => {
-                if (data) {
-                    console.log("success");
-                }
-            });
+            .then(() => {});
         }
     },
     async mounted(){

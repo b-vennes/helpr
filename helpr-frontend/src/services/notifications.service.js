@@ -1,7 +1,7 @@
 export default class NotificationService {
     
-    async getNotifications(userId) {
-        const response = await fetch(`http://localhost:3000/notifications/getLatestNotifications/` + userId, {
+    async getNotificationsByUserId(userId) {
+        const response = await fetch(`http://localhost:3000/notifications/getLatestNotificationsByUserId/` + userId, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -10,6 +10,22 @@ export default class NotificationService {
         });
 
         return response.json();
-    } 
+    }
 
+    async setIsOpened(notification) {
+        const body = {
+            notification: notification
+        }
+
+        const response = await fetch(`http://localhost:3000/notifications/setIsOpened`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        return response.json();
+    }
 }

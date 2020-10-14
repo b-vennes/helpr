@@ -11,11 +11,16 @@
             </div>
             
             <div class="right">
-                <img @click="openNotifications()" src="https://img.icons8.com/fluent-systems-regular/24/000000/appointment-reminders.png"/>
+                <div v-if="hasNotifications">
+                    <img class="notificationIcon" @click="openNotifications()" src="https://img.icons8.com/fluent-systems-filled/24/000000/appointment-reminders.png"/>
+                </div>
+                <div v-else>
+                    <img class="notificationIcon" @click="openNotifications()" src="https://img.icons8.com/fluent-systems-regular/24/000000/appointment-reminders.png"/>
+                </div>
                 <router-link to="/profile">
                     <div class="profile" v-bind:class="{ active: this.$route.name === 'Profile'}"><a class="routeText">Profile</a></div>
                 </router-link>
-                <img @click="toggleModal()" :src="photo">
+                <img class="profilePicture" @click="toggleModal()" :src="photo">
             </div>
         </div>
 
@@ -25,19 +30,25 @@
         </div>
         <div class="notificationModalContainer">
             <div class="notificationModal" v-if="showNotifications">
-                <div>Notifications</div>
+                <div class="notificationTitle">Notifications</div>
+                <Notifications></Notifications>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import NotificationService from '../services/notifications.service.js';
 import Button from "@/components/Button";
+import Notifications from './Notifications';
+
+const notificationService = new NotificationService();
 
 export default {
   name: 'Navbar',
   components: {
-    Button
+    Button,
+    Notifications
   },
   data: function() {
     return {
@@ -46,12 +57,26 @@ export default {
       load: true,
       goToUserProfile: false,
       photo: '',
+      hasNotifications: false,
+      notifications: []
     }
   },
   props: {
     activeTab: String
   },
   methods: {
+    async getNotifications() {
+      await notificationService.getNotificationsByUserId(localStorage.getItem('userId'))
+        .then(data => {
+            if (data) {
+                for (var notification of data) {
+                    if (!notification.isOpened) {
+                        this.hasNotifications = true;
+                    }
+                }
+            }
+        })
+    },
     logout: function() {
       localStorage.setItem('requiresAuth', 'userIsNotAuthorized')
       localStorage.clear()
@@ -65,7 +90,9 @@ export default {
         this.showNotifications = !this.showNotifications;
     }
   },
-  mounted: function() {
+  async mounted() {
+    await this.getNotifications();
+
     this.photo = localStorage.getItem('photo');
 
     if (localStorage.getItem('requiresAuth') === "userIsAuthorized") {
@@ -76,6 +103,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a {
+    text-decoration: none;
+}
 .nav {
   display: flex;
   align-items: center;
@@ -83,7 +113,8 @@ export default {
 
   background-color: #1de9b6;
   color: black;
-  height: 48px;
+  height: 54px;
+  transition: top 0.3s;
 }
 
 .left {
@@ -102,6 +133,8 @@ export default {
 
     &:hover {
       cursor: pointer;
+      background-color: #ddd;
+      color: black;
     }
   }
 }
@@ -112,14 +145,29 @@ export default {
   padding: 8px;
   margin: 2px 12px;
 
-  img {
+  .profilePicture {
     border: 2px solid #42b983;
     border-radius: 50%;
+  }
+
+  .notificationIcon {
+    margin-top: 5px;
+  }
+
+  img {
     height: 36px;
     margin-right: 20px;
+    cursor: pointer;
+    
+    div {
+        &.active {
+            background-color: #42b983;
+        }
 
-    &:hover {
-      cursor: pointer;
+        &:hover {
+            cursor: pointer;
+            text-decoration: none;
+        }
     }
   }
 
@@ -152,12 +200,17 @@ export default {
 
         position: absolute;
         right: 20px;
-        height: 32rem;
-        width: 16rem;
+        height: 35rem;
+        width: 20rem;
         background-color: #F1F1F1;
         border-radius: 8px;
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
         z-index: 1;
+
+        .notificationTitle {
+            margin-top: 20px;
+            font-size: 30px;
+        }
     }
 }
 

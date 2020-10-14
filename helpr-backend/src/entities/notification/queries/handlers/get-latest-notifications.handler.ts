@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 
 export class GetLatestNotificationsQuery {
     constructor(
-        public readonly notificationId: number
+        public readonly userId: number
     ) {}
 }
 
@@ -17,6 +17,19 @@ export class GetLatestNotificationsHandler implements IQueryHandler<GetLatestNot
     ) {}
 
     public async execute(query: GetLatestNotificationsQuery): Promise<Notification[]> {
-        return await this.notificationRepository.find();
+        let notifications = await this.notificationRepository.find({userId: query.userId});
+        let latestNotifications = [];
+        let count = 0;
+        notifications = notifications.sort((a, b) => b.id - a.id);
+
+        for (var notification of notifications) {
+            if (count === 5) {
+                break;
+            }
+
+            latestNotifications.push(notification);
+            count += 1;
+        }
+        return latestNotifications;
     }
 }

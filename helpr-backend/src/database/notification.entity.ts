@@ -16,4 +16,7 @@ export class Notification {
 
     @Column()
     requestId: number;
+
+    @Column()
+    isOpened: boolean;
 }
