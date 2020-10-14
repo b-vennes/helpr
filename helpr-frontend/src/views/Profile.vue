@@ -20,6 +20,23 @@
         <div class="name">
           {{ name }}
         </div>
+        <div class="ranking">
+          <div v-if="points <= 500">
+            Bronze Helpr
+          </div>
+          <div v-else-if="points > 500 && points <= 2000">
+            Silver Helpr
+          </div>
+          <div v-else-if="points > 2000 && points <= 3500">
+            Gold Helpr
+          </div>
+          <div v-else-if="points > 3500 && points <= 5000">
+            Platinum Helpr
+          </div>
+          <div v-else-if="points > 5000">
+            Diamond Helpr
+          </div>
+        </div>
         <div class="tags">
             <div v-for="userTag in userTags" v-bind:key="userTag.id">
                 {{userTag.tagName}}
@@ -187,8 +204,18 @@ export default {
       .name {
         margin-top: 12px;
         font-size: 64px;
-        line-height: 50px;;
+        line-height: 50px;
         font-family: 'Patrick Hand SC', cursive;
+      }
+
+      .ranking {
+          font-weight: 600;
+          width: 8rem;
+          margin: auto;
+          padding: 8px;
+          border-radius: 24px;
+          background-color: #42b983;
+          font-family: 'Patrick Hand SC', cursive;
       }
 
       .tags {
