@@ -157,6 +157,10 @@ export default {
         emitter.on('show-comments-event', () => {
             this.showCommentsEvent();
         });
+
+        emitter.on('created-request-event', () => {
+            this.exitModal();
+        });
     },
     beforeUnmount: function() {
         emitter.off('exit-ask-modal-event', () => {});
@@ -164,6 +168,7 @@ export default {
         emitter.off('add-comment-event', () => {});
         emitter.off('exit-create-comment-modal-event', () => {});
         emitter.off('show-comments-event', () => {});
+        emitter.off('created-request-event', () => {});
     }
 }
 </script>

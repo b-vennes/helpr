@@ -165,10 +165,8 @@ export default {
         },
         createNotifications(requestId) {
             notificationService.sendNotifications(requestId)
-            .then(data => {
-                if (data) {
-                    console.log(data);
-                }
+            .then(() => {
+                this.exitModal();
             });
         },
         async getTags() {

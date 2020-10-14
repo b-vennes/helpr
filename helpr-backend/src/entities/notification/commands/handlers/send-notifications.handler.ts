@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/database/user.entity';
 import { UserTag } from 'src/database/usertag.entity';
 import { RequestTag } from 'src/database/requesttag.entity';
+import { Request } from 'src/database/request.entity';
 
 export class SendNotificationCommand {
     constructor(
@@ -22,11 +23,15 @@ export class SendNotificationHandler implements ICommandHandler<SendNotification
         @InjectRepository(UserTag)
         private readonly userTagRepository: Repository<UserTag>,
         @InjectRepository(RequestTag)
-        private readonly requestTagRepository: Repository<RequestTag>
+        private readonly requestTagRepository: Repository<RequestTag>,
+        @InjectRepository(Request)
+        private readonly requestRepository: Repository<Request>
     ) {}
 
     async execute(command: SendNotificationCommand): Promise<boolean> {
         let users = await this.userRepository.find();
+        let request = await this.requestRepository.findOne(command.requestId);
+        let userFromCreatedRequest = await this.userRepository.findOne(request.userId);
         let requestTags = await this.requestTagRepository.find({requestId: command.requestId});
         
         for (var user of users) {
@@ -35,7 +40,11 @@ export class SendNotificationHandler implements ICommandHandler<SendNotification
             for (var userTag of userTags) {
                 for (var requestTag of requestTags) {
                     if (userTag.tagId === requestTag.tagId) {
-                        let notificationDescription = user.firstname + " " + user.lastname + " just posted a Request based on one of your skills.";
+                        let notificationDescription = userFromCreatedRequest.firstname 
+                        + " " 
+                        + userFromCreatedRequest.lastname 
+                        + " just posted a Request based on one of your skills.";
+                        
                         const notification = {
                             description: notificationDescription,
                             createdDate: new Date(),
