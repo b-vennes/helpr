@@ -182,8 +182,6 @@ export default {
     async mounted() {
         await this.getTags();
 
-        console.log(this.users);
-
         emitter.on('error-display-event', () => {
             this.showErrorMessageEventListener();
         });

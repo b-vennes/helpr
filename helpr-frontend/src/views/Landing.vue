@@ -66,10 +66,9 @@ export default {
        display: flex;
        align-items: center;
 
-       background-color: #F06292;
+       background-color: #42b983;
        border: none;
        border-radius: 28px;
-       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
        font-family: 'Roboto', sans-serif;
        margin: 20px auto 30px auto;
        outline: none;
@@ -87,13 +86,13 @@ export default {
        }
 
        &:hover {
-         background-color: #E35D8A;
+         background-color: #42b983;
          cursor: pointer;
          filter: drop-shadow(0px 4.5px 4.5px rgba(0, 0.0, 0.0, 0.30));
        }
 
        &:active {
-         background-color: #D25982;
+         background-color: #42b983;
        }
      }
    }

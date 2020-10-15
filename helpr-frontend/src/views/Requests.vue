@@ -186,6 +186,7 @@ export default {
         });
 
         emitter.on('exit-ask-modal-event', () => {
+            this.getRequests();
             this.exitModal();
         });
 
