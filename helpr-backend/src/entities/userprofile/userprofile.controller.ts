@@ -30,6 +30,6 @@ export class UserProfileController {
 
       @Put('update')
       async updateUserProfile(@Body() command: UpdateUserProfileCommand): Promise<UserProfile> {
-            return await this.commandBus.execute(new UpdateUserProfileCommand(command.userProfile));
+            return await this.commandBus.execute(new UpdateUserProfileCommand(command.id, command.aboutMe, command.title));
       }
 }

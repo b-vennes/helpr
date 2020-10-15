@@ -16,4 +16,17 @@ export default class UserService {
 
         return response.json();
     }
+
+    async updateUser(user) {
+        const response = await fetch(`http://localhost:3000/users/updateUser`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        return response.json();
+    }
 }

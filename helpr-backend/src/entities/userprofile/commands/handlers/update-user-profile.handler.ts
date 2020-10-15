@@ -5,7 +5,9 @@ import { Repository } from 'typeorm';
 
 export class UpdateUserProfileCommand {
     constructor(
-        public readonly userProfile: UserProfile
+        public readonly id: number,
+        public readonly aboutMe: string,
+        public readonly title: string
     ) {}
 }
 
@@ -17,6 +19,10 @@ export class UpdateUserProfileHandler implements ICommandHandler<UpdateUserProfi
     ) {}
 
     async execute(command: UpdateUserProfileCommand) {
-        return await this.userProfileRepository.update(command.userProfile.id, command.userProfile);
+        let userProfile = await this.userProfileRepository.findOne(command.id);
+        userProfile.aboutMe = command.aboutMe;
+        userProfile.title = command.title;
+
+        return await this.userProfileRepository.update(userProfile.id, userProfile);
     }
 }

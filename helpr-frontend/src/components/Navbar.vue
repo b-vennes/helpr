@@ -45,60 +45,60 @@ import Notifications from './Notifications';
 const notificationService = new NotificationService();
 
 export default {
-  name: 'Navbar',
-  components: {
-    Button,
-    Notifications
-  },
-  data: function() {
-    return {
-      showModal: false,
-      showNotifications: false,
-      load: true,
-      goToUserProfile: false,
-      photo: '',
-      hasNotifications: false,
-      notifications: []
-    }
-  },
-  props: {
-    activeTab: String
-  },
-  methods: {
-    async getNotifications() {
-      await notificationService.getNotificationsByUserId(localStorage.getItem('userId'))
-        .then(data => {
-            if (data) {
-                for (var notification of data) {
-                    if (!notification.isOpened) {
-                        this.hasNotifications = true;
+    name: 'Navbar',
+    components: {
+        Button,
+        Notifications
+    },
+    data: function() {
+        return {
+            showModal: false,
+            showNotifications: false,
+            load: true,
+            goToUserProfile: false,
+            photo: '',
+            hasNotifications: false,
+            notifications: []
+        }
+    },
+    props: {
+        activeTab: String
+    },
+    methods: {
+        async getNotifications() {
+            await notificationService.getNotificationsByUserId(localStorage.getItem('userId'))
+                .then(data => {
+                    if (data) {
+                        for (var notification of data) {
+                            if (!notification.isOpened) {
+                                this.hasNotifications = true;
+                            }
+                        }
                     }
-                }
-            }
-        })
+            })
+        },
+        logout: function() {
+            localStorage.setItem('requiresAuth', 'userIsNotAuthorized')
+            localStorage.clear()
+            this.load = true;
+            window.location.replace("http://localhost:8080");
+        },
+        toggleModal: function() {
+            this.showModal = !this.showModal;
+        },
+        openNotifications: function() {
+            this.showNotifications = !this.showNotifications;
+        }
     },
-    logout: function() {
-      localStorage.setItem('requiresAuth', 'userIsNotAuthorized')
-      localStorage.clear()
-      this.load = true;
-      window.location.replace("http://localhost:8080");
-    },
-    toggleModal: function() {
-      this.showModal = !this.showModal;
-    },
-    openNotifications: function() {
-        this.showNotifications = !this.showNotifications;
-    }
-  },
-  async mounted() {
-    await this.getNotifications();
+    async mounted() {
+        await this.getNotifications();
 
-    this.photo = localStorage.getItem('photo');
+        this.photo = localStorage.getItem('photo');
 
-    if (localStorage.getItem('requiresAuth') === "userIsAuthorized") {
-      this.load = true;
+        if (localStorage.getItem('requiresAuth') === "userIsAuthorized") {
+            this.load = true;
+        }
     }
-  }
 }
 </script>
 
@@ -146,7 +146,6 @@ a {
   margin: 2px 12px;
 
   .profilePicture {
-    border: 2px solid #42b983;
     border-radius: 50%;
   }
 
@@ -178,7 +177,6 @@ a {
 
 .modal {
   display: flex;
-  //align-items: center;
   flex-direction: column;
   justify-content: center;
 

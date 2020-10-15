@@ -47,10 +47,10 @@
                             :key="commentComponentKey">
                         </Comments>
                     </div>
+                </div>
             </div>
         </div>
-        </div>
-        <transition name="slide-fade" mode="out-in">
+        <transition name="fade">
             <div class="modal" v-if="showModal">
                 <AskModal></AskModal>
             </div>
@@ -61,7 +61,7 @@
                 v-bind:requestId="commentRequestId"
             ></AddCommentModal>
         </div>
-      </div>
+    </div>
 </template>
 
 <script>
@@ -228,8 +228,6 @@ export default {
 .requestsContainer {
   display: flex;
   flex-direction: column;
-
-  //background-image: url("../assets/questions-background.svg");
   background-repeat: no-repeat;
   background-size: cover;
   color: black;
@@ -374,16 +372,11 @@ export default {
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.slide-fade-enter-active {
-  transition: all .3s ease;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
 }
 
-.slide-fade-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-
-.slide-fade-enter, .slide-fade-leave-to {
-  transform: translateX(10px);
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 </style>

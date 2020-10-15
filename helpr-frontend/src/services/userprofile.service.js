@@ -46,7 +46,7 @@ export default class UserProfileService {
         }
 
         const response = await fetch(`http://localhost:3000/userprofiles/update`, {
-            method: 'POST',
+            method: 'PUT',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
