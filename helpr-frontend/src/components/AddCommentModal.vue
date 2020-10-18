@@ -19,8 +19,8 @@
 
 <script>
 import Button from './Button';
-import { emitter } from '../components/common/event-bus';
 import CommentService from '../services/comment.service.js';
+import { emitter } from '../components/common/event-bus';
 
 const commentService = new CommentService();
 

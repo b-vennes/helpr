@@ -16,7 +16,7 @@
         <div class="dropdownIcon">
             <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
         </div>
-        <div class="transferPointsIcon">
+        <div class="transferPointsIcon" v-if="loggedInUserId == userId">
             <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
         </div>
         <div class="footer">
@@ -99,7 +99,7 @@ export default {
             emitter.emit('show-comments-event');
         },
         transferPoints() {
-            emitter.emit('transfer-points-event', this.id)
+            emitter.emit('transfer-points-event', { id: this.id, points: this.points} )
         }
 
     },

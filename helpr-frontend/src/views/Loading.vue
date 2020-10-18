@@ -8,8 +8,10 @@
 
 <script>
 import UserService from '../services/user.service.js';
+import UserProfileService from '../services/userprofile.service.js';
 
 const userService = new UserService();
+const userProfileService = new UserProfileService();
 
 export default {
     name: 'Loading',
@@ -19,6 +21,17 @@ export default {
         }
     },
     methods: {
+        async getUserProfileData(userId) {
+            await userProfileService.getUserProfileById(userId)
+            .then(data => {
+                if (data) {
+                    localStorage.setItem('points', data.points)
+                    localStorage.setItem('title', data.title)
+                    localStorage.setItem('description', data.aboutMe)
+                    localStorage.setItem('userProfileId', parseInt(data.id))
+                }
+            })
+        },
         async getUser() {
             const searchCodeParameter = window.location.href;
             const id = searchCodeParameter.substring(searchCodeParameter.lastIndexOf('/') + 1);
@@ -26,6 +39,7 @@ export default {
             await userService.getUser(id)
             .then(data => {
                 if (data) {
+                    this.getUserProfileData(data.id);
                     localStorage.setItem('companyId', data.companyId)
                     localStorage.setItem('email', data.email)
                     localStorage.setItem('firstname', data.firstname)

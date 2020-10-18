@@ -85,6 +85,46 @@ export default {
         SuccessDisplay
     },
     methods: {
+        async createRequest() {
+            const request = {
+                description: this.description,
+                createdDate: new Date(),
+                points: parseInt(this.points),
+                likes: 0,
+                isPublicRequest: this.isPublicRequest,
+                userId: localStorage.getItem('userId'),
+                isDeleted: false,
+                title: this.title
+            }
+            
+            await requestService.createRequest(request)
+            .then(data => {
+                if (data.id) {
+                    this.showSuccessMessage("Successfully posted a new request");
+                    this.createRequestTags(data);
+                    this.createNotifications(data.id);
+                } else {
+                    this.showErrorMessage("Error in posting a new request");
+                }
+            })
+        },
+        async getTags() {
+            await tagService.getAllTags()
+            .then(data => {
+                if (data) {
+                    this.tagSelectList = data;
+                    this.tags = data;
+                }
+            })
+        },
+        async getAllUsers() {
+            await userService.getAllUsers()
+            .then(data => {
+                if (data) {
+                    this.users = data;
+                }
+            });
+        },
         showErrorMessage: function(message) {
             this.errorMessage = message;
             this.isShowError = true;
@@ -116,37 +156,6 @@ export default {
             this.tagSelectList.splice(index, 1);
             this.selected = '';
         },
-        async createRequest() {
-            const request = {
-                description: this.description,
-                createdDate: new Date(),
-                points: parseInt(this.points),
-                likes: 0,
-                isPublicRequest: this.isPublicRequest,
-                userId: localStorage.getItem('userId'),
-                isDeleted: false,
-                title: this.title
-            }
-            
-            await requestService.createRequest(request)
-            .then(data => {
-                if (data.id) {
-                    this.showSuccessMessage("Successfully posted a new request");
-                    this.createRequestTags(data);
-                    this.createNotifications(data.id);
-                } else {
-                    this.showErrorMessage("Error in posting a new request");
-                }
-            })
-        },
-        async getAllUsers() {
-            await userService.getAllUsers()
-            .then(data => {
-                if (data) {
-                    this.users = data;
-                }
-            });
-        },
         createRequestTags(createdRequest) {
             for (var selectedTag of this.selectedTags) {
                 const request = {
@@ -167,15 +176,6 @@ export default {
             .then(() => {
                 this.exitModal();
             });
-        },
-        async getTags() {
-            await tagService.getAllTags()
-            .then(data => {
-                if (data) {
-                    this.tagSelectList = data;
-                    this.tags = data;
-                }
-            })
         }
     },
     async mounted() {

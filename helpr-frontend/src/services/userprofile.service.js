@@ -25,7 +25,25 @@ export default class UserProfileService {
         }
 
         const response = await fetch(`http://localhost:3000/userprofiles/addPoints`, {
-            method: 'POST',
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        return response.json();
+    }
+
+    async deductPointsToUserProfile(request) {
+        const body = {
+            id: request.id,
+            points: request.points
+        }
+
+        const response = await fetch(`http://localhost:3000/userprofiles/deductPoints`, {
+            method: 'PUT',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'

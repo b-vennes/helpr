@@ -5,6 +5,7 @@ import { GetUserProfilesQuery } from "./queries/handlers/get-user-profiles.handl
 import { GetUserProfileByIdQuery } from "./queries/handlers/get-user-profile-by-id.handler";
 import { AddPointsToUserProfileCommand } from "./commands/handlers/add-points-to-user-profile.handler";
 import { UpdateUserProfileCommand } from "./commands/handlers/update-user-profile.handler";
+import { DeductPointsToUserProfileCommand } from "./commands/handlers/deduct-points-to-user-profile.handler";
 
 @Controller('userprofiles')
 export class UserProfileController {
@@ -25,7 +26,12 @@ export class UserProfileController {
 
       @Put('addPoints')
       async addPointsToUserProfile(@Body() command: AddPointsToUserProfileCommand): Promise<UserProfile> {
-            return await this.commandBus.execute(new AddPointsToUserProfileCommand(command.userProfileId, command.points))
+            return await this.commandBus.execute(new AddPointsToUserProfileCommand(command.id, command.points))
+      }
+
+      @Put('deductPoints')
+      async deductPointsToUserProfile(@Body() command: DeductPointsToUserProfileCommand): Promise<UserProfile> {
+            return await this.commandBus.execute(new DeductPointsToUserProfileCommand(command.id, command.points))
       }
 
       @Put('update')

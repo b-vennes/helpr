@@ -11,14 +11,14 @@
                 </div>
             </div>
             <div class="right">
-            <input type="text" placeholder="Search">
-            
-            <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
-            
-            <router-link to="/card">
-                <Button txt="Find a Helpr" class="secondary find"></Button>
-            </router-link>
-            <img src="../assets/settings.svg" class="settings">
+                <input type="text" placeholder="Search">
+                
+                <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
+                
+                <router-link to="/card">
+                    <Button txt="Find a Helpr" class="secondary find"></Button>
+                </router-link>
+                <img src="../assets/settings.svg" class="settings">
             </div>
         </div>
         <div class="main">
@@ -73,8 +73,10 @@
         </div>
 
         <transition name="fade">
-            <div class="modal" v-if="showTransferPointsComponent">
-                <TransferPoints></TransferPoints>
+            <div v-if="showTransferPointsComponent">
+                <TransferPoints 
+                    v-bind:points="selectedRequestToTransferPoints.points"
+                ></TransferPoints>
             </div>
         </transition>
     </div>
@@ -101,6 +103,7 @@ export default {
     data: function() {
         return {
             requests: [],
+            selectedRequestToTransferPoints: {},
             errorMessage: "",
             isShowError: false,
             showModal: false,
@@ -110,7 +113,9 @@ export default {
             showComments: false,
             commentComponentKey: 0,
             loggedInUserId: 0,
-            showTransferPointsComponent: false
+            showTransferPointsComponent: false,
+            isHoverUserEvent: false,
+            hoverUserEventInfo: {}
         }
     },
     components: {
@@ -202,8 +207,13 @@ export default {
         messageUser() {
             console.log("sup");
         },
-        showTransferPointsEvent() {
+        showTransferPointsEvent(event) {
+            this.selectedRequestToTransferPoints = event;
             this.showTransferPointsComponent = true;
+        },
+        exitTransferPointsEvent() {
+            this.selectedRequestToTransferPoints = {};
+            this.showTransferPointsComponent = false;
         }
     },
     async mounted(){
@@ -234,8 +244,12 @@ export default {
             this.showCommentsEvent();
         });
 
-        emitter.on('transfer-points-event', () => {
-            this.showTransferPointsEvent();
+        emitter.on('transfer-points-event', event => {
+            this.showTransferPointsEvent(event);
+        });
+
+        emitter.on('exit-transfer-points-event', () => {
+            this.exitTransferPointsEvent();
         });
     },
     beforeUnmount: function() {
@@ -262,12 +276,6 @@ export default {
     background-size: cover;
     color: black;
     height: 100vh;
-
-    .transferPointsCard {
-        background-color: green;
-        height: 200px;
-        width: 200px;
-    }
 
     .all {
         display: flex;
