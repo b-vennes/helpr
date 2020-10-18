@@ -248,8 +248,6 @@ export default {
                 userId: parseInt(this.userId)
             }
 
-            console.log(userProfile);
-
             await userService.updateUser(user)
             .then(data => {
                 console.log(data);

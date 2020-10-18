@@ -29,10 +29,20 @@
                             v-bind:userId="request.userId"
                             v-bind:createdDate="request.createdDate">
                         </User>
+                        <div class="messageUserIcon" v-if="request.userId != loggedInUserId">
+                            <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
+                        </div>
+                        <div class="thumbsIcon" v-if="request.userId != loggedInUserId">
+                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                        </div>
+                        <div class="thumbsIconLoggedIn" v-if="request.userId == loggedInUserId">
+                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                        </div>
                     </div>
                     <div class="question">
                         <QuestionPreview
                             v-bind:likes="request.likes"
+                            v-bind:points="request.points"
                             v-bind:title="request.title"
                             v-bind:description="request.description"
                             v-bind:id="request.id"
@@ -61,6 +71,12 @@
                 v-bind:requestId="commentRequestId"
             ></AddCommentModal>
         </div>
+
+        <transition name="fade">
+            <div class="modal" v-if="showTransferPointsComponent">
+                <TransferPoints></TransferPoints>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -71,11 +87,12 @@ import Button from '../components/Button';
 import QuestionPreview from '../components/Question-preview';
 import ErrorDisplay from '../components/common/Error.vue';
 import User from '../components/User';
-import { emitter } from '../components/common/event-bus';
 import Navbar from "@/components/Navbar";
 import AskModal from '../components/AskModal';
 import AddCommentModal from '../components/AddCommentModal';
+import TransferPoints from '../components/TransferPoints';
 import Comments from '../components/Comments';
+import { emitter } from '../components/common/event-bus';
 
 const requestService = new RequestService();
 const userService = new UserService();
@@ -91,7 +108,9 @@ export default {
             commentRequestId: 0,
             commentUserId: 0,
             showComments: false,
-            commentComponentKey: 0
+            commentComponentKey: 0,
+            loggedInUserId: 0,
+            showTransferPointsComponent: false
         }
     },
     components: {
@@ -102,7 +121,8 @@ export default {
         User,
         AskModal,
         AddCommentModal,
-        Comments
+        Comments,
+        TransferPoints
     },
     methods: {
         async getRequests() {
@@ -122,6 +142,31 @@ export default {
                     return data;
                 }
             })
+        },
+        async incrementsLikes(requestId) {
+            let tempRequest = {}
+
+            for (var request in this.requests) {
+                if (request.requestId === requestId) {
+                    tempRequest = request;
+                }
+            }
+
+            const body = {
+                id: requestId,
+                description: tempRequest.description,
+                createdDate: tempRequest.createdDate,
+                points: tempRequest.points,
+                likes: tempRequest.likes,
+                isPublicRequest: tempRequest.isPublicRequest,
+                userId: tempRequest.userId,
+                isDeleted: tempRequest.isDeleted
+            }
+
+            await requestService.incrementRequestLikes(body)
+            .then(() => {});
+
+            emitter.emit('add-to-thumbsup-amount');
         },
         showErrorMessageEventListener() {
             this.isShowError = false;
@@ -154,31 +199,16 @@ export default {
         forceRerender() {
             this.commentComponentKey += 1;
         },
-        async incrementsLikes(requestId) {
-            let tempRequest = {}
-
-            for (var request in this.requests) {
-                if (request.requestId === requestId) {
-                    tempRequest = request;
-                }
-            }
-
-            const body = {
-                id: requestId,
-                description: tempRequest.description,
-                createdDate: tempRequest.createdDate,
-                points: tempRequest.points,
-                likes: tempRequest.likes,
-                isPublicRequest: tempRequest.isPublicRequest,
-                userId: tempRequest.userId,
-                isDeleted: tempRequest.isDeleted
-            }
-
-            await requestService.incrementRequestLikes(body)
-            .then(() => {});
+        messageUser() {
+            console.log("sup");
+        },
+        showTransferPointsEvent() {
+            this.showTransferPointsComponent = true;
         }
     },
     async mounted(){
+        this.loggedInUserId = localStorage.getItem('userId');
+
         await this.getRequests();
 
         emitter.on('error-display-event', () => {
@@ -188,10 +218,6 @@ export default {
         emitter.on('exit-ask-modal-event', () => {
             this.getRequests();
             this.exitModal();
-        });
-
-        emitter.on('thumbs-up-event', requestId => {
-            this.incrementsLikes(requestId);
         });
         
         emitter.on('add-comment-event', event => {
@@ -207,111 +233,121 @@ export default {
         emitter.on('show-comments-event', () => {
             this.showCommentsEvent();
         });
+
+        emitter.on('transfer-points-event', () => {
+            this.showTransferPointsEvent();
+        });
     },
     beforeUnmount: function() {
         emitter.off('error-display-event', () => {});
         emitter.off('exit-ask-modal-event', () => {});
-        emitter.off('thumbs-up-event', () => {});
         emitter.off('add-comment-event', () => {});
         emitter.off('exit-create-comment-modal-event', () => {});
         emitter.off('show-comments-event', () => {});
+        emitter.off('transfer-points-event', () => {});
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .navbar {
-  position: absolute;
-  width: 100vw;
+    position: absolute;
+    width: 100vw;
 }
 
 .requestsContainer {
-  display: flex;
-  flex-direction: column;
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: black;
-  height: 100vh;
-
-  .all {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 15%;
-    min-width: 80rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: black;
+    height: 100vh;
 
-    .top {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      width: 70%;
-      margin: 0 0 16px 0;
-
-      .left {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        align-items: flex-start;
-
-        .header {
-          font-size: 2rem;
-          line-height: 2rem;
-          margin: 0 0 8px 0;
-        }
-
-        .filters {
-          .filter {
-            &:hover {
-              cursor: pointer;
-            }
-
-            &.active {
-              font-weight: 600;
-              text-decoration: underline;
-            }
-          }
-        }
-      }
-
-      .right {
-        display: flex;
-        align-items: center;
-
-        input {
-          align-self: flex-end;
-          margin-right: 36px;
-          margin-bottom: 9px;
-          height: 30px;
-          font-size: 18px;
-          border: 0;
-          outline: 0;
-          padding: 4px 8px;
-          background-color: #f1f1f1;
-          border-radius: 8px;
-        }
-
-        .ask, .find {
-          margin-right: 12px;
-        }
-
-        .settings {
-          height: 24px;
-          opacity: 0.6;
-          padding: 8px;
-          border-radius: 50%;
-          background-color: rgba(0,0,0,0.05);
-
-          &:hover {
-            background-color: rgba(0,0,0,0.075);
-            cursor: pointer;
-            opacity: 1;
-          }
-        }
-      }
+    .transferPointsCard {
+        background-color: green;
+        height: 200px;
+        width: 200px;
     }
+
+    .all {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 15%;
+        min-width: 80rem;
+
+        .top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 70%;
+            margin: 0 0 16px 0;
+
+            .left {
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .header {
+                font-size: 2rem;
+                line-height: 2rem;
+                margin: 0 0 8px 0;
+                }
+
+                .filters {
+                    .filter {
+                        &:hover {
+                        cursor: pointer;
+                        }
+
+                        &.active {
+                        font-weight: 600;
+                        text-decoration: underline;
+                        }
+                    }
+                }
+            }
+
+            .right {
+                display: flex;
+                align-items: center;
+
+                input {
+                    align-self: flex-end;
+                    margin-right: 36px;
+                    margin-bottom: 9px;
+                    height: 30px;
+                    font-size: 18px;
+                    border: 0;
+                    outline: 0;
+                    padding: 4px 8px;
+                    background-color: #f1f1f1;
+                    border-radius: 8px;
+                }
+
+                .ask, .find {
+                    margin-right: 12px;
+                }
+
+                .settings {
+                    height: 24px;
+                    opacity: 0.6;
+                    padding: 8px;
+                    border-radius: 50%;
+                    background-color: rgba(0,0,0,0.05);
+
+                    &:hover {
+                        background-color: rgba(0,0,0,0.075);
+                        cursor: pointer;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
 
     .main {
         width: 70%;
@@ -325,12 +361,77 @@ export default {
             align-items: flex-start;
 
             .user {
-                width: 20%;
-                float: left;
+                width: 30%;
+
+                .messageUserIcon {
+                    position: relative;
+                    left: 270px;
+                    top: 10px;
+                    background-color: #f1f1f1;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    
+                    img {
+                        position: relative;
+                        top: 9px;
+                        left: 1px;
+                        height: 20px;
+                    }
+
+                    &:hover {
+                        background-color: #fafafa;
+                        cursor: pointer;
+                    }
+                }
+
+                .thumbsIcon {
+                    position: relative;
+                    left: 225px;
+                    top: -30px;
+                    background-color: #f1f1f1;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    
+                    img {
+                        position: relative;
+                        top: 10px;
+                        left: 1px;
+                        height: 20px;
+                    }
+
+                    &:hover {
+                        background-color: #fafafa;
+                        cursor: pointer;
+                    }
+                }
+
+                .thumbsIconLoggedIn {
+                    position: relative;
+                    left: 273px;
+                    top: 10px;
+                    background-color: #f1f1f1;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    
+                    img {
+                        position: relative;
+                        top: 10px;
+                        left: 1px;
+                        height: 20px;
+                    }
+
+                    &:hover {
+                        background-color: #fafafa;
+                        cursor: pointer;
+                    }
+                }
             }
 
             .question {
-                width: 95%;
+                width: 140%;
                 margin-bottom: 100px;
                 height: 300px;
                 float: right;
@@ -343,40 +444,39 @@ export default {
         }
     }
 
-    // Remove the underline from the router button.
     a {
-      color: black;
-      text-decoration: none;
+        color: black;
+        text-decoration: none;
     }
 
     ::-webkit-scrollbar {
-      width: 4px;
+        width: 4px;
     }
 
     ::-webkit-scrollbar-track {
-      border-radius: 10px;
+        border-radius: 10px;
 
-      &:hover {
-        cursor: pointer;
-      }
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     ::-webkit-scrollbar-thumb {
-      border-radius: 8px;
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        border-radius: 8px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
     }
   }
 }
 
 .modal {
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+    transition: opacity .5s;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+.fade-enter, .fade-leave-to {
+    opacity: 0;
 }
 </style>

@@ -10,7 +10,6 @@
         <img v-bind:src="user.photo">
         <div class="information">
             <div class="username">{{user.firstname}} {{user.lastname}}</div>
-            <div class="email">{{user.email}}</div>
             <div class="createdDate">{{createdDate}}</div>
         </div>
     </div>

@@ -142,7 +142,6 @@ export default {
         async getAllUsers() {
             await userService.getAllUsers()
             .then(data => {
-                console.log(data);
                 if (data) {
                     this.users = data;
                 }

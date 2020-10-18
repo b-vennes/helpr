@@ -2,16 +2,22 @@
     <div class="questionContainer">
         <div class="question">
             <div class="content">
-                <div class="title">{{ title }}<span class="id"></span></div>
+                <div class="title">
+                    {{ title }}
+                </div>
             </div>
         </div>
         <div class="description">
             <div class="requestDescription">{{ description }}</div>
         </div>
-        <div class="icons">
-            <img @click="thumbsUp()" class="image" src="https://img.icons8.com/ios/50/000000/thumb-up.png"/>
-            <img @click="commentRequest()" class="image" src="https://img.icons8.com/small/16/000000/comments.png"/>
-            <img @click="messageUser()" class="image" src="https://img.icons8.com/ios/50/000000/speech-bubble-with-dots.png"/>
+        <div class="commentIcon">
+            <img @click="commentRequest()" src="https://img.icons8.com/ios-filled/50/000000/comments.png"/>
+        </div>
+        <div class="dropdownIcon">
+            <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
+        </div>
+        <div class="transferPointsIcon">
+            <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
         </div>
         <div class="footer">
             <div class="thumbsUp">
@@ -22,8 +28,8 @@
                     {{ requestTag.tagName }}
                 </div>
             </div>
-            <div class="showComments">
-                <img @click="dropdown()" class="dropdown" src="https://img.icons8.com/ios/50/000000/drag-list-down.png"/>
+            <div class="points">
+                +{{ points }}
             </div>
         </div>
     </div>
@@ -45,13 +51,15 @@ export default {
         tag: String,
         title: String,
         userId: Number,
-        likes: Number
+        likes: Number,
+        points: Number
     },
     data: function() {
         return {
             user: {},
             requestTags: [],
-            thumbsUpAmount: 0
+            thumbsUpAmount: 0,
+            loggedInUserId: 0
         }
     },
     methods: {
@@ -79,10 +87,6 @@ export default {
                 }
             })
         },
-        thumbsUp() {
-            emitter.emit('thumbs-up-event', this.id);
-            this.thumbsUpAmount += 1;
-        },
         commentRequest() {
             const event = {
                 userId: this.userId,
@@ -94,15 +98,24 @@ export default {
         dropdown() {
             emitter.emit('show-comments-event');
         },
-        messageUser() {
-            
+        transferPoints() {
+            emitter.emit('transfer-points-event', this.id)
         }
 
     },
     async mounted() {
         this.thumbsUpAmount = this.likes;
+        this.loggedInUserId = localStorage.getItem('userId');
+
         await this.getUser();
         await this.getRequestTags();
+
+        emitter.on('add-to-thumbsup-amount', () => {
+            this.thumbsUpAmount += 1;
+        });
+    },
+    beforeUnmount: function() {
+        emitter.off('add-to-thumbsup-amount', () => {});
     }
 }
 </script>
@@ -116,42 +129,29 @@ export default {
     height: 300px;
 
     .question {
-    background-color: #F1F1F1;
-    border-radius: 24px;
-    margin-bottom: 4px;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.03));
-    
-    .content {
-        padding: 16px;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-        background-color: 	#90EE90;
+        background-color: #F1F1F1;
+        border-radius: 24px;
+        margin-bottom: 4px;
+        
+        .content {
+            padding: 16px;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            background-color: 	#90EE90;
 
-        .title {
-            display: flex;
-            align-items: center;
-            font-size: 2rem;
-
-            .id {
-                font-size: 15px;
-                margin-left: 8px;
-                opacity: 0.6;
+            .title {
+                display: flex;
+                align-items: center;
+                font-size: 2rem;
             }
         }
-    }
 
-    .right {
-        background-color: #FF7043;
-        padding: 12px 18px;
-        border-radius: 24px;
-        margin: 0 24px 0 auto;
-    }
-
-    &:hover {
-        cursor: pointer;
-        background-color: #f7f7f7;
-        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    }
+        .right {
+            background-color: #FF7043;
+            padding: 12px 18px;
+            border-radius: 24px;
+            margin: 0 24px 0 auto;
+        }
     }
 
 
@@ -168,19 +168,78 @@ export default {
         }
     }
 
-    .icons {
+    .commentIcon {
+        position: relative;
+        left: -10px;
+        top: 10px;
+        float: right;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+        width: 40px;
         height: 40px;
-        padding: 10px;
+        
+        img {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            height: 20px;
+        }
 
-        .image {
-            height: 40px;
-            margin-right: 10px;
-            float: right;
+        &:hover {
+            background-color: #fafafa;
+            cursor: pointer;
+        }
+    }
+
+    .dropdownIcon {
+        position: relative;
+        left: -15px;
+        top: 10px;
+        float: right;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        
+        img {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            height: 20px;
+        }
+
+        &:hover {
+            background-color: #fafafa;
+            cursor: pointer;
+        }
+    }
+
+    .transferPointsIcon {
+        position: relative;
+        left: -20px;
+        top: 10px;
+        float: right;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        
+        img {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            height: 20px;
+        }
+
+        &:hover {
+            background-color: #fafafa;
             cursor: pointer;
         }
     }
 
     .footer {
+        position: relative;
+        top: 60px;
         padding: 16px;
         border-bottom-left-radius: 24px;
         border-bottom-right-radius: 24px;
@@ -203,15 +262,16 @@ export default {
             margin-right: 10px;
         }
 
-        .showComments {
-            float: right;
+        .points {
             position: relative;
-            top: -36px;
-
-            .dropdown {
-                cursor: pointer;
-                height: 30px;
-            }
+            top: -43px;
+            left: 10px;
+            float: right;
+            background-color: #F1F1F1;
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            border-radius: 20px;
         }
     }
 }

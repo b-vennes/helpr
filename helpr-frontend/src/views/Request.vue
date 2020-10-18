@@ -8,10 +8,14 @@
                         v-bind:userId="request.userId"
                         v-bind:createdDate="request.createdDate">
                     </User>
+                    <div class="messageUserIcon">
+                        <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
+                    </div>
                 </div>
                 <div class="question">
                     <QuestionPreview
                         v-bind:likes="request.likes"
+                        v-bind:points="request.points"
                         v-bind:title="request.title"
                         v-bind:description="request.description"
                         v-bind:id="request.id"
@@ -63,7 +67,8 @@ export default {
             commentRequestId: 0,
             commentUserId: 0,
             showComments: false,
-            commentComponentKey: 0
+            commentComponentKey: 0,
+            loggedInUserId: 0
         }
     },
     components: {
@@ -127,12 +132,16 @@ export default {
             } else {
                 this.showComments = true;
             }
+        },
+        messageUser() {
+            console.log("sup");
         }
     },
     async beforeMount() {
         const searchCodeParameter = window.location.href;
         this.requestId = searchCodeParameter.substring(searchCodeParameter.lastIndexOf('/') + 1);
 
+        this.loggedInUserId = localStorage.getItem('userId');
 
         await this.getRequestById();
 
@@ -208,6 +217,10 @@ export default {
             .user {
                 width: 20%;
                 float: left;
+
+                .messageUserIcon {
+
+                }
             }
 
             .question {
