@@ -47,6 +47,7 @@
                             v-bind:description="request.description"
                             v-bind:id="request.id"
                             v-bind:userId="request.userId"
+                            v-bind:isClosed="request.isDeleted"
                             tag="Forms">
                         </QuestionPreview>
                     </div>
@@ -73,9 +74,10 @@
         </div>
 
         <transition name="fade">
-            <div v-if="showTransferPointsComponent">
+            <div class="transferPointsCard" v-if="showTransferPointsComponent">
                 <TransferPoints 
                     v-bind:points="selectedRequestToTransferPoints.points"
+                    v-bind:requestId="selectedRequestToTransferPoints.id"
                 ></TransferPoints>
             </div>
         </transition>
@@ -357,127 +359,136 @@ export default {
             }
         }
 
-    .main {
-        width: 70%;
-        padding: 24px;
-        max-height: 25rem;
-    
-        .post {
-            display: flex;
-            justify-content: flex-start;
-            flex-direction: row;
-            align-items: flex-start;
+        .main {
+            width: 70%;
+            padding: 24px;
+            max-height: 25rem;
+        
+            .post {
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: row;
+                align-items: flex-start;
 
-            .user {
-                width: 30%;
+                .user {
+                    width: 30%;
 
-                .messageUserIcon {
-                    position: relative;
-                    left: 270px;
-                    top: 10px;
-                    background-color: #f1f1f1;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    
-                    img {
+                    .messageUserIcon {
                         position: relative;
-                        top: 9px;
-                        left: 1px;
-                        height: 20px;
+                        left: 270px;
+                        top: 10px;
+                        background-color: #f1f1f1;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        
+                        img {
+                            position: relative;
+                            top: 9px;
+                            left: 1px;
+                            height: 20px;
+                        }
+
+                        &:hover {
+                            background-color: #fafafa;
+                            cursor: pointer;
+                        }
                     }
 
-                    &:hover {
-                        background-color: #fafafa;
-                        cursor: pointer;
+                    .thumbsIcon {
+                        position: relative;
+                        left: 225px;
+                        top: -30px;
+                        background-color: #f1f1f1;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        
+                        img {
+                            position: relative;
+                            top: 10px;
+                            left: 1px;
+                            height: 20px;
+                        }
+
+                        &:hover {
+                            background-color: #fafafa;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .thumbsIconLoggedIn {
+                        position: relative;
+                        left: 273px;
+                        top: 10px;
+                        background-color: #f1f1f1;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        
+                        img {
+                            position: relative;
+                            top: 10px;
+                            left: 1px;
+                            height: 20px;
+                        }
+
+                        &:hover {
+                            background-color: #fafafa;
+                            cursor: pointer;
+                        }
                     }
                 }
 
-                .thumbsIcon {
-                    position: relative;
-                    left: 225px;
-                    top: -30px;
-                    background-color: #f1f1f1;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    
-                    img {
-                        position: relative;
-                        top: 10px;
-                        left: 1px;
-                        height: 20px;
-                    }
-
-                    &:hover {
-                        background-color: #fafafa;
-                        cursor: pointer;
-                    }
-                }
-
-                .thumbsIconLoggedIn {
-                    position: relative;
-                    left: 273px;
-                    top: 10px;
-                    background-color: #f1f1f1;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    
-                    img {
-                        position: relative;
-                        top: 10px;
-                        left: 1px;
-                        height: 20px;
-                    }
-
-                    &:hover {
-                        background-color: #fafafa;
-                        cursor: pointer;
-                    }
+                .question {
+                    width: 140%;
+                    margin-bottom: 100px;
+                    height: 300px;
+                    float: right;
                 }
             }
 
-            .question {
-                width: 140%;
-                margin-bottom: 100px;
-                height: 300px;
-                float: right;
+            .comments {
+                margin-left: 18.5%;
+                margin-bottom: 5%;
             }
         }
 
-        .comments {
-            margin-left: 18.5%;
-            margin-bottom: 5%;
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 10px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 8px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
         }
     }
 
-    a {
-        color: black;
-        text-decoration: none;
+    .transferPointsCard {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        top: 0;
     }
 
-    ::-webkit-scrollbar {
-        width: 4px;
+    .modal {
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        position: fixed;
+        right: 25%;
     }
-
-    ::-webkit-scrollbar-track {
-        border-radius: 10px;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 8px;
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-    }
-  }
-}
-
-.modal {
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .fade-enter-active, .fade-leave-active {

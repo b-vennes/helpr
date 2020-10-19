@@ -64,4 +64,21 @@ export default class RequestService {
 
         return response.json();
     }
+
+    async closeRequest(request) {
+        const body = {
+            id: request.id
+        };
+
+        const response = await fetch(`http://localhost:3000/requests/close`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        return response.json();
+    }
 }

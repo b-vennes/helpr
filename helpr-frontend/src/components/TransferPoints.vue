@@ -66,11 +66,13 @@
 <script>
 import UserService from '../services/user.service.js';
 import UserProfileService from '../services/userprofile.service.js';
+import RequestService from '../services/request.service.js';
 import Button from './Button';
 import { emitter } from '../components/common/event-bus';
 
 const userService = new UserService();
 const userProfileService = new UserProfileService();
+const requestService = new RequestService();
 
 export default {
     data: function() {
@@ -85,7 +87,8 @@ export default {
         }
     },
     props: {
-        points: Number
+        points: Number,
+        requestId: Number
     },
     components: {
         Button
@@ -132,10 +135,17 @@ export default {
                 points: this.points
             };
 
+            const requestToClose = {
+                id: this.requestId
+            };
+
             await userProfileService.deductPointsToUserProfile(userToDeduct)
             .then(() => {});
 
             await userProfileService.addPointsToUserProfile(userToReward)
+            .then(() => {});
+
+            await requestService.closeRequest(requestToClose)
             .then(() => {});
 
             this.chosenUserForTransfer = {};
@@ -185,8 +195,11 @@ export default {
                 border-radius: 12px;
                 font-family: 'Patrick Hand SC', cursive;
 
-                .input {
+                input {
                     font-size: 25px;
+                    border-color: #42b983;
+                    outline: none;
+                    border: none;
                 }
             }
         }

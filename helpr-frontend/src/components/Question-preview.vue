@@ -5,19 +5,38 @@
                 <div class="title">
                     {{ title }}
                 </div>
+                <div v-if="isClosed" class="requestClosed">
+                    <div class="closedText">
+                        Closed
+                    </div>
+                </div>
             </div>
         </div>
         <div class="description">
             <div class="requestDescription">{{ description }}</div>
         </div>
-        <div class="commentIcon">
-            <img @click="commentRequest()" src="https://img.icons8.com/ios-filled/50/000000/comments.png"/>
+        <div v-if="!isClosed">
+            <div class="commentIcon">
+                <img @click="commentRequest()" src="https://img.icons8.com/ios-filled/50/000000/comments.png"/>
+            </div>
+        </div>
+        <div v-else>
+            <div class="commentIconClosed">
+                <img src="https://img.icons8.com/ios-filled/50/000000/comments.png"/>
+            </div>
         </div>
         <div class="dropdownIcon">
             <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
         </div>
-        <div class="transferPointsIcon" v-if="loggedInUserId == userId">
-            <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+        <div v-if="(loggedInUserId == userId) && (!isClosed)">
+            <div class="transferPointsIcon">
+                <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+            </div>
+        </div>
+        <div v-else-if="isClosed">
+            <div class="transferPointsIconClosed">
+                <img src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+            </div>
         </div>
         <div class="footer">
             <div class="thumbsUp">
@@ -52,7 +71,8 @@ export default {
         title: String,
         userId: Number,
         likes: Number,
-        points: Number
+        points: Number,
+        isClosed: Boolean
     },
     data: function() {
         return {
@@ -138,11 +158,26 @@ export default {
             border-top-left-radius: 24px;
             border-top-right-radius: 24px;
             background-color: 	#90EE90;
+            display: flex;
 
             .title {
-                display: flex;
-                align-items: center;
                 font-size: 2rem;
+            }
+
+            .requestClosed {
+                position: relative;
+                left: 750px;
+                background-color: #FF6347;
+                border-radius: 16px;
+                width: 8%;
+                height: 40px;
+
+                .closedText {
+                    position: relative;
+                    top: 8px;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
             }
         }
 
@@ -191,6 +226,28 @@ export default {
         }
     }
 
+    .commentIconClosed {
+        position: relative;
+        left: -10px;
+        top: 10px;
+        float: right;
+        background-color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        
+        img {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            height: 20px;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
     .dropdownIcon {
         position: relative;
         left: -15px;
@@ -233,6 +290,28 @@ export default {
 
         &:hover {
             background-color: #fafafa;
+            cursor: pointer;
+        }
+    }
+
+    .transferPointsIconClosed {
+        position: relative;
+        left: -20px;
+        top: 10px;
+        float: right;
+        background-color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        
+        img {
+            position: relative;
+            top: 10px;
+            left: 0px;
+            height: 20px;
+        }
+
+        &:hover {
             cursor: pointer;
         }
     }

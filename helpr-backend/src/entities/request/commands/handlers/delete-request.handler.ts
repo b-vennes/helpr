@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 export class DeleteRequestCommand {
     constructor(
-        public readonly request: Request
+        public readonly id: number
     ) {}
 }
 
@@ -17,6 +17,9 @@ export class DeleteRequestHandler implements ICommandHandler<DeleteRequestComman
       ) { }
 
     async execute(command: DeleteRequestCommand) {
-        await this.requestRepository.update(command.request.id, command.request);
+        let request = await this.requestRepository.findOne(command.id);
+        request.isDeleted = true;
+
+        return await this.requestRepository.update(request.id, request);
     }
 }
