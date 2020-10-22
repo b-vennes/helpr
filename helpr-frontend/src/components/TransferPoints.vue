@@ -27,18 +27,20 @@
                         <Button @click="exitTransfer()" txt="Exit Transfer" class="cancel"></Button>
                     </div>
                 </div>
-                <div class="footerShowUserHover" v-if="isUserInfoHover">
+                <div class="footerShowUserHover" v-if="isUserInfoHover && userInfoHover">
                     <div class="userPhoto">
                         <img v-bind:src="userInfoHover.photo">
                     </div>
-                    <div class="userName">
-                        {{ userInfoHover.firstname }}
-                    </div>
-                    <div class="userTitle">
-                        {{ userInfoHover.title }}
-                    </div>
-                    <div class="userPoints">
-                        Points: {{ userInfoHover.points }}
+                    <div class="userInformation">
+                        <div class="userName">
+                            {{ userInfoHover.firstname }}
+                        </div>
+                        <div class="userTitle">
+                            {{ userInfoHover.title }}
+                        </div>
+                        <div class="userPoints">
+                            Points: {{ userInfoHover.points }}
+                        </div>
                     </div>
                     <div class="userRanking">
                         <div class="rankBronze" v-if="userInfoHover.points <= 500">
@@ -277,27 +279,45 @@ export default {
                     height: 70px;
                     border-radius: 12px;
                 }
-
-                .userName {
+                .userInformation {
                     position: relative;
-                    top: -60px;
-                    left: 10px;
-                    font-size: 20px;
-                }
+                    top: -63px;
+                    left: 88px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
 
-                .userTitle {
-                    position: relative;
-                    top: -60px;
-                    left: 25px;
-                    font-size: 15px;
-                }
+                    .userName {
+                    }
 
-                .userPoints {
-                    position: relative;
-                    top: -60px;
-                    left: 25px;
-                    font-size: 15px;
-                    color: lightcoral;
+                    .userTitle {
+                    }
+
+                    .userPoints {
+                        color: lightcoral;
+                    }
+                    /*.userName {
+                        position: relative;
+                        top: -60px;
+                        left: 10px;
+                        font-size: 20px;
+                    }
+
+                    .userTitle {
+                        position: relative;
+                        top: -60px;
+                        left: 25px;
+                        font-size: 15px;
+                    }
+
+                    .userPoints {
+                        position: relative;
+                        top: -60px;
+                        left: 25px;
+                        font-size: 15px;
+                        color: lightcoral;
+                    }*/
                 }
 
                 .userRanking {
