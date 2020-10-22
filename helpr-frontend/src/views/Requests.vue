@@ -5,7 +5,23 @@
     <div class="all">
         <div class="top">
             <div class="left">
-                <div class="header">Open Requests</div>
+                <div class="header">
+                    <div class="headerText">Open Requests</div>
+                    <div class="closedRequestSwitch">
+                        <label class="switch">
+                            <input type="checkbox" v-model="isShowClosedRequests" @click="closedRequestsClicked()">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="closedRequestText">
+                            <div v-if="!isShowClosedRequests">
+                                Show Only Open Requests
+                            </div>
+                            <div v-else>
+                                Show Closed Requests
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="filters">
                     <span class="filter active">Recommended</span> | <span class="filter">All</span>
                 </div>
@@ -105,6 +121,7 @@ export default {
     data: function() {
         return {
             requests: [],
+            initialRequests: [],
             selectedRequestToTransferPoints: {},
             errorMessage: "",
             isShowError: false,
@@ -117,7 +134,8 @@ export default {
             loggedInUserId: 0,
             showTransferPointsComponent: false,
             isHoverUserEvent: false,
-            hoverUserEventInfo: {}
+            hoverUserEventInfo: {},
+            isShowClosedRequests: true
         }
     },
     components: {
@@ -136,7 +154,13 @@ export default {
             await requestService.getAllRequests()
             .then(data => {
                 if (data) {
-                    this.requests = data;
+                    this.initialRequests = data;
+
+                    for (var request of data) {
+                        if (!request.isDeleted) {
+                            this.requests.push(request);
+                        }
+                    }
                 } else {
                     this.showErrorMessage("Error when receiving requests");
                 }
@@ -216,6 +240,19 @@ export default {
         exitTransferPointsEvent() {
             this.selectedRequestToTransferPoints = {};
             this.showTransferPointsComponent = false;
+        },
+        closedRequestsClicked() {
+            if (this.isShowClosedRequests) {
+                this.requests = [];
+                this.requests = this.initialRequests;
+            } else {
+                this.requests = [];
+                for (var request of this.initialRequests) {
+                    if (!request.isDeleted) {
+                        this.requests.push(request);
+                    }
+                }
+            }
         }
     },
     async mounted(){
@@ -303,20 +340,42 @@ export default {
                 align-items: flex-start;
 
                 .header {
-                font-size: 2rem;
-                line-height: 2rem;
-                margin: 0 0 8px 0;
+                    display: flex;
+                    flex-direction: row;
+
+                    .headerText {
+                        font-size: 2rem;
+                        line-height: 2rem;
+                        margin: 0 0 8px 0;
+                    }
+
+                    .closedRequestSwitch {
+                        position: relative;
+                        top: 7px;
+                        left: 15px;
+                        display: flex;
+                        flex-direction: row;
+
+                        .switch {
+                        }
+
+                        .closedRequestText {
+                            position: relative;
+                            top: 3px;
+                            left: 5px;
+                        }
+                    }
                 }
 
                 .filters {
                     .filter {
                         &:hover {
-                        cursor: pointer;
+                            cursor: pointer;
                         }
 
                         &.active {
-                        font-weight: 600;
-                        text-decoration: underline;
+                            font-weight: 600;
+                            text-decoration: underline;
                         }
                     }
                 }
@@ -498,4 +557,5 @@ export default {
 .fade-enter, .fade-leave-to {
     opacity: 0;
 }
+
 </style>

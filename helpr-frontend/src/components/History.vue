@@ -85,7 +85,7 @@ export default {
             let userInfoHover = {};
 
             for (var history of this.historyList) {
-                if (history.fromUserId === historyEvent.fromUserId) {
+                if (history.requestId === historyEvent.requestId) {
                     isUserInfoHover = true;
                     userInfoHover.commentFromUser = history.commentFromUser;
                     userInfoHover.user = history.user;
