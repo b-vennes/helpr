@@ -14,8 +14,6 @@
         </div>
         <div class="description">
             <div class="requestDescription">{{ description }}</div>
-            userid {{userId}}
-            loggedInUserId {{loggedInUserId}}
         </div>
         <div v-if="!isClosed">
             <div class="commentIcon">

@@ -42,8 +42,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
             const newUserProfile = {
                 points: 0,
-                title: "Add your title",
-                aboutMe: "Add your about me",
+                title: "Helpr",
+                aboutMe: "",
                 userId: newUser.id
             }
 

@@ -68,6 +68,41 @@
                     ></History>
                 </div>
             </transition>
+            <div class="userHistoryHovered" v-if="isUserInfoHover && userInfoHover">
+                <div class="userHistoryHoveredCard">
+                    <div class="userHistoryPhoto">
+                        <img v-bind:src="userInfoHover.user.photo">
+                    </div>
+                    <div class="userHistoryInformation">
+                        <div class="userHistoryName">
+                            {{userInfoHover.user.firstname}} {{userInfoHover.user.lastname}}
+                        </div>
+                        <div class="userHistoryTitle">
+                            {{ userInfoHover.userProfile.title }}
+                        </div>
+                    </div>
+                    <div class="userHistoryRanking">
+                        <div class="userHistoryRankBronze" v-if="userInfoHover.userProfile.points <= 500">
+                            Bronze Helpr
+                        </div>
+                        <div class="userHistoryRankSilver" v-else-if="userInfoHover.userProfile.points > 500 && userInfoHover.userProfile.points <= 2000">
+                            Silver Helpr
+                        </div>
+                        <div class="userHistoryRankGold" v-else-if="userInfoHover.userProfile.points > 2000 && userInfoHover.userProfile.points <= 3500">
+                            Gold Helpr
+                        </div>
+                        <div class="userHistoryRankPlatinum" v-else-if="userInfoHover.userProfile.points > 3500 && userInfoHover.userProfile.points <= 5000">
+                            Platinum Helpr
+                        </div>
+                        <div class="userHistoryRankDiamond" v-else-if="userInfoHover.userProfile.points > 5000">
+                            Diamond Helpr
+                        </div>
+                    </div>
+                    <div class="userHistoryComment">
+                        {{ userInfoHover.commentFromUser }}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="profileContainer" v-if="isEditUserProfile">
             <div class="tooltip">
@@ -207,6 +242,7 @@ import UserTagService from '../services/usertag.service.js';
 import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
 import History from '../components/History';
+import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
@@ -235,7 +271,9 @@ export default {
             editedTitle: "",
             editedDescription: "",
             editedTags: [],
-            showUserHistory: false
+            showUserHistory: false,
+            isUserInfoHover: false,
+            userInfoHover: {}
         }
     },
     components: {
@@ -356,6 +394,20 @@ export default {
         await this.setData();
         await this.getUserProfileData();
         await this.getUserTags();
+
+        emitter.on('user-hover-info-event', event => {
+            this.isUserInfoHover = event.isUserInfoHover;
+            this.userInfoHover = event.userInfoHover
+        });
+
+        emitter.on('user-leave-hover-info-event', () => {
+            this.isUserInfoHover = false;
+            this.userInfoHover = {};
+        });
+    },
+    beforeUnmount: function() {
+        emitter.off('user-hover-info-event', () => {});
+        emitter.off('user-leave-hover-info-event', () => {});
     }
 }
 </script>
@@ -881,6 +933,80 @@ export default {
     .userHistoryCard {
         position: fixed;
         left: 1550px;
+    }
+
+    .userHistoryHovered {
+        .userHistoryHoveredCard {
+            position: fixed;
+            top: 275px;
+            right: 290px;
+            height: 400px;
+            width: 300px;
+            background-color: white;
+            border-style: solid;
+            border-color: #1de9b6;
+            border-radius: 12px;
+
+            img {
+                margin-top: 10px;
+                height: 120px;
+                border-radius: 12px;
+            }
+
+            .userHistoryRanking {
+                position: relative;
+                left: 55px;
+                width: 180px;
+                height: 30px;
+                font-size: 25px;
+                font-weight: 600;
+                font-family: 'Patrick Hand SC', cursive;
+                
+                .userHistoryRankBronze {
+                    border-radius: 24px;
+                    background-color: #CD7F32;
+                }
+
+                .userHistoryRankSilver {
+                    border-radius: 24px;
+                    background-color: #C0C0C0;
+                }
+
+                .userHistoryRankGold {
+                    border-radius: 24px;
+                    background-color: #FFD700;
+                }
+
+                .userHistoryRankPlatinum {
+                    border-radius: 24px;
+                    background-color: #b19cd9;
+                }
+
+                .userHistoryRankDiamond {
+                    border-radius: 24px;
+                    background-color: #b9f2ff;
+                }
+            }
+
+            .userHistoryComment {
+                margin-top: 15px;
+                font-size: 20px;
+                font-family: 'Patrick Hand SC', cursive;
+            }
+
+            .userHistoryInformation {
+                .userHistoryName {
+                    font-size: 35px;
+                    font-family: 'Patrick Hand SC', cursive;
+                }
+
+                .userHistoryTitle {
+                    margin-top: -5px;
+                    font-size: 25px;
+                    font-family: 'Patrick Hand SC', cursive;
+                }
+            }
+        }
     }
 }
 

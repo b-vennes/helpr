@@ -20,28 +20,26 @@
                 </div>
             </div>
         </div>
-        <div class="user" v-if="isUserInfoHover && userInfoHover">
-            {{userInfoHover.firstname}}
-        </div>
     </div>
 </template>
 
 <script>
 import HistoryService from '../services/history.service.js';
 import UserService from '../services/user.service.js';
+import UserProfileService from '../services/userprofile.service.js';
 import RequestService from '../services/request.service.js';
+import { emitter } from '../components/common/event-bus';
 
 const historyService = new HistoryService();
 const userService = new UserService();
+const userProfileService = new UserProfileService();
 const requestService = new RequestService();
 
 export default {
     data: function() {
         return {
             historyList: [],
-            profileUserId: 0,
-            isUserInfoHover: false,
-            userInfoHover: {}
+            profileUserId: 0
         }
     },
     props: {
@@ -51,6 +49,7 @@ export default {
         async getHistoryByUserId() {
             await historyService.getHistoryByUserId(this.profileUserId)
             .then(data => {
+                console.log(data);
                 this.historyList = data;
             });
         },
@@ -73,17 +72,36 @@ export default {
                 });
             }
         },
-        async historyHoverOver(historyEvent) {
+        async getUserProfileForHistory() {
             for (var history of this.historyList) {
-                if (history.userId === historyEvent.userId) {
-                    this.isUserInfoHover = true;
-                    this.userInfoHover = history.user;
-                }
+                await userProfileService.getUserProfileById(history.fromUserId)
+                .then(data => {
+                    history.userProfile = data;
+                });
             }
         },
+        async historyHoverOver(historyEvent) {
+            let isUserInfoHover = false;
+            let userInfoHover = {};
+
+            for (var history of this.historyList) {
+                if (history.fromUserId === historyEvent.fromUserId) {
+                    isUserInfoHover = true;
+                    userInfoHover.commentFromUser = history.commentFromUser;
+                    userInfoHover.user = history.user;
+                    userInfoHover.userProfile = history.userProfile;
+                }
+            }
+
+            const userHover = {
+                isUserInfoHover: isUserInfoHover,
+                userInfoHover: userInfoHover
+            };
+
+            emitter.emit('user-hover-info-event', userHover);
+        },
         historyHoverLeave() {
-            this.isUserInfoHover = false;
-            this.userInfoHover = {};
+            emitter.emit('user-leave-hover-info-event');
         }
     },
     async mounted() {
@@ -91,6 +109,7 @@ export default {
         await this.getHistoryByUserId();
         await this.getRequestForHistory();
         await this.getUserForHistory();
+        await this.getUserProfileForHistory();
     }
 }
 </script>
