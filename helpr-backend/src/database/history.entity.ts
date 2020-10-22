@@ -12,6 +12,9 @@ export class History {
     requestId: number;
 
     @Column()
+    commentFromUser: string;
+
+    @Column()
     fromUserId: number;
 
     @Column()

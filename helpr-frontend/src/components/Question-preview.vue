@@ -14,6 +14,8 @@
         </div>
         <div class="description">
             <div class="requestDescription">{{ description }}</div>
+            userid {{userId}}
+            loggedInUserId {{loggedInUserId}}
         </div>
         <div v-if="!isClosed">
             <div class="commentIcon">
@@ -28,14 +30,16 @@
         <div class="dropdownIcon">
             <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
         </div>
-        <div v-if="(loggedInUserId == userId) && (!isClosed)">
-            <div class="transferPointsIcon">
-                <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+        <div v-if="loggedInUserId == userId ">
+            <div v-if="!isClosed">
+                <div class="transferPointsIcon">
+                    <img @click="transferPoints()" src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+                </div>
             </div>
-        </div>
-        <div v-else-if="isClosed">
-            <div class="transferPointsIconClosed">
-                <img src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+            <div v-else-if="isClosed">
+                <div class="transferPointsIconClosed">
+                    <img src="https://img.icons8.com/material-rounded/24/000000/back-sorting.png"/>
+                </div>
             </div>
         </div>
         <div class="footer">
@@ -157,16 +161,17 @@ export default {
             padding: 16px;
             border-top-left-radius: 24px;
             border-top-right-radius: 24px;
-            background-color: 	#90EE90;
-            display: flex;
+            background-color:	#90EE90;
+            align-self: flex-end;
+            height: 40px;
 
             .title {
                 font-size: 2rem;
+                float: left;
             }
-
+            
             .requestClosed {
-                position: relative;
-                left: 750px;
+                float: right;
                 background-color: #FF6347;
                 border-radius: 16px;
                 width: 8%;
@@ -178,6 +183,7 @@ export default {
                     font-size: 20px;
                     font-weight: bold;
                 }
+            
             }
         }
 

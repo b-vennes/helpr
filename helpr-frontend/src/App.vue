@@ -30,5 +30,24 @@
 body, html {
   margin: 0;
   height: 100%;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #228B22;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #90EE90;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>

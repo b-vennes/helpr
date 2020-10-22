@@ -10,7 +10,7 @@
         <img v-bind:src="user.photo">
         <div class="information">
             <div class="username">{{user.firstname}} {{user.lastname}}</div>
-            <div class="createdDate">{{createdDate}}</div>
+            <div class="createdDate">{{createdDateRequest}}</div>
         </div>
     </div>
   </router-link>
@@ -30,7 +30,8 @@ export default {
     data: function(){
         return {
             sendUserId: 0,
-            user: {}
+            user: {},
+            createdDateRequest: new Date()
         }
     },
     methods: {
@@ -44,6 +45,9 @@ export default {
         }
     },
     async mounted() {
+        let date = new Date(this.createdDate);
+        this.createdDateRequest = date.toDateString();
+
         this.sendUserId = parseInt(this.userId);
         await this.getUser();
     }
@@ -81,6 +85,7 @@ export default {
             }
 
             .createdDate {
+                margin-top: 3px;
                 font-size: 15px;
                 color: #228B22;
             }

@@ -15,6 +15,9 @@
                             <img src="https://img.icons8.com/material-sharp/24/000000/edit.png">
                         </div>
                     </div>
+                    <div class="helprHistory" @click="helprHistoryDisplay()">
+                        Helpr History
+                    </div>
                     <div class="ranking">
                         <div class="rankBronze" v-if="points <= 500">
                             Bronze Helpr
@@ -58,10 +61,17 @@
                     </div>
                 </div>
             </div>
+            <transition name="fade">
+                <div class="userHistoryCard" v-if="showUserHistory">
+                    <History
+                        v-bind:userId="userId"
+                    ></History>
+                </div>
+            </transition>
         </div>
         <div class="profileContainer" v-if="isEditUserProfile">
             <div class="tooltip">
-                <div @click="editName" class="editNameIcon" v-if="!isEditTitle && !isEditDescription">
+                <div @click="editName" class="editNameIcon" v-if="!isEditTitle && !isEditDescription && !isEditTags">
                     <span class="tooltiptext">Edit to edit name</span>
                     Edit Name
                 </div>
@@ -71,7 +81,7 @@
                 </div>
             </div>
             <div class="tooltipLeft">
-                <div @click="editTitle" class="editTitleIcon" v-if="!isEditName && !isEditDescription">
+                <div @click="editTitle" class="editTitleIcon" v-if="!isEditName && !isEditDescription && !isEditTags">
                     <span class="tooltiptextLeft">Click to edit title</span>
                     Edit Title
                 </div>
@@ -81,12 +91,22 @@
                 </div>
             </div>
             <div class="tooltip">
-                <div @click="editDescription" class="editDescriptionIcon" v-if="!isEditName && !isEditTitle">
+                <div @click="editDescription" class="editDescriptionIcon" v-if="!isEditName && !isEditTitle && !isEditTags">
                     <span class="tooltiptext">Click to edit description</span>
                     Edit Description
                 </div>
                 <div class="editDescriptionIconDisabled" v-else>
                     <span class="tooltiptext">Click to edit description</span>
+                    ...
+                </div>
+            </div>
+            <div class="tooltip">
+                <div @click="editTags" class="editTagsIcon" v-if="!isEditName && !isEditTitle && !isEditDescription">
+                    <span class="tooltiptext">Click to edit tags</span>
+                    Edit Tags
+                </div>
+                <div class="editTagsIconDisabled" v-else>
+                    <span class="tooltiptext">Click to edit tags</span>
                     ...
                 </div>
             </div>
@@ -98,7 +118,7 @@
                         </div>
                     </router-link>
                     <div class="tooltipEdit">
-                        <div @click="saveProfileEdit" class="editProfileIcon" v-if="!isEditName && !isEditTitle && !isEditDescription">
+                        <div @click="saveProfileEdit" class="editProfileIcon" v-if="!isEditName && !isEditTitle && !isEditDescription && !isEditTags">
                             <span class="tooltiptextEdit">Save Changes</span>
                             <img src="https://img.icons8.com/material/24/000000/save--v1.png"/>
                         </div>
@@ -106,6 +126,9 @@
                             <span class="tooltiptextEdit">Save Changes</span>
                             <img src="https://img.icons8.com/material/24/000000/save--v1.png"/>
                         </div>
+                    </div>
+                    <div class="helprHistory" @click="helprHistoryDisplay()">
+                        Helpr History
                     </div>
                     <div class="ranking">
                         <div class="rankBronze" v-if="points <= 500">
@@ -144,9 +167,24 @@
                     <div class="title" v-else>
                         <input v-model="editedTitle" :placeholder="title" />
                     </div>
-                    <div class="tags">
+                    <div class="tags" v-if="!isEditTags">
                         <div v-for="userTag in userTags" v-bind:key="userTag.id">
                             {{userTag.tagName}}
+                        </div>
+                    </div>
+                    <div v-else class="editTags">
+                        <div class="tags">
+                            <div v-for="userTag in userTags" v-bind:key="userTag.id">
+                                {{userTag.tagName}}
+                            </div>
+                        </div>
+                        <div id="v-model-select-dynamic" class="selectTags">
+                            <select v-model="selected" @change="onSelected()">
+                                <option disabled value="">Select a Tag</option>
+                                <option v-for="tag in tagSelectList" v-bind:key="tag.name">
+                                    {{ tag.name }}
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div class="description" v-if="!isEditDescription">
@@ -168,6 +206,7 @@ import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
 import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
+import History from '../components/History';
 
 const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
@@ -191,13 +230,17 @@ export default {
             isEditName: false,
             isEditDescription: false,
             isEditTitle: false,
+            isEditTags: false,
             editedName: "",
             editedTitle: "",
-            editedDescription: ""
+            editedDescription: "",
+            editedTags: [],
+            showUserHistory: false
         }
     },
     components: {
-        Navbar
+        Navbar,
+        History
     },
     methods: {
         async setData() {
@@ -292,6 +335,21 @@ export default {
                 }
                 this.isEditTitle = false;
             }
+        },
+        editTags() {
+            if (!this.isEditTags) {
+                this.isEditTags = true;
+            } else {
+                if (this.editedTags !== []) {
+                    this.userTags = [];
+                    this.userTags = this.editedTags;
+                    this.editedTags = [];
+                }
+                this.isEditTags = false;
+            }
+        },
+        helprHistoryDisplay() {
+            this.showUserHistory = !this.showUserHistory;
         }
     },
     async mounted() {
@@ -372,9 +430,9 @@ export default {
     height: 100vh;
 
     .editNameIcon {
-        position: relative;
-        left: 320px;
-        top: 457px;
+        position: fixed;
+        right: 900px;
+        top: 600px;
         background-color: #f1f1f1;
         border-radius: 24px;
         border-style: solid;
@@ -396,9 +454,9 @@ export default {
     }
 
     .editNameIconDisabled {
-        position: relative;
-        left: 320px;
-        top: 457px;
+        position: fixed;
+        right: 900px;
+        top: 600px;
         background-color: #f1f1f1;
         border-radius: 24px;
         border-style: inset dotted;
@@ -419,9 +477,9 @@ export default {
     }
 
     .editTitleIcon {
-        position: relative;
-        left: -345px;
-        top: 470px;
+        position: fixed;
+        left: 860px;
+        top: 645px;
         background-color: #f1f1f1;
         border-radius: 24px;
         border-style: solid;
@@ -443,9 +501,9 @@ export default {
     }
 
     .editTitleIconDisabled {
-        position: relative;
-        left: -345px;
-        top: 470px;
+        position: fixed;
+        left: 860px;
+        top: 645px;
         background-color: #fafafa;
         border-radius: 24px;
         border-style: inset dotted;
@@ -466,9 +524,9 @@ export default {
     }
 
     .editDescriptionIcon {
-        position: relative;
-        left: 340px;
-        top: 625px;
+        position: fixed;
+        left: 860px;
+        top: 835px;
         background-color: #f1f1f1;
         border-radius: 24px;
         border-style: solid;
@@ -490,9 +548,9 @@ export default {
     }
 
     .editDescriptionIconDisabled {
-        position: relative;
-        left: 340px;
-        top: 625px;
+        position: fixed;
+        left: 860px;
+        top: 835px;
         background-color: #f1f1f1;
         border-radius: 24px;
         border-style: inset dotted;
@@ -512,6 +570,55 @@ export default {
         }
     }
 
+    .editTagsIcon {
+        position: fixed;
+        right: 860px;
+        top: 680px;
+        background-color: #f1f1f1;
+        border-radius: 24px;
+        border-style: solid;
+        border-color: #42b983;
+        border-width: 3px;
+        padding: 3px;
+        width: 140px;
+        font-family: 'Patrick Hand SC', cursive;
+        font-size: 20px;
+        font-weight: 400;
+        -webkit-user-select: none;  
+        -moz-user-select: none;
+        -ms-user-select: none;
+
+        &:hover {
+            background-color: #fafafa;
+            cursor: pointer;
+        }
+    }
+
+    .editTagsIconDisabled {
+        position: fixed;
+        right: 860px;
+        top: 680px;
+        background-color: #f1f1f1;
+        border-radius: 24px;
+        border-style: inset dotted;
+        border-color: #42b983;
+        border-width: 3px;
+        padding: 3px;
+        width: 140px;
+        font-family: 'Patrick Hand SC', cursive;
+        font-size: 20px;
+        font-weight: 400;
+        -webkit-user-select: none;  
+        -moz-user-select: none;
+        -ms-user-select: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+
+
     .content {
         display: flex;
         align-items: flex-start;
@@ -527,7 +634,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                left: -105px;
+                left: -5px;
                 position: relative;
 
                 .back {
@@ -577,7 +684,7 @@ export default {
 
             .editProfileIcon {
                 position: relative;
-                left: -105px;
+                left: -5px;
                 background-color: #f1f1f1;
                 border-radius: 50%;
                 height: 40px;
@@ -612,9 +719,26 @@ export default {
                 }
             }
 
+            .helprHistory {
+                padding: 3px;
+                margin-bottom: 7px;
+                position: relative;
+                font-family: 'Patrick Hand SC', cursive;
+                width: 200px;
+                left: 0;
+                font-size: 25px;
+                font-weight: 600;
+                border-radius: 24px;
+                background-color: #42b983;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
             .ranking {
                 position: relative;
-                left: 110px;
+                left: 5px;
                 width: 200px;
                 font-size: 25px;
                 font-weight: 600;
@@ -753,6 +877,19 @@ export default {
             }
         }
     }
+
+    .userHistoryCard {
+        position: fixed;
+        left: 1550px;
+    }
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
 }
 
 // Remove the underline from the router button.
