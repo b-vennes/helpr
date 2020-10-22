@@ -26,7 +26,12 @@
             </div>
         </div>
         <div class="dropdownIcon">
-            <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
+            <div v-if="!isShowComment">
+                <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-down--v2.png"/>
+            </div>
+            <div v-else>
+                <img @click="dropdown()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chevron-up--v2.png"/>
+            </div>
         </div>
         <div v-if="loggedInUserId == userId ">
             <div v-if="!isClosed">
@@ -81,7 +86,8 @@ export default {
             user: {},
             requestTags: [],
             thumbsUpAmount: 0,
-            loggedInUserId: 0
+            loggedInUserId: 0,
+            isShowComment: false
         }
     },
     methods: {
@@ -118,7 +124,14 @@ export default {
             emitter.emit('add-comment-event', event);
         },
         dropdown() {
-            emitter.emit('show-comments-event');
+            this.isShowComment = !this.isShowComment;
+            
+            const event = {
+                id: this.id,
+                isShowComment: this.isShowComment
+            };
+
+            emitter.emit('show-comments-event', event);
         },
         transferPoints() {
             emitter.emit('transfer-points-event', { id: this.id, points: this.points} )

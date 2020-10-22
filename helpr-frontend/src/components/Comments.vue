@@ -38,6 +38,10 @@ export default {
             await commentService.getCommentsByRequestId(this.requestId)
             .then(data => {
                 this.comments = data;
+                for (var comment of data) {
+                    let date = new Date(comment.createdDate);
+                    comment.createdDate = date.toDateString();
+                }
             });
         },
         async getUsersForComments() {
@@ -79,6 +83,7 @@ export default {
             .user {
                 display: flex;
                 flex-direction: row;
+                width: 15%;
                 background-color: #F1F1F1;
                 border-radius: 18px;
                 padding: 8px;

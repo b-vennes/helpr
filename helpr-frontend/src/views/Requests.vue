@@ -68,7 +68,7 @@
                         </QuestionPreview>
                     </div>
                 </div>
-                    <div class="comments" v-if="showComments">
+                    <div class="comments" v-if="request.isShowComment">
                         <Comments
                             v-bind:requestId="request.id"
                             :key="commentComponentKey">
@@ -129,7 +129,6 @@ export default {
             showAddCommentModal: false,
             commentRequestId: 0,
             commentUserId: 0,
-            showComments: false,
             commentComponentKey: 0,
             loggedInUserId: 0,
             showTransferPointsComponent: false,
@@ -156,8 +155,13 @@ export default {
                 if (data) {
                     this.initialRequests = data;
 
+                    for (var initialRequest of this.initialRequests) {
+                        initialRequest.isShowComment = false;
+                    }
+
                     for (var request of data) {
                         if (!request.isDeleted) {
+                            request.isShowComment = false;
                             this.requests.push(request);
                         }
                     }
@@ -220,11 +224,15 @@ export default {
 
             this.forceRerender();
         },
-        showCommentsEvent() {
-            if (this.showComments) {
-                this.showComments = false;
-            } else {
-                this.showComments = true;
+        showCommentsEvent(event) {
+            for (var request of this.requests) {
+                if (request.id === event.id) {
+                    if (event.isShowComment) {
+                        request.isShowComment = true;
+                    } else {
+                        request.isShowComment = false;
+                    }
+                }
             }
         },
         forceRerender() {
@@ -249,6 +257,7 @@ export default {
                 this.requests = [];
                 for (var request of this.initialRequests) {
                     if (!request.isDeleted) {
+                        request.isShowComment = false;
                         this.requests.push(request);
                     }
                 }
@@ -279,8 +288,8 @@ export default {
             this.exitCommentModal();
         });
 
-        emitter.on('show-comments-event', () => {
-            this.showCommentsEvent();
+        emitter.on('show-comments-event', event => {
+            this.showCommentsEvent(event);
         });
 
         emitter.on('transfer-points-event', event => {
