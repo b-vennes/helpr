@@ -297,27 +297,6 @@ export default {
                     .userPoints {
                         color: lightcoral;
                     }
-                    /*.userName {
-                        position: relative;
-                        top: -60px;
-                        left: 10px;
-                        font-size: 20px;
-                    }
-
-                    .userTitle {
-                        position: relative;
-                        top: -60px;
-                        left: 25px;
-                        font-size: 15px;
-                    }
-
-                    .userPoints {
-                        position: relative;
-                        top: -60px;
-                        left: 25px;
-                        font-size: 15px;
-                        color: lightcoral;
-                    }*/
                 }
 
                 .userRanking {
