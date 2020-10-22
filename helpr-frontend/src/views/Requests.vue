@@ -517,6 +517,7 @@ export default {
             }
 
             .comments {
+                margin-top: -80px;
                 margin-left: 18.5%;
                 margin-bottom: 5%;
             }
