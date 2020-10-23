@@ -17,6 +17,6 @@ export class CreateUserTagHandler implements ICommandHandler<CreateUserTagComman
       ) { }
 
     async execute(command: CreateUserTagCommand) {
-        await this.usertagRepository.save(command.userTag);
+        return await this.usertagRepository.save(command.userTag);
     }
 }

@@ -51,7 +51,7 @@
                     </div>
                     <div class="tags">
                         <div v-for="userTag in userTags" v-bind:key="userTag.id">
-                            {{userTag.tagName}}
+                            {{ userTag.tagName }}
                         </div>
                     </div>
                     <div class="description">
@@ -204,22 +204,27 @@
                     </div>
                     <div class="tags" v-if="!isEditTags">
                         <div v-for="userTag in userTags" v-bind:key="userTag.id">
-                            {{userTag.tagName}}
+                            {{ userTag.tagName }}
                         </div>
                     </div>
                     <div v-else class="editTags">
                         <div class="tags">
                             <div v-for="userTag in userTags" v-bind:key="userTag.id">
-                                {{userTag.tagName}}
+                                {{ userTag.tagName }}
                             </div>
                         </div>
                         <div id="v-model-select-dynamic" class="selectTags">
-                            <select v-model="selected" @change="onSelected()">
+                            <select v-model="selectedTag" @change="onSelected()">
                                 <option disabled value="">Select a Tag</option>
-                                <option v-for="tag in tagSelectList" v-bind:key="tag.name">
+                                <option v-for="tag in tagSelectList" v-bind:key="tag.id">
                                     {{ tag.name }}
                                 </option>
                             </select>
+                        </div>
+                        <div class="selectedTagsFromList">
+                            <div class="userTagsToAdd" v-for="selectedTag in selectedTags" v-bind:key="selectedTag.id">
+                                {{selectedTag.name}}
+                            </div>
                         </div>
                     </div>
                     <div class="description" v-if="!isEditDescription">
@@ -239,6 +244,7 @@
 <script>
 import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
+import TagService from '../services/tag.service.js';
 import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
 import History from '../components/History';
@@ -247,6 +253,7 @@ import { emitter } from '../components/common/event-bus';
 const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
 const userService = new UserService();
+const tagService = new TagService();
 
 export default {
     data: function() {
@@ -270,7 +277,10 @@ export default {
             editedName: "",
             editedTitle: "",
             editedDescription: "",
-            editedTags: [],
+            tagSelectList: [],
+            tags: [],
+            selectedTags: [],
+            selectedTag: '',
             showUserHistory: false,
             isUserInfoHover: false,
             userInfoHover: {}
@@ -305,12 +315,19 @@ export default {
             await userTagService.getUserTagsById(this.userId)
             .then(data => {
                 if (data) {
+                    console.log(data);
                     this.userTags = data;
                 }
             })
         },
-        editProfile() {
-            this.isEditUserProfile = true;
+        async getTags() {
+            await tagService.getAllTags()
+            .then(data => {
+                if (data) {
+                    this.tagSelectList = data;
+                    this.tags = data;
+                }
+            })
         },
         async saveProfileEdit() {
             localStorage.setItem('firstname', this.name.split(' ')[0]);
@@ -339,7 +356,23 @@ export default {
                 console.log(data);
             });
 
+            for (var selectedTag of this.selectedTags) {
+                const userTag = {
+                    userId: parseInt(this.userId),
+                    tagId: selectedTag.id,
+                    isDeleted: 0
+                };
+
+                await userTagService.createUserTag(userTag)
+                .then(data => {
+                    console.log(data);
+                });
+            }
+
             this.isEditUserProfile = false;
+        },
+        editProfile() {
+            this.isEditUserProfile = true;
         },
         editName() {
             if (!this.isEditName) {
@@ -378,22 +411,43 @@ export default {
             if (!this.isEditTags) {
                 this.isEditTags = true;
             } else {
-                if (this.editedTags !== []) {
-                    this.userTags = [];
-                    this.userTags = this.editedTags;
-                    this.editedTags = [];
+                if (this.selectedTags !== []) {
+                    for (var selectedTag of this.selectedTags) {
+                        const tempTag = {
+                            id: selectedTag.id,
+                            tagName: selectedTag.name
+                        };
+
+                        this.userTags.push(tempTag);
+                    }
                 }
+
                 this.isEditTags = false;
             }
         },
         helprHistoryDisplay() {
             this.showUserHistory = !this.showUserHistory;
+        },
+        onSelected() {
+            let tagToRemove = {};
+            for (var tag of this.tags) {
+                if (tag.name === this.selectedTag) {
+                    tagToRemove = tag;
+                    this.selectedTags.push(tag);
+                    break;
+                }
+            }
+
+            var index = this.tagSelectList.indexOf(tagToRemove);
+            this.tagSelectList.splice(index, 1);
+            this.selectedTag = '';
         }
     },
     async mounted() {
         await this.setData();
         await this.getUserProfileData();
         await this.getUserTags();
+        await this.getTags();
 
         emitter.on('user-hover-info-event', event => {
             this.isUserInfoHover = event.isUserInfoHover;
@@ -755,7 +809,7 @@ export default {
 
             .editProfileIconDisabled {
                 position: relative;
-                left: -105px;
+                left: -5px;
                 background-color: #fafafa;
                 border-radius: 50%;
                 height: 40px;
@@ -899,6 +953,18 @@ export default {
                 div {
                     margin: 12px 6px;
                     background-color: #FFEE58;
+                    padding: 4px 8px;
+                    border-radius: 8px;
+                }
+            }
+
+            .selectedTagsFromList {
+                display: flex;
+                justify-content: center;
+
+                .userTagsToAdd {
+                    margin: 12px 6px;
+                    background-color: lightyellow;
                     padding: 4px 8px;
                     border-radius: 8px;
                 }

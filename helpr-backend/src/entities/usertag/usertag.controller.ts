@@ -18,8 +18,8 @@ export class UserTagController {
     }
 
     @Post('createUserTag')
-    async createUserTag(@Body() command: CreateUserTagCommand): Promise<UserTag> {
-        return await this.commandBus.execute(new CreateUserTagCommand(command.userTag));
+    async createUserTag(@Body() userTag: UserTag): Promise<UserTag> {
+        return await this.commandBus.execute(new CreateUserTagCommand(userTag));
     }
 
     @Put('deleteUserTag')
