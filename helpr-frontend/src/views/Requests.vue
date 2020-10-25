@@ -310,7 +310,7 @@ export default {
             }
         }
     },
-    async mounted(){
+    async mounted() {
         this.loggedInUserId = localStorage.getItem('userId');
 
         await this.getRequests();

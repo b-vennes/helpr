@@ -17,6 +17,16 @@ export default class UserService {
         return response.json();
     }
 
+    async getUsersByPagination(paginationDto) {
+        const url = `http://localhost:3000/users/getUsersByPagination?page=` + paginationDto.page + `&limit=` + paginationDto.limit;
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors'
+        });
+
+        return response.json();
+    }
+
     async updateUser(user) {
         const response = await fetch(`http://localhost:3000/users/updateUser`, {
             method: 'PUT',

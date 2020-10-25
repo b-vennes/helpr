@@ -84,7 +84,6 @@ export default {
             await requestService.getRequestById(this.requestId)
             .then(data => {
                 if (data) {
-                    console.log(data);
                     this.request = data;
                 }
             });

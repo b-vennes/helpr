@@ -5,9 +5,15 @@
                 <router-link to="/requests">
                     <div class="requests" v-bind:class="{ active: this.$route.name === 'Requests' }"><a class="routeText">Requests</a></div>
                 </router-link>
+
                 <div class="messages" v-bind:class="{ active: this.$route.name === 'Messages' }"><a class="routeText">Messages</a></div>
-                <div class="rankings" v-bind:class="{ active: this.$route.name === 'Rankings' }"><a class="routeText">Rankings</a></div>
+
+                <router-link to="/rankings">
+                    <div class="rankings" v-bind:class="{ active: this.$route.name === 'Rankings' }"><a class="routeText">Rankings</a></div>
+                </router-link>
+
                 <div class="contact" v-bind:class="{ active: this.$route.name === 'Contact' }"><a class="routeText">Contact</a></div>
+                
             </div>
             
             <div class="right">
