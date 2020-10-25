@@ -102,12 +102,14 @@
 <script>
 import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
+import LoggerService from '../services/logger.service.js';
 import Navbar from "@/components/Navbar";
 import History from '../components/History';
 import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
+const loggerService = new LoggerService();
 
 export default {
     data: function() {
@@ -141,12 +143,23 @@ export default {
         },
         async getUserProfileData() {
             await userProfileService.getUserProfileById(this.profileUserId)
-            .then(data => {
-                if (data) {
-                    this.points = data.points;
-                    this.title = data.title;
-                    this.description = data.aboutMe;
-                    this.userProfileId = data.id;
+            .then(response => {
+                if (response.status === 200) {
+                    this.points = response.data.points;
+                    this.title = response.data.title;
+                    this.description = response.data.aboutMe;
+                    this.userProfileId = response.data.id;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not get UserProfile data",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },

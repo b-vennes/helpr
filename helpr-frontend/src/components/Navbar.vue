@@ -39,10 +39,12 @@
 
 <script>
 import NotificationService from '../services/notifications.service.js';
+import LoggerService from '../services/logger.service.js';
 import Button from "@/components/Button";
 import Notifications from './Notifications';
 
 const notificationService = new NotificationService();
+const loggerService = new LoggerService();
 
 export default {
     name: 'Navbar',
@@ -67,13 +69,24 @@ export default {
     methods: {
         async getNotifications() {
             await notificationService.getNotificationsByUserId(localStorage.getItem('userId'))
-                .then(data => {
-                    if (data) {
-                        for (var notification of data) {
+                .then(response => {
+                    if (response.status === 200) {
+                        for (var notification of response.data) {
                             if (!notification.isOpened) {
                                 this.hasNotifications = true;
                             }
                         }
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Get request unsuccessful in Navbar/getNotifications()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
                     }
             })
         },

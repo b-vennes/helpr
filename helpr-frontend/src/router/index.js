@@ -53,13 +53,6 @@ const routes = [
     name: 'Profile',
     component: () => import('../views/Profile.vue'),
     beforeEnter: (to, from, next) => auth(to, from, next),
-  },
-  {
-    path: '/question',
-    name: 'Question',
-    props: true,
-    component: () => import('../views/Question.vue'),
-    beforeEnter: (to, from, next) => auth(to, from, next)
   }
 ]
 

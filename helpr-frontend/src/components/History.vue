@@ -28,12 +28,14 @@ import HistoryService from '../services/history.service.js';
 import UserService from '../services/user.service.js';
 import UserProfileService from '../services/userprofile.service.js';
 import RequestService from '../services/request.service.js';
+import LoggerService from '../services/logger.service.js';
 import { emitter } from '../components/common/event-bus';
 
 const historyService = new HistoryService();
 const userService = new UserService();
 const userProfileService = new UserProfileService();
 const requestService = new RequestService();
+const loggerService = new LoggerService();
 
 export default {
     data: function() {
@@ -48,9 +50,21 @@ export default {
     methods: {
         async getHistoryByUserId() {
             await historyService.getHistoryByUserId(this.profileUserId)
-            .then(data => {
-                console.log(data);
-                this.historyList = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.historyList = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not create User History in History/getHistoryByUserId()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
             });
         },
         async getRequestForHistory() {
@@ -59,24 +73,63 @@ export default {
                 history.dateTimeAwarded = date.toDateString();
 
                 await requestService.getRequestById(history.requestId)
-                .then(data => {
-                    history.request = data;
+                .then(response => {
+                    if (response.status === 200) {
+                        history.request = response.data;
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Get request unsuccessful in History/getRequestForHistory()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    }
                 });
             }
         },
         async getUserForHistory() {
             for (var history of this.historyList) {
                 await userService.getUser(history.fromUserId)
-                .then(data => {
-                    history.user = data;
+                .then(response => {
+                    if (response.status === 200) {
+                        history.user = response.data;
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Get request unsuccessful in History/getUserForHistory()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    }
                 });
             }
         },
         async getUserProfileForHistory() {
             for (var history of this.historyList) {
                 await userProfileService.getUserProfileById(history.fromUserId)
-                .then(data => {
-                    history.userProfile = data;
+                .then(response => {
+                    if (response.status === 200) {
+                        history.userProfile = response.data;
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Get request unsuccessful in History/getUserProfileForHistory()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    }
                 });
             }
         },

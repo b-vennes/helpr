@@ -99,7 +99,7 @@ export default {
             
             await requestService.createRequest(request)
             .then(data => {
-                if (data.id) {
+                if (data.status === 200) {
                     this.showSuccessMessage("Successfully posted a new request");
                     this.createRequestTags(data);
                     this.createNotifications(data.id);

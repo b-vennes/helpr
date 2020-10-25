@@ -19,7 +19,10 @@
 
 <script>
 import UserService from '../services/user.service.js';
+import LoggerService from '../services/logger.service.js';
+
 const userService = new UserService();
+const loggerService = new LoggerService();
 
 export default {
     name: 'User',
@@ -37,9 +40,20 @@ export default {
     methods: {
         async getUser() {
             await userService.getUser(this.userId)
-            .then(data => {
-                if (data) {
-                    this.user = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.user = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in User/getUser()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         }

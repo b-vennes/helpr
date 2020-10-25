@@ -64,10 +64,12 @@
 <script>
 import UserService from '../services/user.service.js';
 import RequestTagsService from '../services/requesttags.service';
+import LoggerService from '../services/logger.service.js';
 import { emitter } from './common/event-bus';
 
 const userService = new UserService();
 const requestTagsService = new RequestTagsService();
+const loggerService = new LoggerService();
 
 export default {
     name: 'QuestionPreview',
@@ -93,25 +95,53 @@ export default {
     methods: {
         async getUser() {
             await userService.getUser(this.userId)
-            .then(data => {
-                if (data) {
-                    this.user = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.user = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Question-preview/getUser()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
         async getRequestTags() {
             await requestTagsService.getRequestTagsById(this.id)
-            .then(data => {
-                if (data) {
-                    if (data.length === 0) {
+            .then(response => {
+                if (response.status === 200) {
+                    if (response.data.length === 0) {
                         const placeholderData = [{
                             tagName: "No Tags"
                         }];
 
                         this.requestTags = placeholderData;
                     } else {
-                        this.requestTags = data;
+                        this.requestTags = response.data;
                     }
+                } else {
+                    const placeholderData = [{
+                        tagName: "No Tags"
+                    }];
+
+                    this.requestTags = placeholderData;
+
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Question-preview/getRequestTags()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },

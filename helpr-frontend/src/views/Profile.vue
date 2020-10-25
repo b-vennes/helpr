@@ -245,6 +245,7 @@
 import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
 import TagService from '../services/tag.service.js';
+import LoggerService from '../services/logger.service.js';
 import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
 import History from '../components/History';
@@ -254,6 +255,7 @@ const userProfileService = new UserProfileService();
 const userTagService = new UserTagService();
 const userService = new UserService();
 const tagService = new TagService();
+const loggerService = new LoggerService();
 
 export default {
     data: function() {
@@ -302,30 +304,62 @@ export default {
         },
         async getUserProfileData() {
             await userProfileService.getUserProfileById(this.userId)
-            .then(data => {
-                if (data) {
-                    this.points = data.points;
-                    this.title = data.title;
-                    this.description = data.aboutMe;
-                    this.userProfileId = data.id;
+            .then(response => {
+                if (response.status === 200) {
+                    this.points = response.data.points;
+                    this.title = response.data.title;
+                    this.description = response.data.aboutMe;
+                    this.userProfileId = response.data.id;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Profile/getUserProfileData()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
         async getUserTags() {
             await userTagService.getUserTagsById(this.userId)
-            .then(data => {
-                if (data) {
-                    console.log(data);
-                    this.userTags = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.userTags = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Profile/getUserTags()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
         async getTags() {
             await tagService.getAllTags()
-            .then(data => {
-                if (data) {
-                    this.tagSelectList = data;
-                    this.tags = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.tagSelectList = response.data;
+                    this.tags = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Profile/getTags()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
@@ -347,13 +381,35 @@ export default {
             }
 
             await userService.updateUser(user)
-            .then(data => {
-                console.log(data);
+            .then(response => {
+                if (response.status !== 200) {
+                    const log = {
+                        success: false,
+                        message: "Could not update User in Profile/saveProfileEdit()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
             });
 
             await userProfileService.update(userProfile)
-            .then(data => {
-                console.log(data);
+            .then(response => {
+                if (response.status !== 200) {
+                    const log = {
+                        success: false,
+                        message: "Could not update UserProfile in Profile/saveProfileEdit()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
             });
 
             for (var selectedTag of this.selectedTags) {
@@ -364,8 +420,19 @@ export default {
                 };
 
                 await userTagService.createUserTag(userTag)
-                .then(data => {
-                    console.log(data);
+                .then(response => {
+                    if (response.status !== 200) {
+                        const log = {
+                            success: false,
+                            message: "Could not create a Helpr Tag in Profile/createComment()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    }
                 });
             }
 

@@ -20,9 +20,11 @@
 <script>
 import CommentService from '../services/comment.service.js';
 import UserService from '../services/user.service.js';
+import LoggerService from '../services/logger.service.js';
 
 const commentService = new CommentService();
 const userService = new UserService();
+const loggerService = new LoggerService();
 
 export default {     
     data: function() {
@@ -36,20 +38,45 @@ export default {
     methods: {
         async getCommentsByRequestId() {
             await commentService.getCommentsByRequestId(this.requestId)
-            .then(data => {
-                this.comments = data;
-                for (var comment of data) {
-                    let date = new Date(comment.createdDate);
-                    comment.createdDate = date.toDateString();
+            .then(response => {
+                if (response.status === 200) {
+                    this.comments = response.data;
+
+                    for (var comment of response.data) {
+                        let date = new Date(comment.createdDate);
+                        comment.createdDate = date.toDateString();
+                    }
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Comments/getCommentsByRequestId()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             });
         },
         async getUsersForComments() {
             for (var comment of this.comments) {
                 await userService.getUser(comment.userId)
-                .then(data => {
-                    if (data) {
-                        comment.user = data;
+                .then(response => {
+                    if (response.status === 200) {
+                        comment.user = response.data;
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Get request unsuccessful in Comments/getUsersForComments()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
                     }
                 });
             }

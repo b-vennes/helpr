@@ -20,9 +20,11 @@
 <script>
 import Button from './Button';
 import CommentService from '../services/comment.service.js';
+import LoggerService from '../services/logger.service.js';
 import { emitter } from '../components/common/event-bus';
 
 const commentService = new CommentService();
+const loggerService = new LoggerService();
 
 export default {
     props: {
@@ -48,8 +50,32 @@ export default {
             }
 
             await commentService.createComment(request)
-            .then(() => {
-                emitter.emit('exit-create-comment-modal-event');
+            .then(response => {
+                if (response.status === 200) {
+                    const log = {
+                        success: true,
+                        message: "Successfully created a Helpr Comment in AddCommentModal/createComment()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+
+                    emitter.emit('exit-create-comment-modal-event');
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not create a Helpr Comment in AddCommentModal/createComment()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
             })
         },
         exitModal() {

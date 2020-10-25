@@ -31,83 +31,103 @@
 </template>
 
 <script>
-    import RequestService from "../services/request.service.js";
-    import Button from '../components/Button';
-    import ErrorDisplay from '../components/common/Error.vue';
-    import SuccessDisplay from '../components/common/Success.vue';
-    import { emitter } from '../components/common/event-bus';
+import RequestService from "../services/request.service.js";
+import LoggerService from '../services/logger.service.js';
+import Button from '../components/Button';
+import ErrorDisplay from '../components/common/Error.vue';
+import SuccessDisplay from '../components/common/Success.vue';
+import { emitter } from '../components/common/event-bus';
 
-    const requestService = new RequestService();
+const requestService = new RequestService();
+const loggerService = new LoggerService();
 
-    export default {
-        data: function() {
-            return {
-                title: "",
-                description: "",
-                errorMessage: "",
-                points: "",
-                isShowError: false,
-                isShowSuccess: false,
-                successMessage: "",
-                isPublicRequest: false
-            }
-        },
-        components: {
-            Button,
-            ErrorDisplay,
-            SuccessDisplay
-        },
-        methods: {
-            showErrorMessage: function(message) {
-                this.errorMessage = message;
-                this.isShowError = true;
-            },
-            showSuccessMessage: function(message) {
-                this.successMessage = message;
-                this.isShowSuccess = true;
-            },
-            async createRequest() {
-                const request = {
-                    description: this.description,
-                    createdDate: new Date(),
-                    points: parseInt(this.points),
-                    likes: 0,
-                    isPublicRequest: this.isPublicRequest,
-                    userId: 1,
-                    isDeleted: false,
-                    title: this.title
-                }
-                
-                await requestService.createRequest(request)
-                .then(data => {
-                    if (data.statusText === "Created") {
-                        this.showSuccessMessage("Successfully posted a new request");
-                    } else {
-                        this.showErrorMessage("Error in posting a new request");
-                    }
-                });
-            },
-            showErrorMessageEventListener() {
-                this.isShowError = false;
-            },
-            showSuccessMessageEventListener() {
-                this.isShowSuccess = false;
-            }
-        },
-        async mounted() {
-            emitter.on('error-display-event', () => {
-                this.showErrorMessageEventListener();
-            });
-
-            emitter.on('success-display-event', () => {
-                this.showSuccessMessageEventListener();
-            });
-        },
-        beforeUnmount: function() {
-            emitter.off('error-display-event', () => {});
-            emitter.off('success-display-event', () => {});
+export default {
+    data: function() {
+        return {
+            title: "",
+            description: "",
+            errorMessage: "",
+            points: "",
+            isShowError: false,
+            isShowSuccess: false,
+            successMessage: "",
+            isPublicRequest: false
         }
+    },
+    components: {
+        Button,
+        ErrorDisplay,
+        SuccessDisplay
+    },
+    methods: {
+        showErrorMessage: function(message) {
+            this.errorMessage = message;
+            this.isShowError = true;
+        },
+        showSuccessMessage: function(message) {
+            this.successMessage = message;
+            this.isShowSuccess = true;
+        },
+        async createRequest() {
+            const request = {
+                description: this.description,
+                createdDate: new Date(),
+                points: parseInt(this.points),
+                likes: 0,
+                isPublicRequest: this.isPublicRequest,
+                userId: 1,
+                isDeleted: false,
+                title: this.title
+            }
+            
+            await requestService.createRequest(request)
+            .then(response => {
+                if (response.status === 200) {
+                    const log = {
+                        success: true,
+                        message: "Successfully created a Helpr Request in Ask/createRequest()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not create a Helpr Request in Ask/createRequest()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
+        },
+        showErrorMessageEventListener() {
+            this.isShowError = false;
+        },
+        showSuccessMessageEventListener() {
+            this.isShowSuccess = false;
+        }
+    },
+    async mounted() {
+        emitter.on('error-display-event', () => {
+            this.showErrorMessageEventListener();
+        });
+
+        emitter.on('success-display-event', () => {
+            this.showSuccessMessageEventListener();
+        });
+    },
+    beforeUnmount: function() {
+        emitter.off('error-display-event', () => {});
+        emitter.off('success-display-event', () => {});
     }
+}
 </script>
 
 <style scoped lang="scss">

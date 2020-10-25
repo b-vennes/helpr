@@ -23,8 +23,10 @@
 
 <script>
 import NotificationService from '../services/notifications.service.js';
+import LoggerService from '../services/logger.service.js';
 
 const notificationService = new NotificationService();
+const loggerService = new LoggerService();
 
 export default {
     name: 'Notifications',
@@ -40,7 +42,31 @@ export default {
         async goToRequest(requestId, notification) {
             if (!notification.isOpened) {
                 await notificationService.setIsOpened(notification)
-                .then(() => {});
+                .then(response => {
+                    if (response.status === 200) {
+                        const log = {
+                            success: true,
+                            message: "Successfully updated a Helpr Notification in Notifications/goToRequest()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    } else {
+                        const log = {
+                            success: false,
+                            message: "Could not update a Helpr Notification in Notifications/goToRequest()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
+
+                        loggerService.createLog(log);
+                    }
+                })
             }
 
             notification.isOpened = true;
@@ -49,9 +75,20 @@ export default {
         },
         async getNotifications() {
             await notificationService.getNotificationsByUserId(localStorage.getItem('userId'))
-            .then(data => {
-                if (data) {
-                    this.notifications = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.notifications = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Notifications/getNotifications()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         }

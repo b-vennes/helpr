@@ -9,9 +9,11 @@
 <script>
 import UserService from '../services/user.service.js';
 import UserProfileService from '../services/userprofile.service.js';
+import LoggerService from '../services/logger.service.js';
 
 const userService = new UserService();
 const userProfileService = new UserProfileService();
+const loggerService = new LoggerService();
 
 export default {
     name: 'Loading',
@@ -23,34 +25,56 @@ export default {
     methods: {
         async getUserProfileData(userId) {
             await userProfileService.getUserProfileById(userId)
-            .then(data => {
-                if (data) {
-                    localStorage.setItem('points', data.points)
-                    localStorage.setItem('title', data.title)
-                    localStorage.setItem('description', data.aboutMe)
-                    localStorage.setItem('userProfileId', parseInt(data.id))
+            .then(response => {
+                if (response.status === 200) {
+                    localStorage.setItem('points', response.data.points)
+                    localStorage.setItem('title', response.data.title)
+                    localStorage.setItem('description', response.data.aboutMe)
+                    localStorage.setItem('userProfileId', parseInt(response.data.id))
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Loading/getUserProfileData()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
-            })
+            });
         },
         async getUser() {
             const searchCodeParameter = window.location.href;
             const id = searchCodeParameter.substring(searchCodeParameter.lastIndexOf('/') + 1);
 
             await userService.getUser(id)
-            .then(data => {
-                if (data) {
-                    this.getUserProfileData(data.id);
-                    localStorage.setItem('companyId', data.companyId)
-                    localStorage.setItem('email', data.email)
-                    localStorage.setItem('firstname', data.firstname)
-                    localStorage.setItem('lastname', data.lastname)
-                    localStorage.setItem('userId', data.id)
-                    localStorage.setItem('photo', data.photo)
-                    localStorage.setItem('username', data.username)
+            .then(response => {
+                if (response.status === 200) {
+                    this.getUserProfileData(response.data.id);
+                    localStorage.setItem('companyId', response.data.companyId)
+                    localStorage.setItem('email', response.data.email)
+                    localStorage.setItem('firstname', response.data.firstname)
+                    localStorage.setItem('lastname', response.data.lastname)
+                    localStorage.setItem('userId', response.data.id)
+                    localStorage.setItem('photo', response.data.photo)
+                    localStorage.setItem('username', response.data.username)
                     localStorage.setItem('requiresAuth', 'userIsAuthorized')
                     setTimeout(function () {
                         window.location.replace("http://localhost:8080/#/requests");
                     }, 2000);
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Loading/getUser()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         }

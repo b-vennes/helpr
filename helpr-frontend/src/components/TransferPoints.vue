@@ -69,12 +69,14 @@
 import UserService from '../services/user.service.js';
 import UserProfileService from '../services/userprofile.service.js';
 import RequestService from '../services/request.service.js';
+import LoggerService from '../services/logger.service.js';
 import Button from './Button';
 import { emitter } from '../components/common/event-bus';
 
 const userService = new UserService();
 const userProfileService = new UserProfileService();
 const requestService = new RequestService();
+const loggerService = new LoggerService();
 
 export default {
     data: function() {
@@ -98,20 +100,42 @@ export default {
     methods: {
         async getUserProfileData(userId) {
             await userProfileService.getUserProfileById(userId)
-            .then(data => {
-                if (data) {
-                    this.userInfoHover.points = data.points;
-                    this.userInfoHover.title = data.title;
-                    this.userInfoHover.description = data.aboutMe;
-                    this.userInfoHover.userProfileId = data.id;
+            .then(response => {
+                if (response.status === 200) {
+                    this.userInfoHover.points = response.data.points;
+                    this.userInfoHover.title = response.data.title;
+                    this.userInfoHover.description = response.data.aboutMe;
+                    this.userInfoHover.userProfileId = response.data.id;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in TranserPoints/getUserProfileData()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
         async getAllUsers() {
             await userService.getAllUsers()
-            .then(data => {
-                if (data) {
-                    this.users = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.users = response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in TranserPoints/getAllUsers()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             });
         },
@@ -142,13 +166,52 @@ export default {
             };
 
             await userProfileService.deductPointsToUserProfile(userToDeduct)
-            .then(() => {});
+            .then(response => {
+                if (response.status !== 200) {
+                    const log = {
+                        success: false,
+                        message: "Could not deduct points to User in TransferPoints/yesSelected()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
 
             await userProfileService.addPointsToUserProfile(userToReward)
-            .then(() => {});
+            .then(response => {
+                if (response.status !== 200) {
+                    const log = {
+                        success: false,
+                        message: "Could not add points to User in TransferPoints/yesSelected()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
 
             await requestService.closeRequest(requestToClose)
-            .then(() => {});
+            .then(response => {
+                if (response.status !== 200) {
+                    const log = {
+                        success: false,
+                        message: "Could not close Request in TransferPoints/yesSelected()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
 
             this.chosenUserForTransfer = {};
             this.ischosenUserForTransfer = false;

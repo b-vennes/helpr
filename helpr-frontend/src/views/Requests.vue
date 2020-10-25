@@ -103,6 +103,7 @@
 <script>
 import RequestService from "../services/request.service.js";
 import UserService from '../services/user.service.js';
+import LoggerService from '../services/logger.service.js';
 import Button from '../components/Button';
 import QuestionPreview from '../components/Question-preview';
 import ErrorDisplay from '../components/common/Error.vue';
@@ -116,6 +117,7 @@ import { emitter } from '../components/common/event-bus';
 
 const requestService = new RequestService();
 const userService = new UserService();
+const loggerService = new LoggerService();
 
 export default {     
     data: function() {
@@ -151,30 +153,50 @@ export default {
     methods: {
         async getRequests() {
             await requestService.getAllRequests()
-            .then(data => {
-                if (data) {
-                    this.initialRequests = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.initialRequests = response.data;
 
                     for (var initialRequest of this.initialRequests) {
                         initialRequest.isShowComment = false;
                     }
 
-                    for (var request of data) {
+                    for (var request of response.data) {
                         if (!request.isDeleted) {
                             request.isShowComment = false;
                             this.requests.push(request);
                         }
                     }
                 } else {
-                    this.showErrorMessage("Error when receiving requests");
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Requests/getRequests()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             });
         },
         async getUser(userId) {
             await userService.getUser(userId)
-            .then(data => {
-                if (data) {
-                    return data;
+            .then(response => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Comments/getUsersForComments()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
             })
         },
@@ -199,9 +221,33 @@ export default {
             }
 
             await requestService.incrementRequestLikes(body)
-            .then(() => {});
+            .then(response => {
+                if (response.status === 200) {
+                    const log = {
+                        success: true,
+                        message: "Successfully created a Helpr Like in Requests/incrementsLikes()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
 
-            emitter.emit('add-to-thumbsup-amount');
+                    loggerService.createLog(log);
+
+                    emitter.emit('add-to-thumbsup-amount');
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not create a Helpr Like in Requests/incrementsLikes()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
         },
         showErrorMessageEventListener() {
             this.isShowError = false;

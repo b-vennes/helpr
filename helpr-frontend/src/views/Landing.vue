@@ -14,8 +14,10 @@
 
 <script>
 import AuthService from '../services/auth.service.js';
+import LoggerService from '../services/logger.service.js';
 
 const authService = new AuthService();
+const loggerService = new LoggerService();
 
 export default {
     data: function() {
@@ -26,11 +28,22 @@ export default {
     methods: {
         async login() {
             await authService.login()
-            .then(data => {
-                if (data) {
-                    window.location.replace(data.redirect_uri);
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.replace(response.data.redirect_uri);
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Get request unsuccessful in Landing/login()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
                 }
-            })
+            });
         }
     }
 }
