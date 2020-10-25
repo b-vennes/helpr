@@ -2,6 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Request } from 'src/database/request.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetRequestsByUserIdQuery {
     constructor(
@@ -25,8 +26,10 @@ export class GetRequestsByUserIdHandler implements IQueryHandler<GetRequestsByUs
                 queryRequests.push(request);
             }
         }
-
-        return queryRequests;
+        if (queryRequests) {
+            return queryRequests;
+        }
         
+        throw new HttpException('Could not find any requests by user ID', HttpStatus.EXPECTATION_FAILED);
     }
 }

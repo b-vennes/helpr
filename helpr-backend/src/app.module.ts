@@ -23,6 +23,7 @@ import { RequestTag } from 'src/database/requesttag.entity';
 import { Notification } from 'src/database/notification.entity';
 import { History } from 'src/database/history.entity';
 import { AuthModule } from './auth/auth.module';
+import { Logger } from './database/logger.entity';
 
 @Module({
   imports: [
@@ -53,7 +54,8 @@ import { AuthModule } from './auth/auth.module';
         UserTag,
         RequestTag,
         Notification,
-        History
+        History,
+        Logger
       ]
     }), 
     ],
