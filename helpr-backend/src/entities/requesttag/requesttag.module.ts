@@ -6,11 +6,14 @@ import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Tag } from 'src/database/tag.entity';
+import { LoggerService } from '../logger/logger.service';
+import { Logger } from 'src/database/logger.entity';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([RequestTag, Tag])],
+    imports: [CqrsModule, TypeOrmModule.forFeature([RequestTag, Tag, Logger])],
     controllers: [RequestTagController],
     providers: [
+        LoggerService,
         ...CommandHandlers,
         ...QueryHandlers],
 })

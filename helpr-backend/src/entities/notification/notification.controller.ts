@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, UseFilters } from "@nestjs/common";
 import { Notification } from 'src/database/notification.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetLatestNotificationsQuery } from "./queries/handlers/get-latest-notifications.handler";
 import { CreateNotificationCommand } from "./commands/handlers/create-notification.handler";
 import { SetIsOpenedCommand } from "./commands/handlers/set-is-opened.handler";
 import { SendNotificationCommand } from "./commands/handlers/send-notifications.handler";
+import { AllExceptionsFilter } from "src/requestFilters/all-exceptions.filter";
 
 @Controller('notifications')
+@UseFilters(AllExceptionsFilter)
 export class NotificationController {
     constructor(
         private readonly commandBus: CommandBus,
@@ -14,22 +16,34 @@ export class NotificationController {
       ) {}
 
     @Get('getLatestNotificationsByUserId/:id')
-    async getLatestNotifications(@Param('id') id: number): Promise<Notification[]> {
-        return await this.queryBus.execute(new GetLatestNotificationsQuery(id));
+    async getLatestNotifications(@Param('id') id: number) {
+        return { 
+            data: await this.queryBus.execute(new GetLatestNotificationsQuery(id)), 
+            status: 200
+        };
     }
 
     @Post('createNotification')
     async createNotification(@Body() command: CreateNotificationCommand) {
-        return await this.commandBus.execute(new CreateNotificationCommand(command.notification));
+        return { 
+            data: await this.commandBus.execute(new CreateNotificationCommand(command.notification)), 
+            status: 200
+        };
     }
 
     @Post('sendNotifications')
     async sendNotifications(@Body() command: SendNotificationCommand) {
-        return await this.commandBus.execute(new SendNotificationCommand(command.requestId));
+        return { 
+            data: await this.commandBus.execute(new SendNotificationCommand(command.requestId)), 
+            status: 200
+        };
     }
 
     @Put('setIsOpened')
     async setIsOpened(@Body() command: SetIsOpenedCommand) {
-        return await this.commandBus.execute(new SetIsOpenedCommand(command.notification));
+        return { 
+            data: await this.commandBus.execute(new SetIsOpenedCommand(command.notification)), 
+            status: 200
+        };
     }
 }

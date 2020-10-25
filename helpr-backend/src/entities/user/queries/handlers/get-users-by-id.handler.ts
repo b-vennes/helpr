@@ -2,6 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { User } from 'src/database/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetUsersByUserIdQuery {
     constructor(
@@ -17,6 +18,12 @@ export class GetUsersByUserIdHandler implements IQueryHandler<GetUsersByUserIdQu
     ) {}
 
     public async execute(query: GetUsersByUserIdQuery): Promise<User> {
-        return await this.userRepository.findOne(query.userId);
+        let user = await this.userRepository.findOne(query.userId);
+
+        if (user) {
+            return user;
+        }
+
+        throw new HttpException('Could not get User', HttpStatus.EXPECTATION_FAILED);
     }
 }

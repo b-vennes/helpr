@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseFilters} from '@nestjs/common';
 import { Message } from 'src/database/message.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetMessagesQuery } from './queries/handlers/get-messages.handler';
 import { CreateMessageCommand } from './commands/handlers/create-message.handler';
+import { AllExceptionsFilter } from 'src/requestFilters/all-exceptions.filter';
 
 @Controller('messages')
+@UseFilters(AllExceptionsFilter)
 export class MessageController {
     constructor(
         private readonly commandBus: CommandBus,

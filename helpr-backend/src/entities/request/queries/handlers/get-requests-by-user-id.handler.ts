@@ -26,7 +26,7 @@ export class GetRequestsByUserIdHandler implements IQueryHandler<GetRequestsByUs
                 queryRequests.push(request);
             }
         }
-        if (queryRequests) {
+        if (queryRequests?.length !== 0) {
             return queryRequests;
         }
         

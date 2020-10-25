@@ -3,6 +3,7 @@ import { RequestTag } from 'src/database/requesttag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from 'src/database/tag.entity';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetTagsByRequestIdQuery {
     constructor(
@@ -24,9 +25,9 @@ export class GetTagsByRequestIdHandler implements IQueryHandler<GetTagsByRequest
         let tags = await this.tagRepository.find();
         let requestTags = [];
         
-         for (var requestTag of tempRequestTags) {
-             for (var tag of tags) {
-                 if (requestTag.tagId === tag.id) {
+        for (var requestTag of tempRequestTags) {
+            for (var tag of tags) {
+                if (requestTag.tagId === tag.id) {
                     const tempRequestTag = {
                         id: requestTag.id,
                         requestId: requestTag.requestId,
@@ -34,10 +35,14 @@ export class GetTagsByRequestIdHandler implements IQueryHandler<GetTagsByRequest
                     }
 
                     requestTags.push(tempRequestTag);
-                 }
-             }
-         }
+                }
+            }
+        }
         
-         return requestTags;
+        if (requestTags.length !== 0) {
+            return requestTags;
+        }
+        
+        throw new HttpException('Could not get RequestTags by RequestId', HttpStatus.EXPECTATION_FAILED);
     }
 }

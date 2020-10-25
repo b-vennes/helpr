@@ -16,7 +16,7 @@ export class GetRequestsHandler implements IQueryHandler<GetRequestsQuery> {
     public async execute(query: GetRequestsQuery): Promise<Request[]> {
         let requests = await this.requestRepository.find();
 
-        if (requests) {
+        if (requests?.length !== 0) {
             return requests;
         }
         

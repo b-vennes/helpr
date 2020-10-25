@@ -24,6 +24,6 @@ export class GetRequestByRequestIdHandler implements IQueryHandler<GetRequestByR
             return request;
         }
 
-        throw new HttpException('Could not find the desired request', HttpStatus.EXPECTATION_FAILED);
+        throw new HttpException('Could not get the desired Request', HttpStatus.EXPECTATION_FAILED);
     }
 }

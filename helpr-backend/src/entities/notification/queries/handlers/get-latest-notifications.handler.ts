@@ -2,6 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Notification } from 'src/database/notification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetLatestNotificationsQuery {
     constructor(
@@ -30,6 +31,11 @@ export class GetLatestNotificationsHandler implements IQueryHandler<GetLatestNot
             latestNotifications.push(notification);
             count += 1;
         }
-        return latestNotifications;
+
+        if (latestNotifications?.length !== 0) {
+            return latestNotifications;
+        }
+
+        throw new HttpException('Could not get Notifications by UserId', HttpStatus.EXPECTATION_FAILED);
     }
 }

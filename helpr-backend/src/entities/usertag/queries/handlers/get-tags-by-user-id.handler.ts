@@ -3,6 +3,7 @@ import { UserTag } from 'src/database/usertag.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tag } from 'src/database/tag.entity';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetTagsByUserIdQuery {
     constructor(
@@ -38,6 +39,10 @@ export class GetTagsByUserIdHandler implements IQueryHandler<GetTagsByUserIdQuer
             }
         }
 
-        return userTags;
+        if (userTags?.length !== 0) {
+            return userTags;
+        }
+
+        throw new HttpException('Could not get Tags by UserId', HttpStatus.EXPECTATION_FAILED);
     }
 }

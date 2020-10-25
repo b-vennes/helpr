@@ -13,17 +13,26 @@ export class UserTagController {
       ) {}
 
     @Get('getById/:id')
-    async getByUserId(@Param('id') id: number): Promise<UserTag[]> {
-        return await this.queryBus.execute(new GetTagsByUserIdQuery(id));
+    async getByUserId(@Param('id') id: number) {
+        return { 
+            data: await this.queryBus.execute(new GetTagsByUserIdQuery(id)), 
+            status: 200
+        };
     }
 
     @Post('createUserTag')
-    async createUserTag(@Body() userTag: UserTag): Promise<UserTag> {
-        return await this.commandBus.execute(new CreateUserTagCommand(userTag));
+    async createUserTag(@Body() userTag: UserTag) {
+        return { 
+            data: await this.commandBus.execute(new CreateUserTagCommand(userTag)), 
+            status: 200
+        };
     }
 
     @Put('deleteUserTag')
-    async deleteUserTag(@Body() command: DeleteUserTagCommand): Promise<boolean> {
-        return await this.commandBus.execute(new DeleteUserTagCommand(command.userTag));
+    async deleteUserTag(@Body() command: DeleteUserTagCommand) {
+        return { 
+            data: await this.commandBus.execute(new DeleteUserTagCommand(command.userTag)), 
+            status: 200
+        };
     }
 }

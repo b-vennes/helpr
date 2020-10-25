@@ -2,6 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserProfile } from 'src/database/userprofile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GetUserProfilesQuery {}
 
@@ -13,6 +14,12 @@ export class GetUserProfilesHandler implements IQueryHandler<GetUserProfilesQuer
       ) { }
 
     public async execute(): Promise<UserProfile[]> {
-        return await this.userProfileRepository.find();
+        let userProfile = await this.userProfileRepository.find();
+
+        if (userProfile) {
+            return userProfile;
+        }
+
+        throw new HttpException('Could not get UserProfile', HttpStatus.EXPECTATION_FAILED);
     }
 }
