@@ -187,21 +187,16 @@ export default {
 
 <style scoped lang="scss">
 .questionContainer {
-    margin-left: 20px;
     border-style: solid;
     border-color: #90EE90;
-    border-radius: 32px;
-    height: 300px;
+    height: 270px;
 
     .question {
         background-color: #F1F1F1;
-        border-radius: 24px;
         margin-bottom: 4px;
         
         .content {
-            padding: 16px;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
+            padding: 4px 8px;
             background-color:	#90EE90;
             align-self: flex-end;
             height: 40px;
@@ -214,7 +209,6 @@ export default {
             .requestClosed {
                 float: right;
                 background-color: #FF6347;
-                border-radius: 16px;
                 width: 8%;
                 height: 40px;
 
@@ -231,7 +225,6 @@ export default {
         .right {
             background-color: #FF7043;
             padding: 12px 18px;
-            border-radius: 24px;
             margin: 0 24px 0 auto;
         }
     }
@@ -242,9 +235,11 @@ export default {
         display: block;
         text-align: left;
         height: 70px;
+        background-color: #fafafa;
 
         .requestDescription {
             display: block;
+
             text-align: left;
             font-size: 18px;
         }
@@ -367,8 +362,6 @@ export default {
         position: relative;
         top: 60px;
         padding: 16px;
-        border-bottom-left-radius: 24px;
-        border-bottom-right-radius: 24px;
         background-color: #90EE90;
 
         .thumbsUp {

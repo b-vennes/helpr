@@ -26,18 +26,18 @@ export default {
  }
 
   &.primary {
-    background-color: #1DE9B6;
+    background-color: #90EE90;
 
     &:hover {
-      background-color: #2aeaba;
+      background-color: #9aef9a;
     }
   }
 
   &.secondary {
-    background-color: #F06292;
+    background-color: #ED91BF;
 
     &:hover {
-      background-color: #f26e9a;
+      background-color: #ef9ac4;
     }
   }
 }

@@ -38,44 +38,48 @@
             </div>
         </div>
         <div class="main">
-            <div v-for="request in requests" :key="request.id">
-                <div class="post">
-                    <div class="user">
-                        <User
-                            v-bind:userId="request.userId"
-                            v-bind:createdDate="request.createdDate">
-                        </User>
-                        <div class="messageUserIcon" v-if="request.userId != loggedInUserId">
-                            <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
-                        </div>
-                        <div class="thumbsIcon" v-if="request.userId != loggedInUserId">
-                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
-                        </div>
-                        <div class="thumbsIconLoggedIn" v-if="request.userId == loggedInUserId">
-                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
-                        </div>
-                    </div>
-                    <div class="question">
-                        <QuestionPreview
-                            v-bind:likes="request.likes"
-                            v-bind:points="request.points"
-                            v-bind:title="request.title"
-                            v-bind:description="request.description"
-                            v-bind:id="request.id"
-                            v-bind:userId="request.userId"
-                            v-bind:isClosed="request.isDeleted"
-                            tag="Forms">
-                        </QuestionPreview>
-                    </div>
+          <div v-for="request in requests" :key="request.id" class="request">
+            <div class="post">
+              <div class="user">
+                <User
+                    v-bind:userId="request.userId"
+                    v-bind:createdDate="request.createdDate">
+                </User>
+                <div class="icons">
+                  <div class="messageUserIcon" v-if="request.userId != loggedInUserId">
+                    <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
+                  </div>
+                  <div class="thumbsIcon" v-if="request.userId != loggedInUserId">
+                    <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                  </div>
+                  <div class="thumbsIconLoggedIn" v-if="request.userId == loggedInUserId">
+                    <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                  </div>
                 </div>
-                    <div class="comments" v-if="request.isShowComment">
-                        <Comments
-                            v-bind:requestId="request.id"
-                            :key="commentComponentKey">
-                        </Comments>
-                    </div>
-                </div>
+              </div>
+              <div class="question">
+                <QuestionPreview
+                    v-bind:likes="request.likes"
+                    v-bind:points="request.points"
+                    v-bind:title="request.title"
+                    v-bind:description="request.description"
+                    v-bind:id="request.id"
+                    v-bind:userId="request.userId"
+                    v-bind:isClosed="request.isDeleted"
+                    tag="Forms">
+                </QuestionPreview>
+              </div>
             </div>
+            <div class="comments" v-if="request.isShowComment">
+              <Comments
+                  v-bind:requestId="request.id"
+                  :key="commentComponentKey">
+              </Comments>
+            </div>
+            <div class="no-show-comments" v-if="!request.isShowComment">
+            </div>
+          </div>
+        </div>
         </div>
         <transition name="fade">
             <div class="modal" v-if="showModal">
@@ -474,99 +478,49 @@ export default {
         }
 
         .main {
-            width: 70%;
-            padding: 24px;
-            max-height: 25rem;
-        
+          width: 70%;
+          padding: 24px;
+
+          .request {
+            background-color: #fafafa;
+            border-radius: 24px;
+            padding: 8px;
+            margin: 8px;
+
             .post {
-                display: flex;
-                justify-content: flex-start;
-                flex-direction: row;
-                align-items: flex-start;
+              margin: 8px 0 0 0;
 
-                .user {
-                    width: 30%;
+              .user {
+                .icons {
+                  display: flex;
 
-                    .messageUserIcon {
-                        position: relative;
-                        left: 270px;
-                        top: 10px;
-                        background-color: #f1f1f1;
-                        border-radius: 50%;
-                        width: 40px;
-                        height: 40px;
-                        
-                        img {
-                            position: relative;
-                            top: 9px;
-                            left: 1px;
-                            height: 20px;
-                        }
+                  position: relative;
+                  left: 60rem;
+                  bottom: 3rem;
+                  height: 0;
 
-                        &:hover {
-                            background-color: #fafafa;
-                            cursor: pointer;
-                        }
-                    }
-
-                    .thumbsIcon {
-                        position: relative;
-                        left: 225px;
-                        top: -30px;
-                        background-color: #f1f1f1;
-                        border-radius: 50%;
-                        width: 40px;
-                        height: 40px;
-                        
-                        img {
-                            position: relative;
-                            top: 10px;
-                            left: 1px;
-                            height: 20px;
-                        }
-
-                        &:hover {
-                            background-color: #fafafa;
-                            cursor: pointer;
-                        }
-                    }
-
-                    .thumbsIconLoggedIn {
-                        position: relative;
-                        left: 273px;
-                        top: 10px;
-                        background-color: #f1f1f1;
-                        border-radius: 50%;
-                        width: 40px;
-                        height: 40px;
-                        
-                        img {
-                            position: relative;
-                            top: 10px;
-                            left: 1px;
-                            height: 20px;
-                        }
-
-                        &:hover {
-                            background-color: #fafafa;
-                            cursor: pointer;
-                        }
-                    }
+                  div {
+                    margin: 1px 4px 0 4px;
+                  }
                 }
+              }
 
-                .question {
-                    width: 140%;
-                    margin-bottom: 100px;
-                    height: 300px;
-                    float: right;
-                }
+              .question {
+
+              }
             }
 
             .comments {
-                margin-top: -80px;
-                margin-left: 18.5%;
-                margin-bottom: 5%;
+
             }
+
+            .no-show-comments {
+              height: 20px;
+              background-color: #90EE90;
+              border-bottom-left-radius: 16px;
+              border-bottom-right-radius: 16px;
+            }
+          }
         }
 
         a {
