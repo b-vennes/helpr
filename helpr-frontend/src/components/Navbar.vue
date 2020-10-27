@@ -13,7 +13,7 @@
                 </router-link>
 
                 <div class="contact" v-bind:class="{ active: this.$route.name === 'Contact' }"><a class="routeText">Contact</a></div>
-                
+
             </div>
             
             <div class="right">
@@ -126,56 +126,59 @@ a {
     text-decoration: none;
 }
 .nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  background-color: #1de9b6;
-  color: black;
-  height: 54px;
-  transition: top 0.3s;
+    background-color: #1de9b6;
+    color: black;
+    height: 54px;
+    transition: top 0.3s;
 }
 
 .left {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    padding: 8px;
 
-  padding: 8px;
+    div {
+        margin: 2px 12px;
+        padding: 16px 8px;
 
-  div {
-    margin: 2px 12px;
-    padding: 16px 8px;
+        &.active {
+            padding: 12px;
+            border-radius: 12px;
+            background-color: #42b983;
+        }
 
-    &.active {
-      background-color: #42b983;
+        &:hover {
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            background-color: #ddd;
+            color: black;
+        }
     }
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ddd;
-      color: black;
-    }
-  }
 }
 
 .right {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  margin: 2px 12px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    margin: 2px 12px;
 
-  .profilePicture {
-    border-radius: 50%;
-  }
+    .profilePicture {
+        border-radius: 50%;
+    }
 
-  .notificationIcon {
-    margin-top: 5px;
-  }
+    .notificationIcon {
+        margin-top: 5px;
+    }
 
-  img {
-    height: 36px;
-    margin-right: 20px;
-    cursor: pointer;
+    img {
+        height: 36px;
+        margin-right: 20px;
+        cursor: pointer;
     
     div {
         &.active {
@@ -195,18 +198,18 @@ a {
 }
 
 .modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-  position: absolute;
-  right: 12px;
-  height: 8rem;
-  width: 8rem;
-  background-color: #F1F1F1;
-  border-radius: 8px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  z-index: 1;
+    position: absolute;
+    right: 12px;
+    height: 8rem;
+    width: 8rem;
+    background-color: #F1F1F1;
+    border-radius: 8px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    z-index: 1;
 }
 .notificationModalContainer {
     margin-top: 10px;
@@ -232,9 +235,9 @@ a {
 }
 
 .routeText {
-      font-size: 20px;
-      font-family: Helvetica; 
-      font-weight: bold;
-      color: darkgreen;
-  }
+    font-size: 20px;
+    font-family: Helvetica; 
+    font-weight: bold;
+    color: darkgreen;
+}
 </style>

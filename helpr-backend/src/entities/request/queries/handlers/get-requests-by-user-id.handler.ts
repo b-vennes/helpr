@@ -18,16 +18,10 @@ export class GetRequestsByUserIdHandler implements IQueryHandler<GetRequestsByUs
     ) {}
 
     public async execute(query: GetRequestsByUserIdQuery): Promise<Request[]> {
-        let requests = await this.requestRepository.find();
-        let queryRequests = new Array<Request>();
-
-        for (var request of requests) {
-            if (request.userId === query.userId) {
-                queryRequests.push(request);
-            }
-        }
-        if (queryRequests?.length !== 0) {
-            return queryRequests;
+        let requests = await this.requestRepository.find({userId: query.userId});
+        
+        if (requests?.length !== 0) {
+            return requests;
         }
         
         throw new HttpException('Could not find any requests by user ID', HttpStatus.EXPECTATION_FAILED);

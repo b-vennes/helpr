@@ -104,7 +104,7 @@ import UserProfileService from '../services/userprofile.service.js';
 import UserTagService from '../services/usertag.service.js';
 import LoggerService from '../services/logger.service.js';
 import Navbar from "@/components/Navbar";
-import History from '../components/History';
+import History from '../components/profile-components/History';
 import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();

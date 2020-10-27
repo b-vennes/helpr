@@ -23,6 +23,18 @@ export default class RequestService {
 
         return response.json();
     }
+
+    async getRequestByUserId(userId) {
+        const response = await fetch(`http://localhost:3000/requests/getByUserId/` + userId, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.json();
+    }
     
     async incrementRequestLikes(request) {
         const body = {

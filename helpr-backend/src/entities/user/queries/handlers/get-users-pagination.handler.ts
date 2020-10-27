@@ -28,6 +28,8 @@ export class GetUsersPaginationHandler implements IQueryHandler<GetUsersPaginati
         
         const totalCount = await this.userProfileRepository.count();
 
+        const totalPages = Math.ceil(totalCount / query.paginationDto.limit);
+
         const userProfiles = await this.userProfileRepository.createQueryBuilder()
             .orderBy('points', "DESC")
             .offset(skippedItems)
@@ -49,6 +51,7 @@ export class GetUsersPaginationHandler implements IQueryHandler<GetUsersPaginati
             return {
                 totalCount,
                 page: query.paginationDto.page,
+                pages: totalPages,
                 limit: query.paginationDto.limit,
                 data: paginatedUsers
             };

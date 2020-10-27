@@ -130,8 +130,8 @@ export default {
                         tagName: "No Tags"
                     }];
 
-                    this.requestTags = placeholderData;
-
+                    this.requestTags = placeholderData; 
+                    
                     const log = {
                         success: false,
                         message: "Get request unsuccessful in Question-preview/getRequestTags()",

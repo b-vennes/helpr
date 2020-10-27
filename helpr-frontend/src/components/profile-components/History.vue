@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import HistoryService from '../services/history.service.js';
-import UserService from '../services/user.service.js';
-import UserProfileService from '../services/userprofile.service.js';
-import RequestService from '../services/request.service.js';
-import LoggerService from '../services/logger.service.js';
-import { emitter } from '../components/common/event-bus';
+import HistoryService from '../../services/history.service.js';
+import UserService from '../../services/user.service.js';
+import UserProfileService from '../../services/userprofile.service.js';
+import RequestService from '../../services/request.service.js';
+import LoggerService from '../../services/logger.service.js';
+import { emitter } from '../../components/common/event-bus';
 
 const historyService = new HistoryService();
 const userService = new UserService();
@@ -55,15 +55,15 @@ export default {
                     this.historyList = response.data;
                 } else {
                     const log = {
-                        success: false,
-                        message: "Could not create User History in History/getHistoryByUserId()",
-                        httpStatusCode: response.status,
-                        isBackEnd: false,
-                        isFrontEnd: true,
-                        timestamp: new Date()
-                    };
+                            success: false,
+                            message: "Get request unsuccessful in History/getHistoryByUserId()",
+                            httpStatusCode: response.status,
+                            isBackEnd: false,
+                            isFrontEnd: true,
+                            timestamp: new Date()
+                        };
 
-                    loggerService.createLog(log);
+                        loggerService.createLog(log);
                 }
             });
         },
@@ -79,7 +79,7 @@ export default {
                     } else {
                         const log = {
                             success: false,
-                            message: "Get request unsuccessful in History/getRequestForHistory()",
+                            message: "Get request unsuccessful in Profile/History/getRequestForHistory()",
                             httpStatusCode: response.status,
                             isBackEnd: false,
                             isFrontEnd: true,

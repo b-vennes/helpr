@@ -40,7 +40,7 @@ export class AuthService {
           `scope=${scopes.join(' ')}`
         ];
         const redirect_uri: string = `https://accounts.google.com/o/oauth2/auth?${queryParams.join('&')}`;
-    
+
         return {
           redirect_uri
         };

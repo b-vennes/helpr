@@ -42,7 +42,7 @@ export default {
                 if (response.status === 200) {
                     this.comments = response.data;
 
-                    for (var comment of response.data) {
+                    for (var comment of this.comments) {
                         let date = new Date(comment.createdDate);
                         comment.createdDate = date.toDateString();
                     }

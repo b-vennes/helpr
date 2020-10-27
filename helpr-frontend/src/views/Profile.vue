@@ -60,12 +60,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="bottom">
+                    <div class="helprRequests" @click="helprRequestsDisplay()">
+                        Helpr Requests
+                    </div>
+                    <div class="helprFriends" @click="helprFriendsDisplay()">
+                        Helpr Friends
+                    </div>
+                </div>
             </div>
             <transition name="fade">
                 <div class="userHistoryCard" v-if="showUserHistory">
                     <History
                         v-bind:userId="userId"
                     ></History>
+                </div>
+            </transition>
+            <transition name="fade">
+                <div class="userRequestsCard" v-if="showUserRequests">
+                    <Requests
+                        v-bind:userId="userId"
+                    ></Requests>
+                </div>
+            </transition>
+            <transition name="fade">
+                <div class="userFriendsCard" v-if="showUserFriends">
+                    
                 </div>
             </transition>
             <div class="userHistoryHovered" v-if="isUserInfoHover && userInfoHover">
@@ -236,6 +256,14 @@
                         <textarea  v-model="editedDescription" :placeholder="description" />
                     </div>
                 </div>
+                <div class="bottom">
+                    <div class="helprRequests" @click="helprRequestsDisplay()">
+                        Helpr Requests
+                    </div>
+                    <div class="helprFriends" @click="helprFriendsDisplay()">
+                        Helpr Friends
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -248,7 +276,8 @@ import TagService from '../services/tag.service.js';
 import LoggerService from '../services/logger.service.js';
 import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
-import History from '../components/History';
+import History from '../components/profile-components/History';
+import Requests from '../components/profile-components/Requests';
 import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();
@@ -284,13 +313,16 @@ export default {
             selectedTags: [],
             selectedTag: '',
             showUserHistory: false,
+            showUserRequests: false,
+            showUserFriends: false,
             isUserInfoHover: false,
             userInfoHover: {}
         }
     },
     components: {
         Navbar,
-        History
+        History,
+        Requests
     },
     methods: {
         async setData() {
@@ -494,6 +526,18 @@ export default {
         },
         helprHistoryDisplay() {
             this.showUserHistory = !this.showUserHistory;
+            this.showUserRequests = false;
+            this.showUserFriends = false;
+        },
+        helprRequestsDisplay() {
+            this.showUserRequests = !this.showUserRequests;
+            this.showUserHistory = false;
+            this.showUserFriends = false;
+        },
+        helprFriendsDisplay() {
+            this.showUserFriends = !this.showUserFriends;
+            this.showUserRequests = false;
+            this.showUserHistory = false;
         },
         onSelected() {
             let tagToRemove = {};
@@ -596,7 +640,6 @@ export default {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background-image: url("../assets/questions-background.svg");
     background-repeat: no-repeat;
     background-size: cover;
     color: black;
@@ -846,7 +889,7 @@ export default {
                 border-radius: 6px;
                 border-width: 3px;
                 position: absolute;
-                top: -35px;
+                top: -45px;
                 left: 105%;
                 z-index: 1;
             }
@@ -1061,9 +1104,57 @@ export default {
                 }
             }
         }
+
+        .bottom {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-size: 28px;
+            margin-top: 10px;
+
+            .helprRequests {
+                padding: 3px;
+                margin-right: 5px;
+                margin-bottom: 7px;
+                position: relative;
+                font-family: 'Patrick Hand SC', cursive;
+                width: 50%;
+                left: 0;
+                font-size: 25px;
+                font-weight: 600;
+                border-radius: 24px;
+                background-color: #42b983;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .helprFriends {
+                padding: 3px;
+                margin-bottom: 7px;
+                position: relative;
+                font-family: 'Patrick Hand SC', cursive;
+                width: 50%;
+                left: 0;
+                font-size: 25px;
+                font-weight: 600;
+                border-radius: 24px;
+                background-color: #42b983;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
     }
 
     .userHistoryCard {
+        position: fixed;
+        left: 1550px;
+    }
+
+    .userRequestsCard {
         position: fixed;
         left: 1550px;
     }

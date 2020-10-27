@@ -26,10 +26,10 @@ export class RequestController {
         };
     }
 
-    @Get('getByUserId')
-    async getRequestsByUserId(@Body() query: GetRequestsByUserIdQuery) {
+    @Get('getByUserId/:id')
+    async getRequestsByUserId(@Param('id') id: number) {
         return { 
-            data: await this.queryBus.execute(new GetRequestsByUserIdQuery(query.userId)),
+            data: await this.queryBus.execute(new GetRequestsByUserIdQuery(id)),
             status: 200
         };
     }

@@ -10,7 +10,10 @@ export class AuthController {
 
     @Get('google/uri')
     async requestGoogleRedirectUri() {
-        return await this.authService.requestGoogleRedirectUri();
+        return { 
+            data: await this.authService.requestGoogleRedirectUri(), 
+            status: 200
+        };
     }
 
     @Get('google/callback')

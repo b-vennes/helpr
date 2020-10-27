@@ -72,6 +72,7 @@ export default {
      }
 
      .subtitle {
+       margin-top: 10px;
        font-size: 1.7rem;
      }
 
