@@ -50,6 +50,7 @@ export class SendNotificationHandler implements ICommandHandler<SendNotification
                             createdDate: new Date(),
                             userId: user.id,
                             requestId: command.requestId,
+                            friendId: 0,
                             isOpened: false
                         }
 

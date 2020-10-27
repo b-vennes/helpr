@@ -30,10 +30,7 @@ export default class FriendService {
 
     async confirmFriendRequest(request) {
         const body = {
-            id: request.id,
-            userId: request.userId,
-            friendUserId: request.userId,
-            isConfirmed: request.isConfirmed
+            id: request.id
         };
 
         const response = await fetch(`http://localhost:3000/friends/update`, {

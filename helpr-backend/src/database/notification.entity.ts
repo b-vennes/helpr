@@ -18,5 +18,8 @@ export class Notification {
     requestId: number;
 
     @Column()
+    friendId: number;
+
+    @Column()
     isOpened: boolean;
 }

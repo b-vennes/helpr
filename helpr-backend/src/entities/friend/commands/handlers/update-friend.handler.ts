@@ -20,6 +20,8 @@ export class UpdateFriendHandler implements ICommandHandler<UpdateFriendCommand>
         let friend = await this.friendRepository.findOne(command.id);
         friend.isConfirmed = true;
 
-        return await this.friendRepository.update(friend.id, friend);
+        await this.friendRepository.update(friend.id, friend);
+
+        return friend;
     }
 }

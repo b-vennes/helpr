@@ -43,7 +43,7 @@ export class NotificationController {
     @Post('sendFriendNotifications')
     async sendFriendNotifications(@Body() command: SendFriendNotificationCommand) {
         return { 
-            data: await this.commandBus.execute(new SendFriendNotificationCommand(command.toUserId, command.fromUserId)), 
+            data: await this.commandBus.execute(new SendFriendNotificationCommand(command.toUserId, command.fromUserId, command.friendId)), 
             status: 200
         };
     }

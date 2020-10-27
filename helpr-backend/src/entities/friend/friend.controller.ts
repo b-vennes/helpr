@@ -31,9 +31,9 @@ export class FriendController {
     }
 
     @Put('update')
-    async confirmFriendRequest(@Body() friend: Friend) {
+    async confirmFriendRequest(@Body() body: any) {
         return { 
-            data: await this.commandBus.execute(new UpdateFriendCommand(friend.id)), 
+            data: await this.commandBus.execute(new UpdateFriendCommand(body.id)), 
             status: 200
         };
     }

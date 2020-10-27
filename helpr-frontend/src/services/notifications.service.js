@@ -32,7 +32,8 @@ export default class NotificationService {
     async sendFriendNotifications(notification) {
         const body = {
             fromUserId: notification.fromUserId,
-            toUserId: notification.toUserId
+            toUserId: notification.toUserId,
+            friendId: notification.friendId
         };
 
         const response = await fetch(`http://localhost:3000/notifications/sendFriendNotifications`, {

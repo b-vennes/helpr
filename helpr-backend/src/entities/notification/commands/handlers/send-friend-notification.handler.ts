@@ -7,7 +7,8 @@ import { User } from 'src/database/user.entity';
 export class SendFriendNotificationCommand {
     constructor(
         public readonly toUserId: number,
-        public readonly fromUserId: number
+        public readonly fromUserId: number,
+        public readonly friendId: number
     ) {}
 }
 
@@ -34,6 +35,7 @@ export class SendFriendNotificationHandler implements ICommandHandler<SendFriend
             createdDate: new Date(),
             userId: toUser.id,
             requestId: 0,
+            friendId: command.friendId,
             isOpened: false
         }
 

@@ -304,8 +304,9 @@ export default {
 
             await friendService.sendFriendRequest(friend)
             .then(response => {
+                console.log(response);
                 if (response.status === 200) {
-                    this.sendNotifications(userId);
+                    this.sendNotifications(userId, response.data.id);
                 } else {
                     const log = {
                         success: false,
@@ -320,10 +321,11 @@ export default {
                 }
             });
         },
-        sendNotifications(userId) {
+        sendNotifications(userId, friendId) {
             const notification = {
                 toUserId: userId,
-                fromUserId: this.loggedInUserId
+                fromUserId: this.loggedInUserId,
+                friendId: friendId
             };
 
             notificationService.sendFriendNotifications(notification)
