@@ -74,13 +74,14 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
-        background-color: #F1F1F1;
-        border-radius: 24px;
-        padding: 16px;
+        background-color: #90EE90;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        padding: 8px 16px 0 12px;
 
         img {
-            height: 70px;
-            border-radius: 24px;
+            height: 52px;
+            border-radius: 50%;
         }
 
         .information {
@@ -88,10 +89,11 @@ export default {
             flex-direction: column;
             justify-content: flex-start;
             align-items: flex-start;
-            margin-left: 15px;
+            align-self: center;
+            margin-left: 8px;
 
             .username {
-                font-size: 25px;
+                font-size: 15px;
             }
 
             .email {
@@ -100,7 +102,7 @@ export default {
 
             .createdDate {
                 margin-top: 3px;
-                font-size: 15px;
+                font-size: 11px;
                 color: #228B22;
             }
         }

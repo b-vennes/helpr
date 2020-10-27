@@ -92,32 +92,39 @@ export default {
 <style lang="scss" scoped>
 .commentsContainer {
     display: block;
+    background-color: #90EE90;
+    padding: 12px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
 
     .comments {
-        padding: 8px;
+        padding: 2px;
+        margin: 4px;
         border-radius: 24px;
+        background-color: white;
         display: block;
         text-align: left;
         font-size: 18px;
-        margin-bottom: 15px;
-        border-color: #90EE90;
+        margin-bottom: 0px;
+        border-color: white;
         border-style: solid;
 
         .commentsInformation {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 8px;
 
             .user {
                 display: flex;
                 flex-direction: row;
-                width: 15%;
-                background-color: #F1F1F1;
-                border-radius: 18px;
+                align-items: center;
+                width: 100%;
                 padding: 8px;
                 
                 img {
-                    height: 60px;
-                    border-radius: 16px;
+                    height: 48px;
+                    border-radius: 50%;
                 }
 
                 .information {
@@ -125,15 +132,16 @@ export default {
                     flex-direction: column;
                     justify-content: flex-start;
                     align-items: flex-start;
-                    margin-left: 15px;
-                    margin-top: 9px;
+                    margin-left: 8px;
 
                     .username {
-                        font-size: 20px;
+                        font-size: 16px;
+                        margin-right: 4px;
                     }
 
                     .createdDate {
-                        font-size: 15px;
+                        align-self: center;
+                        font-size: 12px;
                         color: #228B22;
                     }
                 }
@@ -141,7 +149,7 @@ export default {
 
             .description {
                 margin-left: 10px;
-                padding: 10px;
+                padding: 10px 0;
             }
         }
     }

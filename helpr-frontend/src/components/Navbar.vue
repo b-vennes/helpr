@@ -130,7 +130,7 @@ a {
     align-items: center;
     justify-content: space-between;
 
-    background-color: #1de9b6;
+    background-color: #90EE90;
     color: black;
     height: 54px;
     transition: top 0.3s;
@@ -142,22 +142,28 @@ a {
     padding: 8px;
 
     div {
-        margin: 2px 12px;
-        padding: 16px 8px;
+      padding: 14px;
 
-        &.active {
-            padding: 12px;
-            border-radius: 12px;
-            background-color: #42b983;
-        }
+      border: 0px solid #90EE90;
+      border-width: 0 0 7px 0;
 
-        &:hover {
-            cursor: pointer;
-            padding: 12px;
-            border-radius: 12px;
-            background-color: #ddd;
-            color: black;
+      &:hover {
+        cursor: pointer;
+        background-color: #f0a3c9;
+        color: black;
+
+        border: 0px solid #f0a3c9;
+        border-width: 0 0 7px 0;
+      }
+
+      &.active {
+        border: 0px solid #ED91BF;
+        border-width: 0 0 7px 0;
+
+        &.hover {
+          border-color: #ED91BF;
         }
+      }
     }
 }
 
@@ -235,9 +241,9 @@ a {
 }
 
 .routeText {
-    font-size: 20px;
+    font-size: 14px;
     font-family: Helvetica; 
     font-weight: bold;
-    color: darkgreen;
+    color: black;
 }
 </style>
