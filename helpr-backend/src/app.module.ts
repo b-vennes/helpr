@@ -11,6 +11,7 @@ import { UserTagModule } from 'src/entities/usertag/usertag.module';
 import { TagModule } from 'src/entities/tag/tag.module';
 import { NotificationModule } from 'src/entities/notification/notification.module';
 import { HistoryModule } from 'src/entities/history/history.module';
+import { FriendModule } from 'src/entities/friend/friend.module';
 import { Company } from 'src/database/company.entity';
 import { User } from 'src/database/user.entity';
 import { UserProfile } from 'src/database/userprofile.entity';
@@ -24,6 +25,7 @@ import { Notification } from 'src/database/notification.entity';
 import { History } from 'src/database/history.entity';
 import { AuthModule } from './auth/auth.module';
 import { Logger } from './database/logger.entity';
+import { Friend } from 'src/database/friend.entity';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { Logger } from './database/logger.entity';
     TagModule,
     NotificationModule,
     HistoryModule,
+    FriendModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'helpr.db',
@@ -55,7 +58,8 @@ import { Logger } from './database/logger.entity';
         RequestTag,
         Notification,
         History,
-        Logger
+        Logger,
+        Friend
       ]
     }), 
     ],
