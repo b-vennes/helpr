@@ -45,14 +45,16 @@
                             v-bind:userId="request.userId"
                             v-bind:createdDate="request.createdDate">
                         </User>
-                        <div class="messageUserIcon" v-if="request.userId != loggedInUserId">
-                            <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
-                        </div>
-                        <div class="thumbsIcon" v-if="request.userId != loggedInUserId">
-                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
-                        </div>
-                        <div class="thumbsIconLoggedIn" v-if="request.userId == loggedInUserId">
-                            <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                        <div v-if="request.userId != loggedInUserId">
+                            <div class="addFriendIcon">
+                                <img @click="addFriend(request.userId)" src="https://img.icons8.com/material/24/000000/add-user-male--v1.png"/>
+                            </div>
+                            <div class="messageUserIcon">
+                                <img @click="messageUser()" src="https://img.icons8.com/fluent-systems-filled/24/000000/chat-message.png"/>
+                            </div>
+                            <div class="thumbsIcon">
+                                <img @click="incrementsLikes(request.id)" src="https://img.icons8.com/android/24/000000/thumb-up.png"/>
+                            </div>
                         </div>
                     </div>
                     <div class="question">
@@ -104,6 +106,8 @@
 import RequestService from "../services/request.service.js";
 import UserService from '../services/user.service.js';
 import LoggerService from '../services/logger.service.js';
+import FriendService from '../services/friend.service.js';
+import NotificationService from '../services/notifications.service.js';
 import Button from '../components/Button';
 import QuestionPreview from '../components/Question-preview';
 import ErrorDisplay from '../components/common/Error.vue';
@@ -118,6 +122,8 @@ import { emitter } from '../components/common/event-bus';
 const requestService = new RequestService();
 const userService = new UserService();
 const loggerService = new LoggerService();
+const friendService = new FriendService();
+const notificationService = new NotificationService();
 
 export default {     
     data: function() {
@@ -286,6 +292,42 @@ export default {
         },
         messageUser() {
             console.log("sup");
+        },
+        async addFriend(userId) {
+            const friend = {
+                userId: this.loggedInUserId,
+                friendUserId: userId,
+                isConfirmed: false
+            };
+
+            await friendService.sendFriendRequest(friend)
+            .then(response => {
+                if (response.status === 200) {
+                    this.sendNotifications(userId);
+                } else {
+                    const log = {
+                        success: false,
+                        message: "Could not send a friend request in Requests/addFriend()",
+                        httpStatusCode: response.status,
+                        isBackEnd: false,
+                        isFrontEnd: true,
+                        timestamp: new Date()
+                    };
+
+                    loggerService.createLog(log);
+                }
+            });
+        },
+        sendNotifications(userId) {
+            const notification = {
+                toUserId: userId,
+                fromUserId: this.loggedInUserId
+            };
+
+            notificationService.sendFriendNotifications(notification)
+            .then(response => {
+                console.log(response);
+            });
         },
         showTransferPointsEvent(event) {
             this.selectedRequestToTransferPoints = event;
@@ -487,7 +529,7 @@ export default {
                 .user {
                     width: 30%;
 
-                    .messageUserIcon {
+                    .addFriendIcon {
                         position: relative;
                         left: 270px;
                         top: 10px;
@@ -509,7 +551,7 @@ export default {
                         }
                     }
 
-                    .thumbsIcon {
+                    .messageUserIcon {
                         position: relative;
                         left: 225px;
                         top: -30px;
@@ -520,7 +562,7 @@ export default {
                         
                         img {
                             position: relative;
-                            top: 10px;
+                            top: 9px;
                             left: 1px;
                             height: 20px;
                         }
@@ -531,10 +573,10 @@ export default {
                         }
                     }
 
-                    .thumbsIconLoggedIn {
+                    .thumbsIcon {
                         position: relative;
-                        left: 273px;
-                        top: 10px;
+                        left: 180px;
+                        top: -70px;
                         background-color: #f1f1f1;
                         border-radius: 50%;
                         width: 40px;

@@ -12,7 +12,7 @@ export default class FriendService {
     async sendFriendRequest(request) {
         const body = {
             userId: request.userId,
-            friendUserId: request.userId,
+            friendUserId: request.friendUserId,
             isConfirmed: request.isConfirmed
         };
 

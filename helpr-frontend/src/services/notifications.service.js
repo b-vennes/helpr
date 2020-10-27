@@ -29,6 +29,24 @@ export default class NotificationService {
         return response.json();
     }
 
+    async sendFriendNotifications(notification) {
+        const body = {
+            fromUserId: notification.fromUserId,
+            toUserId: notification.toUserId
+        };
+
+        const response = await fetch(`http://localhost:3000/notifications/sendFriendNotifications`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        return response.json();
+    }
+
     async createNotification(request) {
         const body = {
             description: request.description,

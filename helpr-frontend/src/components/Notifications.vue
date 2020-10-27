@@ -1,20 +1,40 @@
 <template>
     <div class="notificationContainer">
         <div class="notifications" v-for="notification in notifications" @click="goToRequest(notification.requestId, notification)" v-bind:key="notification.id">
-            <div v-if="notification.isOpened">
-                <div class="notificationDotOpened">
-                    .
+            <div v-if="notification.requestId != 0">
+                <div v-if="notification.isOpened">
+                    <div class="notificationDotOpened">
+                        .
+                    </div>
+                    <div class="notificationDescription">
+                        {{notification.description}}
+                    </div>
                 </div>
-                <div class="notificationDescription">
-                    {{notification.description}}
+                <div v-else>
+                    <div class="notificationDotNotOpened">
+                        .
+                    </div>
+                    <div class="notificationDescription">
+                        {{notification.description}}
+                    </div>
                 </div>
             </div>
-            <div v-else>
-                <div class="notificationDotNotOpened">
-                    .
+            <div v-else-if="notification.requestId == 0">
+                <div v-if="notification.isOpened">
+                    <div class="notificationDotOpened">
+                        .
+                    </div>
+                    <div class="notificationDescription">
+                        {{notification.description}}
+                    </div>
                 </div>
-                <div class="notificationDescription">
-                    {{notification.description}}
+                <div v-else>
+                    <div class="notificationDotNotOpened">
+                        .
+                    </div>
+                    <div class="notificationDescription">
+                        {{notification.description}}
+                    </div>
                 </div>
             </div>
         </div>

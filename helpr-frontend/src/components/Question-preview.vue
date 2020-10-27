@@ -131,17 +131,6 @@ export default {
                     }];
 
                     this.requestTags = placeholderData; 
-                    
-                    const log = {
-                        success: false,
-                        message: "Get request unsuccessful in Question-preview/getRequestTags()",
-                        httpStatusCode: response.status,
-                        isBackEnd: false,
-                        isFrontEnd: true,
-                        timestamp: new Date()
-                    };
-
-                    loggerService.createLog(log);
                 }
             })
         },

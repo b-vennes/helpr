@@ -6,6 +6,7 @@ import { CreateNotificationCommand } from "./commands/handlers/create-notificati
 import { SetIsOpenedCommand } from "./commands/handlers/set-is-opened.handler";
 import { SendNotificationCommand } from "./commands/handlers/send-notifications.handler";
 import { AllExceptionsFilter } from "src/requestFilters/all-exceptions.filter";
+import { SendFriendNotificationCommand } from "./commands/handlers/send-friend-notification.handler";
 
 @Controller('notifications')
 @UseFilters(AllExceptionsFilter)
@@ -35,6 +36,14 @@ export class NotificationController {
     async sendNotifications(@Body() command: SendNotificationCommand) {
         return { 
             data: await this.commandBus.execute(new SendNotificationCommand(command.requestId)), 
+            status: 200
+        };
+    }
+
+    @Post('sendFriendNotifications')
+    async sendFriendNotifications(@Body() command: SendFriendNotificationCommand) {
+        return { 
+            data: await this.commandBus.execute(new SendFriendNotificationCommand(command.toUserId, command.fromUserId)), 
             status: 200
         };
     }

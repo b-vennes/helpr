@@ -16,7 +16,7 @@ export class CreateFriendHandler implements ICommandHandler<CreateFriendCommand>
         private readonly friendRepository: Repository<Friend>
       ) { }
 
-    async execute(command: CreateFriendCommand): Promise<Friend> {
+    async execute(command: CreateFriendCommand) {
         return await this.friendRepository.save(command.friend);
     }
 }
