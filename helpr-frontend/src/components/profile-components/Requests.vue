@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="userRequestsList" v-if="userRequests">
-            <div class="userRequests" v-for="request in userRequests" @mouseover="requestsHoverOver(requests)" @mouseleave="requestsHoverLeave()" :key="request.id">
+            <div class="userRequests" v-for="request in userRequests" :key="request.id">
                 <div class="request">
                     <div class="requestRowTitle">
                         <div class="requestTitle">
@@ -36,7 +36,6 @@
 <script>
 import RequestService from '../../services/request.service.js';
 import LoggerService from '../../services/logger.service.js';
-//import { emitter } from '../../components/common/event-bus';
 
 const requestService = new RequestService();
 const loggerService = new LoggerService();
@@ -75,12 +74,6 @@ export default {
                     loggerService.createLog(log);
                 }
             });
-        },
-        async requestsHoverOver(requestEvent) {
-            console.log(requestEvent);
-        },
-        requestHoverLeave() {
-
         }
     },
     async mounted() {

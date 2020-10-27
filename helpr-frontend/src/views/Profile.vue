@@ -85,7 +85,9 @@
             </transition>
             <transition name="fade">
                 <div class="userFriendsCard" v-if="showUserFriends">
-                    
+                    <Friends
+                        v-bind:userId="userId"
+                    ></Friends>
                 </div>
             </transition>
             <div class="userHistoryHovered" v-if="isUserInfoHover && userInfoHover">
@@ -278,6 +280,7 @@ import Navbar from "@/components/Navbar";
 import UserService from '../services/user.service.js';
 import History from '../components/profile-components/History';
 import Requests from '../components/profile-components/Requests';
+import Friends from '../components/profile-components/Friends';
 import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();
@@ -322,7 +325,8 @@ export default {
     components: {
         Navbar,
         History,
-        Requests
+        Requests,
+        Friends
     },
     methods: {
         async setData() {
@@ -1155,6 +1159,11 @@ export default {
     }
 
     .userRequestsCard {
+        position: fixed;
+        left: 1550px;
+    }
+
+    .userFriendsCard {
         position: fixed;
         left: 1550px;
     }

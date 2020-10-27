@@ -7,9 +7,10 @@ import { CommandHandlers } from './commands';
 import { CqrsModule } from '@nestjs/cqrs';
 import { LoggerService } from '../logger/logger.service';
 import { Logger } from 'src/database/logger.entity';
+import { User } from 'src/database/user.entity';
 
 @Module({
-    imports: [CqrsModule, TypeOrmModule.forFeature([Friend, Logger])],
+    imports: [CqrsModule, TypeOrmModule.forFeature([Friend, Logger, User])],
     controllers: [FriendController],
     providers: [
         LoggerService,
