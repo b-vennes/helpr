@@ -534,15 +534,16 @@ export default {
 
               .user {
                 .icons {
-                  display: flex;
-
                   position: relative;
-                  left: 60rem;
-                  bottom: 3rem;
+                  top: -45px;
+                  left: -10px;
+                  float: right;
                   height: 0;
 
                   div {
                     margin: 1px 4px 0 4px;
+                    display: inline-block;
+                    cursor: pointer;
                   }
                 }
               }
