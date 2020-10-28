@@ -2,12 +2,10 @@
     <div class="addCommentModalContainer">
          <div class="content">
              <div class="top">
-                <div>Add a Comment to this Post</div>
+                <div>Add a Comment</div>
             </div>
             <div class="inputs">
-                <div class="commentinline">
-                    <textarea v-model="comment" class="comment" rows="5" placeholder="Comment"></textarea>
-                </div>
+                    <textarea v-model="comment" class="comment" rows="15" placeholder="Comment"></textarea>
             </div>
             <div class="buttons">
                 <Button @click="createComment" txt="Submit" class="secondary submit"></Button>
@@ -123,29 +121,23 @@ export default {
             display: flex;
             align-items: flex-start;
             flex-direction: column;
-
-            background-color: rgba(#F1F1F1, 0.4);
             border-radius: 12px;
             margin-bottom: 20px;
-            padding: 30px;
             margin-left:20px;
             margin-right:20px;
 
-            .commentinline {
-                padding: 12px;
 
-                .comment {
-                    background-color: #f1f1f1;
-                    border: 0;
-                    border-radius: 8px;
-                    font-family: Avenir, Helvetica, Arial, sans-serif;
-                    font-size: 16px;
-                    outline: 0;
-                    margin-bottom: 8px;
-                    padding: 4px 8px;
-                    resize: none;
-                    width: 60rem;
-                }
+            .comment {
+                background-color: #f1f1f1;
+                border: 0;
+                border-radius: 8px;
+                font-family: Avenir, Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                outline: 0;
+                margin-bottom: 8px;
+                padding: 4px 8px;
+                resize: none;
+                width: 17rem;
             }
         }
 

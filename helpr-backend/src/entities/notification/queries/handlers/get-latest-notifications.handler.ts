@@ -32,10 +32,7 @@ export class GetLatestNotificationsHandler implements IQueryHandler<GetLatestNot
             count += 1;
         }
 
-        if (latestNotifications?.length !== 0) {
-            return latestNotifications;
-        }
-
-        throw new HttpException('Could not get Notifications by UserId', HttpStatus.EXPECTATION_FAILED);
+        return latestNotifications;
+        
     }
 }

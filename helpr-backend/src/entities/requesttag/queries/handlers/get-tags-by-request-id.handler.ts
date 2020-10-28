@@ -39,10 +39,6 @@ export class GetTagsByRequestIdHandler implements IQueryHandler<GetTagsByRequest
             }
         }
         
-        if (requestTags.length !== 0) {
-            return requestTags;
-        }
-        
-        throw new HttpException('Could not get RequestTags by RequestId', HttpStatus.EXPECTATION_FAILED);
+        return requestTags;
     }
 }

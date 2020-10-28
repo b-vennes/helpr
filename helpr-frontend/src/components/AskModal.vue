@@ -8,26 +8,21 @@
                 <div>Post a Request</div>
             </div>
             <div class="inputs">
-                <div class="titleInline">
-                    <input v-model="title" class="title" placeholder="Title">
-                    <input v-model="points" class="points" placeholder="Points">
+                <input v-model="title" class="title" placeholder="Title">
+                <input v-model="points" class="points" placeholder="Points">
+                <textarea v-model="description" class="description" rows="10" placeholder="Description"></textarea>
+            
+                <div class="checkboxInline">
+                    <input class="isPublicRequest" type="checkbox" id="isPublicRequestCheckbox" v-model="isPublicRequest" />
+                    <label class="labelIsPublicRequest" for="isPublicRequestCheckbox">Public Request</label>
                 </div>
-                <div class="descriptionInline">
-                    <textarea v-model="description" class="description" rows="10" placeholder="Description"></textarea>
-                </div>
-                <div class="selectListInLine">
-                    <div class="checkboxInline">
-                        <input class="isPublicRequest" type="checkbox" id="isPublicRequestCheckbox" v-model="isPublicRequest" />
-                        <label class="labelIsPublicRequest" for="isPublicRequestCheckbox">Public Request</label>
-                    </div>
-                    <div id="v-model-select-dynamic" class="selectTags">
-                        <select v-model="selected" @change="onSelected()">
-                            <option disabled value="">Select a Tag</option>
-                            <option v-for="tag in tagSelectList" v-bind:key="tag.name">
-                                {{ tag.name }}
-                            </option>
-                        </select>
-                    </div>
+                <div id="v-model-select-dynamic" class="selectTags">
+                    <select v-model="selected" @change="onSelected()">
+                        <option disabled value="">Select a Tag</option>
+                        <option v-for="tag in tagSelectList" v-bind:key="tag.id">
+                            {{ tag.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="tags">
                     <div class="requestTags" v-for="selectedTag in selectedTags" v-bind:key="selectedTag.id">
@@ -98,11 +93,11 @@ export default {
             }
             
             await requestService.createRequest(request)
-            .then(data => {
-                if (data.status === 200) {
+            .then(response => {
+                if (response.status === 200) {
                     this.showSuccessMessage("Successfully posted a new request");
-                    this.createRequestTags(data);
-                    this.createNotifications(data.id);
+                    this.createRequestTags(response);
+                    this.createNotifications(response.id);
                 } else {
                     this.showErrorMessage("Error in posting a new request");
                 }
@@ -110,18 +105,18 @@ export default {
         },
         async getTags() {
             await tagService.getAllTags()
-            .then(data => {
-                if (data) {
-                    this.tagSelectList = data;
-                    this.tags = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.tagSelectList = response.data;
+                    this.tags = response.data;
                 }
             })
         },
         async getAllUsers() {
             await userService.getAllUsers()
-            .then(data => {
-                if (data) {
-                    this.users = data;
+            .then(response => {
+                if (response.status === 200) {
+                    this.users = response.data;
                 }
             });
         },
@@ -164,8 +159,8 @@ export default {
                 }
 
                 requestTagService.createRequestTag(request)
-                .then(data => {
-                    if (data) {
+                .then(response => {
+                    if (response.status === 200) {
                         this.showSuccessMessage("data added to request tag");
                     }
                 });
@@ -229,7 +224,7 @@ export default {
                 border-radius: 50%;
                 height: 40px;
                 margin: 0 8px 8px 0;
-                width: 40px;
+                //width: 40px;
 
                 img {
                 height: 15px;
@@ -253,69 +248,64 @@ export default {
                 padding: 30px;
                 margin-left:20px;
                 margin-right:20px;
-                
-                .titleInline {
-                    padding: 12px;
 
-                    .title {
-                        background-color: #f1f1f1;
-                        border: 0;
-                        border-radius: 8px;
-                        font-size: 18px;
-                        height: 30px;
-                        margin-bottom: 8px;
-                        margin-right:10px;
-                        outline: 0;
-                        padding: 4px 8px;
-                        width: 29rem;
-                    }
-                
-                    .points {
-                        background-color: #f1f1f1;
-                        border: 0;
-                        border-radius: 8px;
-                        font-size: 18px;
-                        height: 30px;
-                        margin-bottom: 8px;
-                        margin-left:10px;
-                        outline: 0;
-                        padding: 4px 8px;
-                        width: 29rem;
-                    }
+                .title {
+                    background-color: #f1f1f1;
+                    border: 0;
+                    border-radius: 8px;
+                    font-size: 18px;
+                    height: 30px;
+                    margin-bottom: 8px;
+                    outline: 0;
+                    padding: 4px 8px;
+                    width: 15rem;
                 }
             
-                .descriptionInline {
-                    padding: 12px;
+                .points {
+                    background-color: #f1f1f1;
+                    border: 0;
+                    border-radius: 8px;
+                    font-size: 18px;
+                    height: 30px;
+                    margin-bottom: 8px;
+                    outline: 0;
+                    padding: 4px 8px;
+                    width: 15rem;
+                }
+        
+                .description {
+                    background-color: #f1f1f1;
+                    border: 0;
+                    border-radius: 8px;
+                    font-family: Avenir, Helvetica, Arial, sans-serif;
+                    font-size: 16px;
+                    outline: 0;
+                    margin-bottom: 8px;
+                    padding: 4px 8px;
+                    resize: none;
+                    width: 15rem;
+                }
 
-                    .description {
-                        background-color: #f1f1f1;
-                        border: 0;
-                        border-radius: 8px;
-                        font-family: Avenir, Helvetica, Arial, sans-serif;
-                        font-size: 16px;
-                        outline: 0;
-                        margin-bottom: 8px;
-                        padding: 4px 8px;
-                        resize: none;
-                        width: 60rem;
+                .checkboxInline {
+                    float: left;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+
+                    .labelIsPublicRequest {
+                        margin-left: 10px;
                     }
                 }
 
-                .selectListInLine {
-                    width: 50%;
+                .selectTags {
+                    width: 5rem;
+                    float: left;
+                    position: relative;
+                    font-family: Arial;
 
-                    .checkboxInline {
-                        padding: 12px;
-                        float: left;
-
-                        .labelIsPublicRequest {
-                            margin-left: 10px;
-                        }
-                    }
-
-                    .selectTags {
-                        width: 60rem;
-                        padding: 12px;
+                    select {
+                        width: 255px;
+                        height: 30px;
+                        border-radius: 8px;
                     }
                 }
 
@@ -330,6 +320,7 @@ export default {
                         padding: 10px;
                         font-size: 1rem;
                         margin-right: 10px;
+                        overflow-y:auto;
                     }
                 }
             }
