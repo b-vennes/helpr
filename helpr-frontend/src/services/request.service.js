@@ -1,7 +1,7 @@
 export default class RequestService {
     
-    async getAllRequests() {
-        const response = await fetch(`http://localhost:3000/requests/get`, {
+    async getRequests(pageNumber, pageSize, search, includeClosed) {
+        const response = await fetch(`http://localhost:3000/requests?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&includeClosed=${includeClosed}`, {
             method: 'GET',
             mode: 'cors',
             headers: {

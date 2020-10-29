@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseFilters } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, UseFilters } from '@nestjs/common';
 import { Request } from 'src/database/request.entity';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetRequestsQuery } from './queries/handlers/get-requests.handler';
@@ -18,10 +18,17 @@ export class RequestController {
         private readonly queryBus: QueryBus
       ) {}
 
-    @Get('get')
-    async getAllRequests() {
+    @Get()
+    async getRequests(
+        @Query('pageNumber') pageNumber: number,
+        @Query('pageSize') pageSize: number,
+        @Query('search') search: string,
+        @Query('includeClosed') includeClosed: string
+    ) {
+        const query = new GetRequestsQuery(pageNumber, pageSize, search, includeClosed === 'true');
+
         return { 
-            data: await this.queryBus.execute(new GetRequestsQuery()), 
+            data: await this.queryBus.execute(query),
             status: 200
         };
     }

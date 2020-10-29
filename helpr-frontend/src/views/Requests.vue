@@ -9,16 +9,11 @@
                     <div class="headerText">Open Requests</div>
                     <div class="closedRequestSwitch">
                         <label class="switch">
-                            <input type="checkbox" v-model="isShowClosedRequests" @click="closedRequestsClicked()">
+                            <input type="checkbox" @click="closedRequestsClicked()">
                             <span class="slider round"></span>
                         </label>
                         <div class="closedRequestText">
-                            <div v-if="!isShowClosedRequests">
-                                Show Only Open Requests
-                            </div>
-                            <div v-else>
                                 Show Closed Requests
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -27,7 +22,7 @@
                 </div>
             </div>
             <div class="right">
-                <input type="text" placeholder="Search">
+                <input type="text" v-model="search" placeholder="Search" @keyup="searchChanged()">
                 
                 <Button txt="Ask a Helpr" class="primary ask" @click="toggleModal()"></Button>
                 
@@ -144,7 +139,10 @@ export default {
             showTransferPointsComponent: false,
             isHoverUserEvent: false,
             hoverUserEventInfo: {},
-            isShowClosedRequests: true
+            isShowClosedRequests: false,
+            search: '',
+            pageNumber: 0,
+            pageSize: 100
         }
     },
     components: {
@@ -160,7 +158,7 @@ export default {
     },
     methods: {
         async getRequests() {
-            await requestService.getAllRequests()
+            await requestService.getRequests(this.pageNumber, this.pageSize, this.search, this.isShowClosedRequests)
             .then(response => {
                 if (response.status === 200) {
                     this.initialRequests = response.data;
@@ -169,12 +167,7 @@ export default {
                         initialRequest.isShowComment = false;
                     }
 
-                    for (var request of response.data) {
-                        if (!request.isDeleted) {
-                            request.isShowComment = false;
-                            this.requests.push(request);
-                        }
-                    }
+                    this.requests = this.initialRequests;
                 } else {
                     const log = {
                         success: false,
@@ -342,18 +335,11 @@ export default {
             this.showTransferPointsComponent = false;
         },
         closedRequestsClicked() {
-            if (this.isShowClosedRequests) {
-                this.requests = [];
-                this.requests = this.initialRequests;
-            } else {
-                this.requests = [];
-                for (var request of this.initialRequests) {
-                    if (!request.isDeleted) {
-                        request.isShowComment = false;
-                        this.requests.push(request);
-                    }
-                }
-            }
+            this.isShowClosedRequests = !this.isShowClosedRequests;
+            this.getRequests();
+        },
+        searchChanged() {
+            this.getRequests();
         }
     },
     async mounted() {
