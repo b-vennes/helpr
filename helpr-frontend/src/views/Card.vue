@@ -61,6 +61,20 @@
                 ></History>
             </div>
         </transition>
+        <transition name="fade">
+            <div class="userRequestsCard" v-if="showUserRequests">
+                <Requests
+                    v-bind:userId="userId"
+                ></Requests>
+            </div>
+        </transition>
+        <transition name="fade">
+            <div class="userFriendsCard" v-if="showUserFriends">
+                <Friends
+                    v-bind:userId="userId"
+                ></Friends>
+            </div>
+        </transition>
         <div class="userHistoryHovered" v-if="isUserInfoHover && userInfoHover">
             <div class="userHistoryHoveredCard">
                 <div class="userHistoryPhoto">
@@ -105,6 +119,8 @@ import UserTagService from '../services/usertag.service.js';
 import LoggerService from '../services/logger.service.js';
 import Navbar from "@/components/Navbar";
 import History from '../components/profile-components/History';
+import Requests from '../components/profile-components/Requests';
+import Friends from '../components/profile-components/Friends';
 import { emitter } from '../components/common/event-bus';
 
 const userProfileService = new UserProfileService();
@@ -122,6 +138,8 @@ export default {
             description: '',
             userProfileId: 0,
             showUserHistory: false,
+            showUserRequests: false,
+            showUserFriends: false,
             isUserInfoHover: false,
             userInfoHover: {}
         }
@@ -135,7 +153,9 @@ export default {
     },
     components: {
         Navbar,
-        History
+        History,
+        Requests,
+        Friends
     },
     methods: {
         async setData() {
@@ -173,6 +193,18 @@ export default {
         },
         helprHistoryDisplay() {
             this.showUserHistory = !this.showUserHistory;
+            this.showUserRequests = false;
+            this.showUserFriends = false;
+        },
+        helprRequestsDisplay() {
+            this.showUserRequests = !this.showUserRequests;
+            this.showUserHistory = false;
+            this.showUserFriends = false;
+        },
+        helprFriendsDisplay() {
+            this.showUserFriends = !this.showUserFriends;
+            this.showUserRequests = false;
+            this.showUserHistory = false;
         }
     },
     async mounted() {
@@ -381,6 +413,16 @@ export default {
     }
 
     .userHistoryCard {
+        position: fixed;
+        left: 1550px;
+    }
+
+    .userRequestsCard {
+        position: fixed;
+        left: 1550px;
+    }
+
+    .userFriendsCard {
         position: fixed;
         left: 1550px;
     }
